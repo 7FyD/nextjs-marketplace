@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import MenuItem from "./MenuItem";
+import Container from "../utilities/Container";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const widthRef = useRef(769);
@@ -33,19 +35,48 @@ const Navbar = () => {
     document.getElementById("sideBar")!.style.width = "0";
     document.body.style.backgroundColor = "white";
   };
+  const router = useRouter();
 
   return (
     <div className="">
-      <button
-        className="text-3xl cursor-pointer inline-block"
-        onClick={openNav}
-      >
-        &#9776;
-      </button>
+      <div className="w-full bg-[#212529] z-[1] text-l pt-3 pb-3 border-b-[2px] border-black">
+        <Container>
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-row gap-12 md:gap-16">
+              <button
+                className="text-3xl cursor-pointer inline-block"
+                onClick={openNav}
+              >
+                &#9776;
+              </button>
+
+              <p
+                className="text-3xl text-white cursor-pointer"
+                onClick={() => router.push("/")}
+              >
+                F
+              </p>
+            </div>
+            <div className="flex flex-row items-start gap-6 md:gap-12 lg:gap-18 text-white">
+              <button
+                onClick={() => router.push("/auth/login")}
+                className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+              >
+                Sign In
+              </button>
+              <button
+                className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+        </Container>
+      </div>
       {width && (
         <div
           id="sideBar"
-          className="w-0 h-full fixed z-[1] top-0 left-0 bg-[#111] overflow-x-hidden transition-[width] duration-300 text-white"
+          className="w-0 h-full fixed z-[2] top-0 left-0 bg-[#111] overflow-x-hidden transition-[width] duration-300 text-white"
         >
           <div className="p-8 pb-0 flex flex-row justify-between content-center">
             <p>
