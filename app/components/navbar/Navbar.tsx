@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import MenuItem from "./MenuItem";
-import Container from "../utilities/Container";
 import { useRouter } from "next/navigation";
+import Container from "../utilities/Container";
 
 const Navbar = () => {
   const widthRef = useRef(769);
@@ -36,7 +36,9 @@ const Navbar = () => {
     document.body.style.backgroundColor = "white";
   };
   const router = useRouter();
-
+  // TO DO!!
+  // basically add a way to detect if logged in, if not logged in display upper nav with login if logged in do it with user, if not logged in dont display
+  // vertical navbar
   return (
     <div className="">
       <div className="w-full bg-[#212529] z-[1] text-l pt-3 pb-3 border-b-[2px] border-black">
@@ -44,7 +46,7 @@ const Navbar = () => {
           <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row gap-12 md:gap-16">
               <button
-                className="text-3xl cursor-pointer inline-block"
+                className="text-3xl cursor-pointer inline-block text-white"
                 onClick={openNav}
               >
                 &#9776;
@@ -66,6 +68,7 @@ const Navbar = () => {
               </button>
               <button
                 className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+                onClick={() => router.push("/auth/register")}
               >
                 Sign Up
               </button>

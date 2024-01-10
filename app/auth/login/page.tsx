@@ -1,5 +1,7 @@
+import { LoginClient } from "./LoginClient";
+
 const LoginPage = () => {
-  return <div>Login Page!</div>;
+  return <LoginClient />;
 };
 
 export default LoginPage;
