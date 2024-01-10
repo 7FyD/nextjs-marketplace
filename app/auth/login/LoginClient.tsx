@@ -21,6 +21,7 @@ import { Button } from "@/app/components/ui/button";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
 import { CardWrapper } from "@/app/components/auth/card-wrapper";
+import { login } from "@/app/actions/login";
 
 export const LoginClient = () => {
   const searchParams = useSearchParams();
@@ -44,9 +45,16 @@ export const LoginClient = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log("Button clicked!");
-  };
+    setError("");
+    setSuccess("");
 
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
+  };
   return (
     <CardWrapper
       headerTitle="Log into your account"
