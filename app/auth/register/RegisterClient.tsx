@@ -52,6 +52,7 @@ export const RegisterClient = () => {
       headerTitle="Join us!"
       backButtonLabel="Already have an account?"
       backButtonHref="/auth/login"
+      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
