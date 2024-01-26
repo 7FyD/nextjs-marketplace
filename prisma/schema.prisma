@@ -75,6 +75,16 @@ model TwoFactorToken {
   @@unique([email, token])
 }
 
+model AddTwoFactorToken {
+  id String @id @default(cuid())
+  email String
+  token String @unique
+  expires DateTime
+
+
+  @@unique([email, token])
+}
+
 model TwoFactorConfirmation {
   id String @id @default(cuid())
 
