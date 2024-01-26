@@ -22,10 +22,11 @@ import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
 import { CardWrapper } from "@/app/components/auth/card-wrapper";
 import { login } from "@/app/actions/login";
+import { FormWarning } from "@/app/components/utilities/form-warning";
 
 export const LoginClient = () => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams.get("callbackUrl"); // will add redirect back to callback once login is fully implemented
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
@@ -34,6 +35,9 @@ export const LoginClient = () => {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  const [twoFactorMessage, setTwoFactorMessage] = useState<string | undefined>(
+    ""
+  );
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -49,10 +53,28 @@ export const LoginClient = () => {
     setSuccess("");
 
     startTransition(() => {
-      login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
-      });
+      login(values)
+        .then((data) => {
+          if (data?.error) {
+            setTwoFactorMessage("");
+            if (data.errorCode === "1") {
+              form.reset();
+              setShowTwoFactor(false);
+            }
+            setError(data.error);
+          }
+
+          if (data?.success) {
+            form.reset();
+            setSuccess(data.success);
+          }
+
+          if (data?.twoFactor) {
+            setShowTwoFactor(true);
+            setTwoFactorMessage("Please check your inbox for your 2FA code.");
+          }
+        })
+        .catch(() => setError("Something went wrong"));
     });
   };
   return (
@@ -142,6 +164,7 @@ export const LoginClient = () => {
           </div>
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
+          <FormWarning message={twoFactorMessage} />
           <Button disabled={isPending} type="submit" className="w-full">
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>
