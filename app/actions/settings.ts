@@ -1,11 +1,14 @@
 "use server";
 
+import * as z from "zod";
+import { NewPasswordSchema } from "@/schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 import { generateAddTwoFactorToken } from "@/lib/tokens";
 import { sendAddTwoFactorEmail } from "@/lib/mail";
 import { currentUser } from "@/lib/user";
 import { getUserById } from "@/data/user";
 import { db } from "@/lib/db";
+import bcrypt from "bcryptjs";
 
 export const settingsToggleTwoFA = async () => {
   const user = await currentUser();
@@ -55,4 +58,46 @@ export const settingsToggleTwoFA = async () => {
     inform:
       "An email has been sent with your 2 factor authentification confirmation link.",
   };
+};
+
+export const settingsChangePassword = async (
+  values: z.infer<typeof NewPasswordSchema>
+) => {
+  const user = await currentUser();
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+
+  const dbUser = await getUserById(user.id);
+
+  if (!dbUser) {
+    return { error: "Unauthorized" };
+  }
+
+  if (!dbUser.password) {
+    return { error: "Account does not use password." };
+  }
+
+  if (!values.oldPassword || !values.password) {
+    return { error: "Invalid fields." };
+  }
+
+  const validPassword = await bcrypt.compare(
+    values.oldPassword,
+    dbUser.password
+  );
+  if (!validPassword) {
+    return { error: "Incorrect password." };
+  }
+  const validatedFields = NewPasswordSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { error: "Invalid new password." };
+  }
+  const hashedPassword = await bcrypt.hash(values.password, 10);
+  await db.user.update({
+    where: { id: user.id },
+    data: { password: hashedPassword },
+  });
+  return { success: "Password succesfully changed." };
 };
