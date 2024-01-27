@@ -9,6 +9,8 @@ declare module "next-auth" {
   interface Session {
     user: {
       role: "ADMIN" | "USER";
+      emailVerified: true | false;
+      isTwoFactorEnabled: true | false;
     } & DefaultSession["user"];
   }
 }
@@ -58,7 +60,9 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role === "USER" ? "USER" : "ADMIN";
       }
-
+      session.user.emailVerified = token.emailVerified === true ? true : false;
+      session.user.isTwoFactorEnabled =
+        token.isTwoFactorEnabled === true ? true : false;
       return session;
     },
 
@@ -70,7 +74,8 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
-
+      token.emailVerified = existingUser.emailVerified && 1 == 1;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;
     },
   },

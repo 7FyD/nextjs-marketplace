@@ -1,3 +1,5 @@
+"use server";
+
 import { getTwoFactorAddByToken } from "@/data/two-factor-add";
 import { getUserByEmail } from "@/data/user";
 import { db } from "@/lib/db";

@@ -6,20 +6,21 @@ import { db } from "@/lib/db";
 import { getVerificationTokenByEmail } from "@/data/verification-token";
 import { getPasswordResetTokenByEmail } from "@/data/password-reset-token";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
+import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 
 export const generateAddTwoFactorToken = async (email: string) => {
   const token = uuidv4();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
-  const existingToken = await getPasswordResetTokenByEmail(email);
+  const existingToken = await getTwoFactorAddByEmail(email);
 
   if (existingToken) {
-    await db.passwordResetToken.delete({
+    await db.addTwoFactorToken.delete({
       where: { id: existingToken.id },
     });
   }
 
-  const addTwoFactorToken = await db.passwordResetToken.create({
+  const addTwoFactorToken = await db.addTwoFactorToken.create({
     data: {
       email,
       token,

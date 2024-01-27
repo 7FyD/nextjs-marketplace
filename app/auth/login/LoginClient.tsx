@@ -22,7 +22,7 @@ import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
 import { CardWrapper } from "@/app/components/auth/card-wrapper";
 import { login } from "@/app/actions/login";
-import { FormWarning } from "@/app/components/utilities/form-warning";
+import { FormInform } from "@/app/components/utilities/form-inform";
 
 export const LoginClient = () => {
   const searchParams = useSearchParams();
@@ -164,7 +164,7 @@ export const LoginClient = () => {
           </div>
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
-          <FormWarning message={twoFactorMessage} />
+          <FormInform message={twoFactorMessage} />
           <Button disabled={isPending} type="submit" className="w-full">
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>

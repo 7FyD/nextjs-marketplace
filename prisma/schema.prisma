@@ -79,6 +79,7 @@ model AddTwoFactorToken {
   id String @id @default(cuid())
   email String
   token String @unique
+  createdAt DateTime @default(now())
   expires DateTime
 
 
