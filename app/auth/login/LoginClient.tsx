@@ -23,9 +23,12 @@ import { FormSuccess } from "@/app/components/utilities/form-success";
 import { CardWrapper } from "@/app/components/auth/card-wrapper";
 import { login } from "@/app/actions/login";
 import { FormInform } from "@/app/components/utilities/form-inform";
+import { useCurrentUser } from "@/app/hooks/use-current-user";
 
 export const LoginClient = () => {
   const searchParams = useSearchParams();
+  const user = useCurrentUser();
+  console.log(user);
   const callbackUrl = searchParams.get("callbackUrl"); // will add redirect back to callback once login is fully implemented
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"

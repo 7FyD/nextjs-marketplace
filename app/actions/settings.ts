@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import { NewPasswordSchema } from "@/schemas";
+import { SettingsNewPasswordSchema } from "@/schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 import { generateAddTwoFactorToken } from "@/lib/tokens";
 import { sendAddTwoFactorEmail } from "@/lib/mail";
@@ -61,7 +61,7 @@ export const settingsToggleTwoFA = async () => {
 };
 
 export const settingsChangePassword = async (
-  values: z.infer<typeof NewPasswordSchema>
+  values: z.infer<typeof SettingsNewPasswordSchema>
 ) => {
   const user = await currentUser();
   if (!user) {
@@ -89,7 +89,7 @@ export const settingsChangePassword = async (
   if (!validPassword) {
     return { error: "Incorrect password." };
   }
-  const validatedFields = NewPasswordSchema.safeParse(values);
+  const validatedFields = SettingsNewPasswordSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: "Invalid new password." };

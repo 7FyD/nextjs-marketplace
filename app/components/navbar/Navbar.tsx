@@ -4,8 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import MenuItem from "./MenuItem";
 import { useRouter } from "next/navigation";
 import Container from "../utilities/Container";
+import { useCurrentUser } from "@/app/hooks/use-current-user";
+import { logout } from "@/app/actions/logout";
 
 const Navbar = () => {
+  const user = useCurrentUser();
   const widthRef = useRef(769);
   const [width, setWidth] = useState(769);
 
@@ -36,6 +39,9 @@ const Navbar = () => {
     document.body.style.backgroundColor = "white";
   };
   const router = useRouter();
+  const signOut = () => {
+    logout();
+  };
   // TO DO!!
   // basically add a way to detect if logged in, if not logged in display upper nav with login if logged in do it with user, if not logged in dont display
   // vertical navbar
@@ -60,18 +66,31 @@ const Navbar = () => {
               </p>
             </div>
             <div className="flex flex-row items-start gap-6 md:gap-12 lg:gap-18 text-white">
-              <button
-                onClick={() => router.push("/auth/login")}
-                className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
-              >
-                Sign In
-              </button>
-              <button
-                className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
-                onClick={() => router.push("/auth/register")}
-              >
-                Sign Up
-              </button>
+              {!user?.id ? (
+                <>
+                  <button
+                    onClick={() => router.push("/auth/login")}
+                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+                    onClick={() => router.push("/auth/register")}
+                  >
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+                    onClick={signOut}
+                  >
+                    Sign out
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </Container>
