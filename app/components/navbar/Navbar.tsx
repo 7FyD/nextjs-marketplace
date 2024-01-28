@@ -66,7 +66,9 @@ const Navbar = () => {
               </p>
             </div>
             <div className="flex flex-row items-start gap-6 md:gap-12 lg:gap-18 text-white">
-              {!user?.id ? (
+              {
+                // this DOES NOT WORK DURING DEVELOPMENT but WORKS DURING PRODUCTION. UNCOMMENT ON RELEASE.
+                /* {!user?.id ? (
                 <>
                   <button
                     onClick={() => router.push("/auth/login")}
@@ -90,7 +92,22 @@ const Navbar = () => {
                     Sign out
                   </button>
                 </>
-              )}
+              )} */
+                <>
+                  <button
+                    onClick={() => router.push("/auth/login")}
+                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
+                    onClick={() => router.push("/auth/register")}
+                  >
+                    Sign Up
+                  </button>
+                </>
+              }
             </div>
           </div>
         </Container>
