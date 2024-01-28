@@ -46,7 +46,7 @@ const ToggleTwoFactor = () => {
     <div className="flex flex-col justify-center items-center">
       <h1>
         Two factor authentificator:
-        {user?.isTwoFactorEnabled ? "enabled" : "disabled"}
+        {user?.isTwoFactorEnabled ? " enabled" : " disabled"}
       </h1>
       <Button className="w-max rounded-xl" onClick={sendTwoFA}>
         {`${

@@ -17,13 +17,11 @@ import { startTransition, useState } from "react";
 import { useForm } from "react-hook-form";
 import { settingsChangePassword } from "@/app/actions/settings";
 import { Button } from "@/app/components/ui/button";
-import { FormInform } from "@/app/components/utilities/form-inform";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
-const ChangePasswordClient = () => {
+const ChangePassword = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [inform, setInform] = useState<string | undefined>("");
   const newPasswordForm = useForm<z.infer<typeof SettingsNewPasswordSchema>>({
     resolver: zodResolver(SettingsNewPasswordSchema),
     defaultValues: {
@@ -99,7 +97,6 @@ const ChangePasswordClient = () => {
           </div>
           <FormSuccess message={success} />
           <FormError message={error} />
-          <FormInform message={inform} />
           <Button disabled={false} type="submit" className="w-full">
             Change password
           </Button>
@@ -109,4 +106,4 @@ const ChangePasswordClient = () => {
   );
 };
 
-export default ChangePasswordClient;
+export default ChangePassword;

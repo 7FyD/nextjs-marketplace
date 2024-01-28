@@ -3,7 +3,7 @@ import { logout } from "@/app/actions/logout";
 
 import { Button } from "@/app/components/ui/button";
 
-const SignOutClient = () => {
+const SignOut = () => {
   const signOut = () => {
     logout();
   };
@@ -15,4 +15,4 @@ const SignOutClient = () => {
   );
 };
 
-export default SignOutClient;
+export default SignOut;

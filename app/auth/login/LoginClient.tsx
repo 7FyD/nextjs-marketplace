@@ -27,8 +27,6 @@ import { useCurrentUser } from "@/app/hooks/use-current-user";
 
 export const LoginClient = () => {
   const searchParams = useSearchParams();
-  const user = useCurrentUser();
-  console.log(user);
   const callbackUrl = searchParams.get("callbackUrl"); // will add redirect back to callback once login is fully implemented
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
