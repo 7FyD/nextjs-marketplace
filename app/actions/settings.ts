@@ -3,12 +3,41 @@
 import * as z from "zod";
 import { SettingsNewPasswordSchema } from "@/schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
-import { generateAddTwoFactorToken } from "@/lib/tokens";
-import { sendAddTwoFactorEmail } from "@/lib/mail";
+import {
+  generateAddTwoFactorToken,
+  generateVerificationToken,
+} from "@/lib/tokens";
+import { sendAddTwoFactorEmail, sendVerificationEmail } from "@/lib/mail";
 import { currentUser } from "@/lib/user";
 import { getUserById } from "@/data/user";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
+
+export const settingsVerifyEmail = async () => {
+  const user = await currentUser();
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+
+  const dbUser = await getUserById(user.id);
+
+  if (!dbUser) {
+    return { error: "Unauthorized" };
+  }
+
+  if (!user.email) {
+    return { error: "Account does not use email." };
+  }
+
+  if (user.emailVerified) {
+    return { error: "Email already verified." };
+  }
+
+  const verificationToken = await generateVerificationToken(user.email);
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
+  return { inform: "An email has been sent with a verification link." };
+};
 
 export const settingsToggleTwoFA = async () => {
   const user = await currentUser();
