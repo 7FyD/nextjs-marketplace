@@ -20,6 +20,7 @@ import { Button } from "@/app/components/ui/button";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
 import { register } from "@/app/actions/register";
+import { BeatLoader } from "react-spinners";
 
 export const RegisterClient = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -121,7 +122,13 @@ export const RegisterClient = () => {
           <FormSuccess message={success} />
           <Button disabled={isPending} type="submit" className="w-full">
             Create an account
-          </Button>
+          </Button>{" "}
+          {isPending && (
+            <div className="flex flex-col justify-center items-center gap-6">
+              <BeatLoader />
+              <p className="font-extralight">Loading... </p>
+            </div>
+          )}
         </form>
       </Form>
     </CardWrapper>
