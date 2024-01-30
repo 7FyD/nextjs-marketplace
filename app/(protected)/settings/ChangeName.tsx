@@ -12,28 +12,27 @@ import {
 } from "@/app/components/ui/form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SettingsNewPasswordSchema } from "@/schemas";
+import { SettingsChangeNameSchema } from "@/schemas";
 import { startTransition, useState } from "react";
 import { useForm } from "react-hook-form";
-import { settingsChangePassword } from "@/app/actions/settings";
+import { settingsChangeName } from "@/app/actions/settings";
 import { Button } from "@/app/components/ui/button";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
-const ChangePassword = () => {
+const ChangeName = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const newPasswordForm = useForm<z.infer<typeof SettingsNewPasswordSchema>>({
-    resolver: zodResolver(SettingsNewPasswordSchema),
+  const newNameForm = useForm<z.infer<typeof SettingsChangeNameSchema>>({
+    resolver: zodResolver(SettingsChangeNameSchema),
     defaultValues: {
-      oldPassword: "",
-      password: "",
+      name: "",
     },
   });
-  const onNewPasswordSubmit = (
-    values: z.infer<typeof SettingsNewPasswordSchema>
+  const onNewNameSubmit = (
+    values: z.infer<typeof SettingsChangeNameSchema>
   ) => {
     startTransition(() => {
-      settingsChangePassword(values)
+      settingsChangeName(values)
         .then((data) => {
           if (data?.error) {
             console.log(data.error);
@@ -48,46 +47,27 @@ const ChangePassword = () => {
     });
   };
   return (
-    <CardWrapper headerTitle="" headerLabel="Change your password">
-      <Form {...newPasswordForm}>
+    <CardWrapper headerTitle="" headerLabel="Change your name">
+      <Form {...newNameForm}>
         <form
-          onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)}
+          onSubmit={newNameForm.handleSubmit(onNewNameSubmit)}
           className="space-y-6"
         >
           <div className="space-y-4">
             <FormField
-              control={newPasswordForm.control}
-              name="oldPassword"
+              control={newNameForm.control}
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Old password</FormLabel>
+                  <FormLabel>New name</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={false}
-                      placeholder="******"
-                      type="password"
-                      id="oldPassword"
-                      autoComplete="password"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={newPasswordForm.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>New password</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={false}
-                      placeholder="********"
-                      type="password"
-                      id="password"
+                      placeholder="Harvey Specter"
+                      type="text"
+                      id="name"
+                      autoComplete="name"
                     />
                   </FormControl>
                   <FormMessage />
@@ -98,7 +78,7 @@ const ChangePassword = () => {
           <FormSuccess message={success} />
           <FormError message={error} />
           <Button disabled={false} type="submit" className="w-full">
-            Change password
+            Change name
           </Button>
         </form>
       </Form>
@@ -106,4 +86,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default ChangeName;
