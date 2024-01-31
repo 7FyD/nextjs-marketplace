@@ -1,7 +1,7 @@
 "use server";
 
 import * as z from "zod";
-import { SettingsNewPasswordSchema } from "@/schemas";
+import { SettingsNewPasswordSchema, SettingsChangeNameSchema } from "@/schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 import {
   generateAddTwoFactorToken,
@@ -129,4 +129,34 @@ export const settingsChangePassword = async (
     data: { password: hashedPassword },
   });
   return { success: "Password succesfully changed." };
+};
+
+export const settingsChangeName = async (
+  values: z.infer<typeof SettingsChangeNameSchema>
+) => {
+  const user = await currentUser();
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+
+  const dbUser = await getUserById(user.id);
+
+  if (!dbUser) {
+    return { error: "Unauthorized" };
+  }
+
+  if (!values) {
+    return { error: "New name is required." };
+  }
+
+  const validatedFields = SettingsChangeNameSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { error: "Invalid new name." };
+  }
+  await db.user.update({
+    where: { id: user.id },
+    data: { name: values.name },
+  });
+  return { success: "Name successfully changed." };
 };
