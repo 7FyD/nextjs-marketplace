@@ -1,7 +1,10 @@
 "use server";
 
 import * as z from "zod";
-import { SettingsNewPasswordSchema } from "@/schemas";
+import {
+  SettingsChangeEmailSchema,
+  SettingsNewPasswordSchema,
+} from "@/schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 import {
   generateAddTwoFactorToken,
@@ -9,7 +12,7 @@ import {
 } from "@/lib/tokens";
 import { sendAddTwoFactorEmail, sendVerificationEmail } from "@/lib/mail";
 import { currentUser } from "@/lib/user";
-import { getUserById } from "@/data/user";
+import { getUserByEmail, getUserById } from "@/data/user";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
@@ -129,4 +132,43 @@ export const settingsChangePassword = async (
     data: { password: hashedPassword },
   });
   return { success: "Password succesfully changed." };
+};
+
+export const settingsChangeEmail = async (
+  values: z.infer<typeof SettingsChangeEmailSchema>
+) => {
+  // add an optional oldEmaiil? string on the new-verification token in database and if there is one, get it
+  const user = await currentUser();
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+
+  const dbUser = await getUserById(user.id);
+
+  if (!dbUser) {
+    return { error: "Unauthorized" };
+  }
+
+  if (!user.email) {
+    return { error: "Account does not use email." };
+  }
+
+  const validatedFields = SettingsChangeEmailSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { error: "Invalid new email." };
+  }
+
+  const existingUser = await getUserByEmail(values.email);
+
+  if (existingUser) {
+    return { error: "Email already in use!" };
+  }
+
+  const verificationToken = await generateVerificationToken(values.email);
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
+  return {
+    inform: "A verification email has been sent to your new mail addresss.",
+  };
 };

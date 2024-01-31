@@ -21,7 +21,7 @@ export const newVerification = async (token: string) => {
   const existingUser = await getUserByEmail(existingToken.email);
 
   if (!existingUser) {
-    return { error: "User does not exist." };
+    return { error: "Email does not exist." };
   }
 
   await db.user.update({
@@ -32,6 +32,6 @@ export const newVerification = async (token: string) => {
   await db.verificationToken.delete({
     where: { id: existingToken.id },
   });
-
+  // add an optional oldEmaiil? string on the new-verification token in database and if there is one, get it
   return { success: "Email verified." };
 };

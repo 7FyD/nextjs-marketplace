@@ -1,5 +1,11 @@
 import * as z from "zod";
 
+export const SettingsChangeEmailSchema = z.object({
+  email: z.string().email({
+    message: "New email is required.",
+  }),
+});
+
 export const SettingsNewPasswordSchema = z.object({
   oldPassword: z.string().min(1, {
     message: "Old password is required",
