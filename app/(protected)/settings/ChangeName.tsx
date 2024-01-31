@@ -13,15 +13,17 @@ import {
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SettingsChangeNameSchema } from "@/schemas";
-import { startTransition, useState } from "react";
+import { startTransition, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { settingsChangeName } from "@/app/actions/settings";
 import { Button } from "@/app/components/ui/button";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
+import { BeatLoader } from "react-spinners";
 const ChangeName = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
   const newNameForm = useForm<z.infer<typeof SettingsChangeNameSchema>>({
     resolver: zodResolver(SettingsChangeNameSchema),
     defaultValues: {
@@ -80,6 +82,12 @@ const ChangeName = () => {
           <Button disabled={false} type="submit" className="w-full">
             Change name
           </Button>
+          {isPending && (
+            <div className="flex flex-col justify-center items-center gap-6 mt-6">
+              <BeatLoader />
+              <p className="font-extralight">Loading... </p>
+            </div>
+          )}
         </form>
       </Form>
     </CardWrapper>

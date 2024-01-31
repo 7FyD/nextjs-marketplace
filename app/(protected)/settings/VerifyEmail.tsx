@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useState } from "react";
+import { startTransition, useState, useTransition } from "react";
 import { settingsVerifyEmail } from "@/app/actions/settings";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 
@@ -8,12 +8,14 @@ import { Button } from "@/app/components/ui/button";
 import { FormInform } from "@/app/components/utilities/form-inform";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
+import { BeatLoader } from "react-spinners";
 
 const VerifyEmail = () => {
   const user = useCurrentUser();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [inform, setInform] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
   const verifyEmail = () => {
     setError("");
     setSuccess("");
@@ -48,6 +50,12 @@ const VerifyEmail = () => {
       <FormSuccess className="w-max" message={success} />
       <FormError className="w-max" message={error} />
       <FormInform className="w-max" message={inform} />
+      {isPending && (
+        <div className="flex flex-col justify-center items-center gap-6 mt-6">
+          <BeatLoader />
+          <p className="font-extralight">Loading... </p>
+        </div>
+      )}
     </div>
   );
 };
