@@ -2,6 +2,7 @@ import VerifyEmail from "./VerifyEmail";
 import ToggleTwoFactor from "./ToggleTwoFactor";
 import ChangePassword from "./ChangePassword";
 import ChangeEmail from "./ChangeEmail";
+import ChangeName from "./ChangeName";
 import SignOut from "./SignOut";
 const settingsPage = async () => {
   return (
@@ -10,8 +11,9 @@ const settingsPage = async () => {
       change email sends a verification email to a "random" email
       <VerifyEmail />
       <ToggleTwoFactor />
-      <ChangePassword />
+      <ChangeName />
       <ChangeEmail />
+      <ChangePassword />
       <SignOut />
     </div>
   );

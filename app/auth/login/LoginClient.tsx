@@ -23,7 +23,7 @@ import { FormSuccess } from "@/app/components/utilities/form-success";
 import { CardWrapper } from "@/app/components/auth/card-wrapper";
 import { login } from "@/app/actions/login";
 import { FormInform } from "@/app/components/utilities/form-inform";
-import { useCurrentUser } from "@/app/hooks/use-current-user";
+import { BeatLoader } from "react-spinners";
 
 export const LoginClient = () => {
   const searchParams = useSearchParams();
@@ -169,6 +169,12 @@ export const LoginClient = () => {
           <Button disabled={isPending} type="submit" className="w-full">
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>
+          {isPending && (
+            <div className="flex flex-col justify-center items-center gap-6">
+              <BeatLoader />
+              <p className="font-extralight">Loading... </p>
+            </div>
+          )}
         </form>
       </Form>
     </CardWrapper>
