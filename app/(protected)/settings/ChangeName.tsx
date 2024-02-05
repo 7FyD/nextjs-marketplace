@@ -13,7 +13,7 @@ import {
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SettingsChangeNameSchema } from "@/schemas";
-import { startTransition, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { settingsChangeName } from "@/app/actions/settings";
 import { Button } from "@/app/components/ui/button";

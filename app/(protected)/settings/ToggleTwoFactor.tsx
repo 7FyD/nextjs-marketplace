@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { settingsToggleTwoFA } from "@/app/actions/settings";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 
