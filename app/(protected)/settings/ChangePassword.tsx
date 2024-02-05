@@ -13,7 +13,7 @@ import {
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SettingsNewPasswordSchema } from "@/schemas";
-import { startTransition, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { settingsChangePassword } from "@/app/actions/settings";
 import { Button } from "@/app/components/ui/button";
@@ -67,7 +67,7 @@ const ChangePassword = () => {
                     <Input
                       {...field}
                       disabled={false}
-                      placeholder="******"
+                      placeholder="*******"
                       type="password"
                       id="oldPassword"
                       autoComplete="password"
