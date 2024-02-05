@@ -13,15 +13,18 @@ import {
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SettingsChangeEmailSchema } from "@/schemas";
-import { startTransition, useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { settingsChangeEmail } from "@/app/actions/settings";
 import { Button } from "@/app/components/ui/button";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormInform } from "@/app/components/utilities/form-inform";
+import { BeatLoader } from "react-spinners";
 const ChangeEmail = () => {
   const [error, setError] = useState<string | undefined>("");
   const [inform, setInform] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+
   const changeEmailForm = useForm<z.infer<typeof SettingsChangeEmailSchema>>({
     resolver: zodResolver(SettingsChangeEmailSchema),
     defaultValues: {
@@ -80,6 +83,12 @@ const ChangeEmail = () => {
           <Button disabled={false} type="submit" className="w-full">
             Change email
           </Button>
+          {isPending && (
+            <div className="flex flex-col justify-center items-center gap-6 mt-6">
+              <BeatLoader />
+              <p className="font-extralight">Loading... </p>
+            </div>
+          )}
         </form>
       </Form>
     </CardWrapper>
