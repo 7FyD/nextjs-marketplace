@@ -1,8 +1,9 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getUserByEmail } from "@/data/user";
+import { getUserByEmail, getUserById } from "@/data/user";
 import { getVerificationTokenByToken } from "@/data/verification-token";
+import { currentUser } from "@/lib/user";
 
 export const newVerification = async (token: string) => {
   const existingToken = await getVerificationTokenByToken(token);
@@ -21,17 +22,24 @@ export const newVerification = async (token: string) => {
   const existingUser = await getUserByEmail(existingToken.email);
 
   if (!existingUser) {
-    return { error: "Email does not exist." };
-  }
+    const user = await currentUser();
+    if (!user) return { error: "User does not exist." };
+    const dbUser = await getUserById(user.id);
+    if (!dbUser) return { error: "User does not exist." };
+    if (!user.email) return { error: "Your account does not use email." };
 
-  await db.user.update({
-    where: { id: existingUser.id },
-    data: { emailVerified: new Date(), email: existingToken.email },
-  });
+    await db.user.update({
+      where: { id: user.id },
+      data: { emailVerified: new Date(), email: existingToken.email },
+    });
+  } else
+    await db.user.update({
+      where: { id: existingUser.id },
+      data: { emailVerified: new Date(), email: existingToken.email },
+    });
 
   await db.verificationToken.delete({
     where: { id: existingToken.id },
   });
-  // add an optional oldEmaiil? string on the new-verification token in database and if there is one, get it
   return { success: "Email verified." };
 };
