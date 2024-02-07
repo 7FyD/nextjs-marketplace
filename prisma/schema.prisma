@@ -11,6 +11,8 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// USER RELATED SCHEMAS START
+
 enum UserRole {
   ADMIN
   USER
@@ -27,6 +29,7 @@ model User {
   accounts      Account[]
   isTwoFactorEnabled Boolean @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  listings Listing[]
 }
 
 model Account {
@@ -94,3 +97,32 @@ model TwoFactorConfirmation {
 
   @@unique([userId])
 }
+
+// USER RELATED SCHEMAS END
+
+enum Condition { 
+  NEW
+  VERYGOOD
+  GOOD
+  USED 
+  BROKEN
+}
+
+model Listing {
+  id String @id @default(cuid())
+  title String
+  description String
+  price Int
+  images String[]
+  createdAt DateTime @default(now())
+  category String
+  condition Condition
+  country String
+  county String
+  
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // comments Comment[]
+}
+
+// Comment
