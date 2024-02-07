@@ -5,7 +5,7 @@ import {
   SettingsChangeEmailSchema,
   SettingsNewPasswordSchema,
   SettingsChangeNameSchema,
-} from "@/schemas";
+} from "@/schemas/user-schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 import {
   generateAddTwoFactorToken,

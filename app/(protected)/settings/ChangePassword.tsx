@@ -12,7 +12,7 @@ import {
 } from "@/app/components/ui/form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SettingsNewPasswordSchema } from "@/schemas";
+import { SettingsNewPasswordSchema } from "@/schemas/user-schemas";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { settingsChangePassword } from "@/app/actions/settings";

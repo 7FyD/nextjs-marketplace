@@ -12,7 +12,7 @@ import {
 } from "@/app/components/ui/form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SettingsChangeNameSchema } from "@/schemas";
+import { SettingsChangeNameSchema } from "@/schemas/user-schemas";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { settingsChangeName } from "@/app/actions/settings";
