@@ -50,7 +50,7 @@ import { BeatLoader } from "react-spinners";
 import { FileUpload } from "@/app/components/utilities/file-upload";
 import { useModal } from "@/app/hooks/use-modal-store";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
-import { newListing } from "@/app/actions/new-listing";
+import { createNewListing } from "@/app/actions/new-listing";
 import PickCategoryModal from "./pick-category";
 
 const NewListingModal = () => {
@@ -83,7 +83,7 @@ const NewListingModal = () => {
     setSuccess("");
 
     startTransition(() => {
-      newListing(values)
+      createNewListing(values)
         .then((data) => {
           if (data?.error) {
             setError(data.error);

@@ -7,7 +7,9 @@ import { getUserById } from "@/data/user";
 import { currentUser } from "@/lib/user";
 import { db } from "@/lib/db";
 
-export const newListing = async (data: z.infer<typeof NewListingSchema>) => {
+export const createNewListing = async (
+  data: z.infer<typeof NewListingSchema>
+) => {
   const user = await currentUser();
   if (!user) return { error: "Unauthorized." };
   const dbUser = await getUserById(user.id);
