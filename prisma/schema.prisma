@@ -101,24 +101,28 @@ model TwoFactorConfirmation {
 // USER RELATED SCHEMAS END
 
 enum Condition { 
-  NEW
-  VERYGOOD
-  GOOD
-  USED 
-  BROKEN
+  None
+  New
+  Excellent
+  Good
+  Used
+  Broken
 }
+
+// enum Category { bla bla}
 
 model Listing {
   id String @id @default(cuid())
+  createdAt DateTime @default(now())
   title String
   description String
   price Int
-  images String[]
-  createdAt DateTime @default(now())
+  imageUrl String
   category String
-  condition Condition
   country String
-  county String
+  phone String
+  
+  condition Condition
   
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
