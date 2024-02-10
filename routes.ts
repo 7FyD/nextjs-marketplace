@@ -25,6 +25,11 @@ Routes that start with this prefix are used for API auth purposes.
 */
 export const apiAuthPrefix = "/api/auth";
 
+/**
+Image uplaoding API via UploadThing
+@type {string}
+*/
+export const apiImageUpload = "/api/uploadthing";
 /**  The default redirect path after logging in.
 @type {string}
 */
