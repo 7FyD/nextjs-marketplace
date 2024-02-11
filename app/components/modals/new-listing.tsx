@@ -32,15 +32,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/ui/select";
-
-enum Condition {
-  NONE = "None",
-  NEW = "New",
-  EXCELLENT = "Excellent",
-  GOOD = "Good",
-  USED = "Used",
-  Broken = "Broken",
-}
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/app/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/app/components/ui/command";
 
 import { Textarea } from "@/app/components/ui/textarea";
 import { Button } from "@/app/components/ui/button";
@@ -52,6 +55,12 @@ import { useModal } from "@/app/hooks/use-modal-store";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { createNewListing } from "@/app/actions/new-listing";
 import PickCategoryModal from "./pick-category";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "../ui/scroll-area";
+
+import { countries } from "@/data/const-data";
+import { Condition } from "@/data/const-data";
 
 const NewListingModal = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -98,7 +107,7 @@ const NewListingModal = () => {
         .catch(() => setError("Something went wrong"));
     });
   };
-
+  const [open, setOpen] = useState(false);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -226,7 +235,7 @@ const NewListingModal = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="NEW">New</SelectItem>
+                        <SelectItem value={Condition.NEW}>New</SelectItem>
                         <SelectItem value={Condition.EXCELLENT}>
                           Excellent
                         </SelectItem>
@@ -243,17 +252,63 @@ const NewListingModal = () => {
                 control={form.control}
                 name="country"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Country where you can ship your item</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder={`${user?.name} or Romania?`}
-                        id="name"
-                        autoComplete="name"
-                      />
-                    </FormControl>
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="w-min">Country</FormLabel>
+                    <Popover open={open} onOpenChange={setOpen} modal={true}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className={cn(
+                              "min-w-[200px] w-min justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? countries.find(
+                                  (country) => country.value === field.value
+                                )?.label
+                              : "Select country"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Search country..." />
+                          <CommandEmpty>No language found.</CommandEmpty>
+                          <ScrollArea className="h-40 overflow-auto">
+                            <CommandGroup>
+                              {countries.map((country) => (
+                                <CommandItem
+                                  value={country.label}
+                                  key={country.value}
+                                  onSelect={() => {
+                                    form.setValue("country", country.value);
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      country.value === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {country.label}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </ScrollArea>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormDescription>
+                      Specify the country to which you can ship your item.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -302,7 +357,7 @@ const NewListingModal = () => {
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button disabled={isPending} type="submit" className="w-full">
-              Create an account
+              Create new listing!
             </Button>
             {isPending && (
               <div className="flex flex-col justify-center items-center gap-6">
