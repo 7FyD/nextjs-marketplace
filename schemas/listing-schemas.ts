@@ -1,17 +1,10 @@
+import { Condition, CountryEnum } from "@/data/const-data";
+
 import * as z from "zod";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 );
-
-enum Condition {
-  NONE = "None",
-  NEW = "New",
-  EXCELLENT = "Excellent",
-  GOOD = "Good",
-  USED = "Used",
-  Broken = "Broken",
-}
 
 export const NewListingSchema = z.object({
   title: z.string().min(2, {
@@ -30,11 +23,17 @@ export const NewListingSchema = z.object({
     message: "Image is required.",
   }),
   category: z.string().min(1, {
-    message: "Please choose your item's category.",
+    message: "Please select your item's category.",
   }),
-  condition: z.nativeEnum(Condition),
-  country: z.string().min(2, {
-    message: "Please specify your country.",
+  condition: z.nativeEnum(Condition, {
+    errorMap: (issue, ctx) => {
+      return { message: "Please select your item's condition." };
+    },
+  }),
+  country: z.nativeEnum(CountryEnum, {
+    errorMap: (issue, ctx) => {
+      return { message: "Please select a country." };
+    },
   }),
   phone: z.string().regex(phoneRegex, "Invalid Number!"),
   email: z.string().email(),
