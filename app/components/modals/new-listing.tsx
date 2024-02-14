@@ -59,8 +59,9 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
 
-import { countries } from "@/data/const-data";
+import { countriesArray } from "@/data/const-data";
 import { Condition } from "@/data/const-data";
+import { CountryEnum } from "@/data/const-data";
 
 const NewListingModal = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -77,7 +78,6 @@ const NewListingModal = () => {
       category: "",
       price: 0,
       imageUrl: "",
-      country: "",
       phone: "",
       email: user?.email ? user.email : "",
     },
@@ -267,7 +267,7 @@ const NewListingModal = () => {
                             )}
                           >
                             {field.value
-                              ? countries.find(
+                              ? countriesArray.find(
                                   (country) => country.value === field.value
                                 )?.label
                               : "Select country"}
@@ -281,12 +281,18 @@ const NewListingModal = () => {
                           <CommandEmpty>No language found.</CommandEmpty>
                           <ScrollArea className="h-40 overflow-auto">
                             <CommandGroup>
-                              {countries.map((country) => (
+                              {countriesArray.map((country) => (
                                 <CommandItem
                                   value={country.label}
                                   key={country.value}
                                   onSelect={() => {
-                                    form.setValue("country", country.value);
+                                    form.setValue(
+                                      "country",
+                                      CountryEnum[
+                                        country.value as keyof typeof CountryEnum
+                                      ]
+                                    );
+
                                     setOpen(false);
                                   }}
                                 >
