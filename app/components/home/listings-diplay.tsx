@@ -10,9 +10,9 @@ interface ListingsDisplayProps {
 
 const ListingsDisplay: React.FC<ListingsDisplayProps> = ({ listings }) => {
   return (
-    <div className="grid grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-4 items-center">
       {listings.map((listing: Listing) => (
-        <div key={listing.id} className="flex flex-col gap-4 items-center">
+        <div key={listing.id}>
           <ListingCard
             title={listing.title}
             country={listing.country}

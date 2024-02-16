@@ -29,7 +29,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   return (
     <Link href={id}>
-      <Card className="w-[350px] hover:scale-105 transition-all">
+      <Card className="mx-auto w-[300px] md:w-[400px] 2xl:w-[350px] hover:scale-105 transition-all">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <CardDescription>{country}</CardDescription>
