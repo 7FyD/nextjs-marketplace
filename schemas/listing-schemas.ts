@@ -7,9 +7,14 @@ const phoneRegex = new RegExp(
 );
 
 export const NewListingSchema = z.object({
-  title: z.string().min(2, {
-    message: "A title of minimum 2 characters is required.",
-  }),
+  title: z
+    .string()
+    .min(2, {
+      message: "A title of minimum 2 characters is required.",
+    })
+    .max(32, {
+      message: "A maximum of 32 characters are allowed for the title.",
+    }),
   description: z.string().min(16, {
     message: "A description of minimum 16 characters is required.",
   }),
@@ -21,7 +26,8 @@ export const NewListingSchema = z.object({
     .finite()
     .refine(
       (n) => {
-        return n.toString().split(".")[1].length <= 2;
+        if (n % 1 === 0) return true;
+        else return n.toString().split(".")[1].length <= 2;
       },
       { message: "Maximum 2 decimals allowed." }
     ),
