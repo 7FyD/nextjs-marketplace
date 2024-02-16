@@ -116,7 +116,7 @@ model Listing {
   createdAt DateTime @default(now())
   title String
   description String
-  price Int
+  price Float
   imageUrl String
   category String
   country String
