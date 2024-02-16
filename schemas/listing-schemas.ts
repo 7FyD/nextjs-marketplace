@@ -18,7 +18,13 @@ export const NewListingSchema = z.object({
     .nonnegative({
       message: "Please input a price >= $0.",
     })
-    .finite(),
+    .finite()
+    .refine(
+      (n) => {
+        return n.toString().split(".")[1].length <= 2;
+      },
+      { message: "Maximum 2 decimals allowed." }
+    ),
   imageUrl: z.string().min(1, {
     message: "Image is required.",
   }),
