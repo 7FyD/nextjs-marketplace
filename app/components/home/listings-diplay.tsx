@@ -1,7 +1,6 @@
 "use client";
 
 import { Listing } from "@prisma/client";
-import Image from "next/image";
 import ListingCard from "./listing-card";
 
 interface ListingsDisplayProps {
@@ -20,6 +19,7 @@ const ListingsDisplay: React.FC<ListingsDisplayProps> = ({ listings }) => {
             specific={listing.condition}
             image={listing.imageUrl}
             id={listing.id}
+            userId={listing.userId}
           />
         </div>
       ))}

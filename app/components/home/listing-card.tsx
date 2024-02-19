@@ -1,3 +1,5 @@
+"use client";
+
 interface ListingCardProps {
   title: string;
   country: string;
@@ -5,6 +7,7 @@ interface ListingCardProps {
   specific: string;
   image: string;
   id: string;
+  userId: string;
 }
 
 import {
@@ -19,6 +22,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { AspectRatio } from "../ui/aspect-ratio";
 
+import { useCurrentUser } from "@/app/hooks/use-current-user";
+
 const ListingCard: React.FC<ListingCardProps> = ({
   title,
   country,
@@ -26,9 +31,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
   specific,
   image,
   id,
+  userId,
 }) => {
+  const user = useCurrentUser();
   return (
-    <Link href={id}>
+    <Link href={id} className="inline-block">
       <Card className="mx-auto w-[300px] md:w-[400px] 2xl:w-[350px] hover:scale-105 transition-all">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
@@ -49,6 +56,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             })}
           </p>
           <p>{specific}</p>
+          {user && user.id === userId && <p>Delete!</p>}
         </CardFooter>
       </Card>
     </Link>
