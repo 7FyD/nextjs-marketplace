@@ -278,7 +278,7 @@ const NewListingModal = () => {
                       <PopoverContent className="w-[200px] p-0">
                         <Command>
                           <CommandInput placeholder="Search country..." />
-                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandEmpty>No country found.</CommandEmpty>
                           <ScrollArea className="h-40 overflow-auto">
                             <CommandGroup>
                               {countriesArray.map((country) => (
