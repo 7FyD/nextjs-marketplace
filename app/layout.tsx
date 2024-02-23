@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
-
+import ToasterProvider from "@/providers/ToastProvider";
 import "./globals.css";
 
 import { Inter } from "next/font/google";
@@ -24,6 +24,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className={inter.className}>
+          <ToasterProvider />
           <Navbar />
           <div className="flex flex-col min-h-screen">
             <div className="flex-grow">{children}</div>
