@@ -36,7 +36,10 @@ const Bookmark: React.FC<BookmarkProps> = ({ listingId, currentUser }) => {
                 >
                   <div className="flex items-center gap-12">
                     {!isBookmarked ? (
-                      <BookmarkIcon size={24} className="text-green-500 mr-2" />
+                      <BookmarkCheckIcon
+                        size={24}
+                        className="text-green-500 mr-2"
+                      />
                     ) : (
                       <BookmarkX size={24} className="text-red-500 mr-2" />
                     )}
