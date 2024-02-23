@@ -23,6 +23,7 @@ const Bookmark: React.FC<BookmarkProps> = ({ listingId, currentUser }) => {
       toggleFavoriteListing(listingId)
         .then((data) => {
           if (data.error) {
+            console.log(data.error);
             toast.error(data.error);
           }
           if (data.success) {

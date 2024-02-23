@@ -62,6 +62,7 @@ export const LoginClient = () => {
               form.reset();
               setShowTwoFactor(false);
             }
+            console.log(data.error);
             setError(data.error);
           }
 

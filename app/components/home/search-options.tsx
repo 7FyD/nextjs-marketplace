@@ -103,7 +103,6 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({ className }) => {
                             key={country.label}
                             value={country.value}
                             onSelect={(currentValue) => {
-                              console.log(currentValue);
                               setCountryFilter(currentValue);
                               setOpen(false);
                             }}

@@ -42,12 +42,17 @@ const NewPasswordClient = () => {
       setError("Invalid token.");
       return;
     }
-    console.log(values);
 
     startTransition(() => {
       newPassword(values, token).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        if (data?.error) {
+          console.log(data.error);
+          setError(data.error);
+        }
+
+        if (data?.success) {
+          setSuccess(data.success);
+        }
       });
     });
   };

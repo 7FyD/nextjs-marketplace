@@ -21,8 +21,14 @@ const NewVerificationClient = () => {
     }
     newVerification(token)
       .then((data) => {
-        setSuccess(data.success);
-        setError(data.error);
+        if (data?.error) {
+          console.log(data.error);
+          setError(data.error);
+        }
+
+        if (data?.success) {
+          setSuccess(data.success);
+        }
       })
       .catch(() => {
         setError("Something went wrong!");

@@ -42,8 +42,14 @@ const ForgotPasswordClient = () => {
 
     startTransition(() => {
       reset(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        if (data?.error) {
+          console.log(data.error);
+          setError(data.error);
+        }
+
+        if (data?.success) {
+          setSuccess(data.success);
+        }
       });
     });
   };
