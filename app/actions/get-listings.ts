@@ -6,28 +6,29 @@ export interface ListingQueryProps {
   userId?: string;
   category?: string;
   country?: string;
-  page?: string;
-  perPage?: string;
   free?: boolean;
+  page?: string;
 }
 
 export const getListings = async (params: ListingQueryProps) => {
   try {
-    const { userId, category, country, page, perPage, free } = params;
+    const { userId, category, country, free, page } = params;
     let query: any = {};
     if (userId) {
       query.userId = userId;
     }
     if (category) {
       query.category = {
-        // Use 'contains' for case-insensitive search
         contains: category,
         mode: "insensitive",
       };
     }
 
     if (country) {
-      query.country = category;
+      query.country = {
+        contains: country,
+        mode: "insensitive",
+      };
     }
     if (free) {
       query.price = {
@@ -35,18 +36,22 @@ export const getListings = async (params: ListingQueryProps) => {
       };
     }
     const pageNumber = page ? parseInt(page) : 1;
-    const take = perPage ? parseInt(perPage) : 20;
-    const skip = (pageNumber - 1) * take;
+    const listingsPerPage = 3;
+    const listingsAlreadyDisplayed = (pageNumber - 1) * listingsPerPage;
     const listings = await db.listing.findMany({
+      skip: listingsAlreadyDisplayed,
+      take: listingsPerPage,
       where: query,
       orderBy: {
         createdAt: "desc",
       },
-      take: take,
-      skip: skip,
     });
 
-    return listings;
+    const totalListingsCount = await db.listing.count({
+      where: query,
+    });
+
+    return { listings, totalListingsCount, listingsPerPage };
   } catch (error: any) {
     throw new Error(error);
   }
