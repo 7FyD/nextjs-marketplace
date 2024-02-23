@@ -11,6 +11,7 @@ declare module "next-auth" {
       role: "ADMIN" | "USER";
       emailVerified: true | false;
       isTwoFactorEnabled: true | false;
+      favoriteIds: string[];
     } & DefaultSession["user"];
   }
 }
@@ -66,6 +67,7 @@ export const {
       session.user.emailVerified = token.emailVerified === true ? true : false;
       session.user.isTwoFactorEnabled =
         token.isTwoFactorEnabled === true ? true : false;
+      session.user.favoriteIds = token.favoriteIds as string[];
       return session;
     },
 
@@ -79,6 +81,7 @@ export const {
       token.role = existingUser.role;
       token.emailVerified = existingUser.emailVerified && 1 == 1;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.favoriteIds = existingUser.favoriteIds;
       return token;
     },
   },

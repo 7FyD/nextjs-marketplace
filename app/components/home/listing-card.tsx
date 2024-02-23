@@ -23,6 +23,7 @@ import Link from "next/link";
 import { AspectRatio } from "../ui/aspect-ratio";
 
 import { useCurrentUser } from "@/app/hooks/use-current-user";
+import Bookmark from "../utilities/bookmark";
 
 const ListingCard: React.FC<ListingCardProps> = ({
   title,
@@ -35,10 +36,13 @@ const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const user = useCurrentUser();
   return (
-    <Link href={id} className="inline-block">
-      <Card className="mx-auto w-[300px] md:w-[400px] 2xl:w-[350px] hover:scale-105 transition-all">
+    <Link href={`/listings/${id}`} className="inline-block">
+      <Card className="mx-auto w-[300px] md:w-[400px] 2xl:w-[350px] hover:scale-105 transition-all h-[450px]">
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
+          <div className="flex flex-row justify-between">
+            <CardTitle>{title}</CardTitle>
+            <Bookmark listingId={id} currentUser={user} />
+          </div>
           <CardDescription>{country}</CardDescription>
         </CardHeader>
         <CardContent>

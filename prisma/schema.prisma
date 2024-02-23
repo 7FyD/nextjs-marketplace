@@ -25,9 +25,13 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+
+  favoriteIds   String[] @default([])
+
+  isTwoFactorEnabled Boolean @default(false)
+
   role          UserRole @default(USER)
   accounts      Account[]
-  isTwoFactorEnabled Boolean @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   listings Listing[]
 }
@@ -124,7 +128,7 @@ model Listing {
   
   condition Condition
   
-  userId String
+  userId String 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   // comments Comment[]
 }
