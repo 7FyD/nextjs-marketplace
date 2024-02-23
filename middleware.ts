@@ -7,6 +7,7 @@ import {
   apiImageUpload,
   authRoutes,
   publicRoutes,
+  dynamicRoutes,
 } from "@/routes";
 
 const { auth } = NextAuth(authConfig);
@@ -14,9 +15,11 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isDynamicRoute = dynamicRoutes.some((route) =>
+    nextUrl.pathname.startsWith(route)
+  );
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isImageUploadRoute = apiImageUpload.includes(nextUrl.pathname);
   if (isApiAuthRoute || isImageUploadRoute) return null;
@@ -27,7 +30,7 @@ export default auth((req) => {
     return null;
   }
 
-  if (!isLoggedIn && !isPublicRoute) {
+  if (!isLoggedIn && !(isPublicRoute || isDynamicRoute)) {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
 

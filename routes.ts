@@ -1,3 +1,9 @@
+/** The prefix for all the public dynamic pages.
+ These routes do not require authentification.
+ @type {string[]}
+ */
+export const dynamicRoutes = ["/listings", "/profile"];
+
 /**  An array of public routes that are accessible to the public.
 These routes do not require authentification.
 @type {string[]}
