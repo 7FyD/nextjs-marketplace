@@ -23,10 +23,10 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
-  image         String?
+  image         String?   @default("/images/default.png")
   password      String?
 
-  favoriteIds   String[] @default([])
+  favoriteIds   String[]  @default([])
 
   isTwoFactorEnabled Boolean @default(false)
 
@@ -37,7 +37,7 @@ model User {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
+  id                 String   @id @default(cuid())
   userId             String
   type               String
   provider           String
