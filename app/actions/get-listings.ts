@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 
 export interface ListingQueryProps {
   userId?: string;
+  listingsId: string[];
   category?: string;
   country?: string;
   free?: boolean;
@@ -12,10 +13,15 @@ export interface ListingQueryProps {
 
 export const getListings = async (params: ListingQueryProps) => {
   try {
-    const { userId, category, country, free, page } = params;
+    const { userId, listingsId, category, country, free, page } = params;
     let query: any = {};
     if (userId) {
       query.userId = userId;
+    }
+    if (listingsId) {
+      query.id = {
+        in: listingsId,
+      };
     }
     if (category) {
       query.category = {
