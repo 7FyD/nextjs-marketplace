@@ -7,7 +7,7 @@ interface ListingsDisplayProps {
   listings: Listing[];
 }
 
-const ListingsDisplay: React.FC<ListingsDisplayProps> = ({ listings }) => {
+const ListingsArray: React.FC<ListingsDisplayProps> = ({ listings }) => {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-4 items-center">
       {listings.map((listing: Listing) => (
@@ -27,4 +27,4 @@ const ListingsDisplay: React.FC<ListingsDisplayProps> = ({ listings }) => {
   );
 };
 
-export default ListingsDisplay;
+export default ListingsArray;
