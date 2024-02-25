@@ -6,6 +6,23 @@ import { useRouter } from "next/navigation";
 import Container from "../utilities/Container";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { logout } from "@/app/actions/logout";
+import { Button } from "@/app/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu";
+import Image from "next/image";
+import Link from "next/link";
 
 const Navbar = () => {
   const user = useCurrentUser();
@@ -65,10 +82,12 @@ const Navbar = () => {
                 F
               </p>
             </div>
+            {
+              // this DOES NOT WORK DURING DEVELOPMENT but WORKS DURING
+              // PRODUCTION. UNCOMMENT ON RELEASE.
+            }
             <div className="flex flex-row items-start gap-6 md:gap-12 lg:gap-18 text-white">
-              {
-                // this DOES NOT WORK DURING DEVELOPMENT but WORKS DURING PRODUCTION. UNCOMMENT ON RELEASE.
-                /* {!user?.id ? (
+              {!user?.id ? (
                 <>
                   <button
                     onClick={() => router.push("/auth/login")}
@@ -85,29 +104,56 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <button
-                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
-                    onClick={signOut}
-                  >
-                    Sign out
-                  </button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      asChild
+                      className="rounded-full hover:cursor-pointer"
+                    >
+                      <Image
+                        src={user.image ? user.image : ""}
+                        alt="User image"
+                        width={48}
+                        height={48}
+                      />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                      <DropdownMenuLabel className="flex flex-row items-center gap-4">
+                        <Image
+                          src={user.image ? user.image : ""}
+                          alt="User image"
+                          width={32}
+                          height={32}
+                        />
+                        {user.name}
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <Link href={`/user/${user.id}`}>
+                          <DropdownMenuItem className="hover:cursor-pointer">
+                            My profile
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/user/my-bookmarks">
+                          <DropdownMenuItem className="hover:cursor-pointer">
+                            My bookmarks
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link href="/user/settings">
+                          <DropdownMenuItem className="hover:cursor-pointer">
+                            User settings
+                          </DropdownMenuItem>
+                        </Link>
+                      </DropdownMenuGroup>
+                      <DropdownMenuSeparator />
+                      <Link href="/auth/signout">
+                        <DropdownMenuItem className="hover:cursor-pointer">
+                          Sign out
+                        </DropdownMenuItem>
+                      </Link>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </>
-              )} */
-                <>
-                  <button
-                    onClick={() => router.push("/auth/login")}
-                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
-                    onClick={() => router.push("/auth/register")}
-                  >
-                    Sign Up
-                  </button>
-                </>
-              }
+              )}
             </div>
           </div>
         </Container>
