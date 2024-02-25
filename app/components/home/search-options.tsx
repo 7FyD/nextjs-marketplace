@@ -1,7 +1,7 @@
 "use client";
 
 import qs from "query-string";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useCallback, useState } from "react";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -34,6 +34,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({ className }) => {
   const [category, setCategory] = useState("");
   const [key, setKey] = useState(0);
   const router = useRouter();
+  const currentPath = usePathname();
   const onSubmit = useCallback(async () => {
     let currentQuery = {};
 
@@ -49,7 +50,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({ className }) => {
 
     const url = qs.stringifyUrl(
       {
-        url: "/",
+        url: currentPath,
         query: updatedQuery,
       },
       { skipNull: true, skipEmptyString: true }
@@ -62,11 +63,11 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({ className }) => {
     setIsFree(false);
     setCategory("");
     setKey(key + 1);
-    router.push("/");
+    router.push(currentPath);
   };
   return (
     <div className={`h-full relative top-0 left-0 w-full ${className}`}>
-      <Button onClick={() => setIsHidden(!isHidden)}>Test</Button>
+      <Button onClick={() => setIsHidden(!isHidden)}>Filter listings</Button>
       <div className={`mt-2 ${isHidden ? "hidden" : ""}`}>
         <div className="border-2 rounded-2xl">
           <div className="flex flex-col gap-8 p-12 ">
