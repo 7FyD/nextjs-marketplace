@@ -1,9 +1,7 @@
 import { getListings, ListingQueryProps } from "./actions/get-listings";
-import ListingsDisplay from "./components/home/listings-diplay";
-import PaginationMenu from "./components/home/pagination-menu";
-import SearchOptions from "./components/home/search-options";
 import NewListingModal from "./components/modals/new-listing";
 import Container from "./components/utilities/Container";
+import ListingsDisplay from "./components/listings/listings-display";
 
 interface HomeProps {
   searchParams: ListingQueryProps;
@@ -16,15 +14,10 @@ const HomePage = async ({ searchParams }: HomeProps) => {
   return (
     <Container>
       <NewListingModal />
-      <SearchOptions className="my-6 mx-2" />
-      {listings.length > 0 ? (
-        <ListingsDisplay listings={listings} />
-      ) : (
-        "Nothing found."
-      )}
-      <PaginationMenu
-        totalPages={Math.ceil(totalListingsCount / listingsPerPage)}
-        className="mt-12"
+      <ListingsDisplay
+        listings={listings}
+        totalListingsCount={totalListingsCount}
+        listingsPerPage={listingsPerPage}
       />
     </Container>
   );
