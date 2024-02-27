@@ -13,12 +13,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import Image from "next/image";
@@ -82,10 +77,6 @@ const Navbar = () => {
                 F
               </p>
             </div>
-            {
-              // this DOES NOT WORK DURING DEVELOPMENT but WORKS DURING
-              // PRODUCTION. UNCOMMENT ON RELEASE.
-            }
             <div className="flex flex-row items-start gap-6 md:gap-12 lg:gap-18 text-white">
               {!user?.id ? (
                 <>
