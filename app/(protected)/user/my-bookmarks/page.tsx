@@ -8,7 +8,7 @@ interface HomeProps {
 
 const BookmarksPage = async ({ searchParams }: HomeProps) => {
   const user = await currentUser();
-  if (!user || !user.favoriteIds) return <div>Nothing found...</div>;
+  if (!user) return <div>Unauthorized</div>;
   searchParams.listingsId = user.favoriteIds;
   const { listings, totalListingsCount, listingsPerPage } = await getListings(
     searchParams
