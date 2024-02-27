@@ -119,7 +119,7 @@ const Navbar = () => {
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
-                        <Link href={`/user/${user.id}`}>
+                        <Link href={`/user/profile/${user.id}`}>
                           <DropdownMenuItem className="hover:cursor-pointer">
                             My profile
                           </DropdownMenuItem>
@@ -129,13 +129,18 @@ const Navbar = () => {
                             My bookmarks
                           </DropdownMenuItem>
                         </Link>
-                        <Link href="/user/settings">
+                        <Link href="/user/my-listings">
                           <DropdownMenuItem className="hover:cursor-pointer">
-                            User settings
+                            My listings
                           </DropdownMenuItem>
                         </Link>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
+                      <Link href="/user/settings">
+                        <DropdownMenuItem className="hover:cursor-pointer">
+                          User settings
+                        </DropdownMenuItem>
+                      </Link>
                       <Link href="/auth/signout">
                         <DropdownMenuItem className="hover:cursor-pointer">
                           Sign out
