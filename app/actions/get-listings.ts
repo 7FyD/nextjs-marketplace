@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 
 export interface ListingQueryProps {
   userId?: string;
-  listingsId: string[];
+  listingsId?: string[];
   category?: string;
   country?: string;
   free?: boolean;
