@@ -42,7 +42,7 @@ export const toggleFavoriteListing = async (listingId: string) => {
         favoriteIds: updatedFavoriteIds,
       },
     });
-    return { success: `Bookmark ${operation}.` };
+    return { success: `Bookmark ${operation}.`, operation: operation };
   } catch (error: any) {
     throw new Error(error);
   }

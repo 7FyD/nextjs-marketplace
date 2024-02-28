@@ -22,6 +22,7 @@ const Bookmark: React.FC<BookmarkProps> = ({ listingId, currentUser }) => {
     startTransition(() => {
       toggleFavoriteListing(listingId)
         .then((data) => {
+          const operation = data.operation;
           if (data.error) {
             console.log(data.error);
             toast.error(data.error);
@@ -34,8 +35,8 @@ const Bookmark: React.FC<BookmarkProps> = ({ listingId, currentUser }) => {
                     t.visible ? "animate-enter" : "animate-leave"
                   }`}
                 >
-                  <div className="flex items-center gap-12">
-                    {!isBookmarked ? (
+                  <div className="flex items-center gap-10">
+                    {operation === "added" ? (
                       <BookmarkCheckIcon
                         size={24}
                         className="text-green-500 mr-2"
@@ -43,13 +44,13 @@ const Bookmark: React.FC<BookmarkProps> = ({ listingId, currentUser }) => {
                     ) : (
                       <BookmarkX size={24} className="text-red-500 mr-2" />
                     )}
-                    <div>
-                      <div className="text-lg font-medium text-center">
+                    <div className="w-40">
+                      <p className="text-lg font-medium text-center">
                         Success!
-                      </div>
-                      <div className="text-gray-600 dark:text-gray-400 text-center">
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400 text-center">
                         {data.success}
-                      </div>
+                      </p>
                     </div>
                   </div>
                 </div>
