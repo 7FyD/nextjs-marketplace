@@ -9,7 +9,7 @@ export const toggleFavoriteListing = async (listingId: string) => {
       return { error: "Invalid request." };
     }
     const user = await currentUser();
-    if (!user) {
+    if (!user || !user.id) {
       return { error: "Unauthorized." };
     }
     const dbUser = await db.user.findUnique({

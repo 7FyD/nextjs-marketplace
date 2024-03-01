@@ -19,7 +19,7 @@ import bcrypt from "bcryptjs";
 
 export const settingsVerifyEmail = async () => {
   const user = await currentUser();
-  if (!user) {
+  if (!user || !user.id) {
     return { error: "Unauthorized." };
   }
 
@@ -45,7 +45,7 @@ export const settingsVerifyEmail = async () => {
 
 export const settingsToggleTwoFA = async () => {
   const user = await currentUser();
-  if (!user) {
+  if (!user || !user.id) {
     return { error: "Unauthorized." };
   }
 
@@ -97,7 +97,7 @@ export const settingsChangePassword = async (
   values: z.infer<typeof SettingsNewPasswordSchema>
 ) => {
   const user = await currentUser();
-  if (!user) {
+  if (!user || !user.id) {
     return { error: "Unauthorized." };
   }
 
@@ -139,7 +139,7 @@ export const settingsChangeName = async (
   values: z.infer<typeof SettingsChangeNameSchema>
 ) => {
   const user = await currentUser();
-  if (!user) {
+  if (!user || !user.id) {
     return { error: "Unauthorized." };
   }
 
@@ -170,7 +170,7 @@ export const settingsChangeEmail = async (
 ) => {
   // add an optional oldEmaiil? string on the new-verification token in database and if there is one, get it
   const user = await currentUser();
-  if (!user) {
+  if (!user || !user.id) {
     return { error: "Unauthorized." };
   }
 

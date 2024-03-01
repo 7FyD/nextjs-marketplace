@@ -23,7 +23,7 @@ export const newVerification = async (token: string) => {
 
   if (!existingUser) {
     const user = await currentUser();
-    if (!user) return { error: "User does not exist." };
+    if (!user || !user.id) return { error: "User does not exist." };
     const dbUser = await getUserById(user.id);
     if (!dbUser) return { error: "User does not exist." };
     if (!user.email) return { error: "Your account does not use email." };

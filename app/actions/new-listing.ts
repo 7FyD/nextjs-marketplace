@@ -11,7 +11,7 @@ export const createNewListing = async (
   data: z.infer<typeof NewListingSchema>
 ) => {
   const user = await currentUser();
-  if (!user) return { error: "Unauthorized." };
+  if (!user || !user.id) return { error: "Unauthorized." };
   const dbUser = await getUserById(user.id);
   if (!dbUser) return { error: "Unauthorized." };
 
