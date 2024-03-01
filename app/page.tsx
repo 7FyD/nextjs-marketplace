@@ -18,6 +18,7 @@ const HomePage = async ({ searchParams }: HomeProps) => {
         listings={listings}
         totalListingsCount={totalListingsCount}
         listingsPerPage={listingsPerPage}
+        defaultHidden={false}
       />
     </Container>
   );

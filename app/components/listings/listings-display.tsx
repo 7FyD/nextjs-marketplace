@@ -1,7 +1,7 @@
 "use client";
 
 import { Listing } from "@prisma/client";
-import SearchOptions from "../home/search-options";
+import SearchOptions from "./search-options";
 import ListingsArray from "./listings-array";
 import PaginationMenu from "../home/pagination-menu";
 
@@ -9,16 +9,18 @@ interface ListingsPageInterface {
   listings: Listing[];
   totalListingsCount: number;
   listingsPerPage: number;
+  defaultHidden: boolean;
 }
 
 const ListingsDisplay: React.FC<ListingsPageInterface> = ({
   listings,
   totalListingsCount,
   listingsPerPage,
+  defaultHidden,
 }) => {
   return (
     <div>
-      <SearchOptions className="my-6 mx-2" />
+      <SearchOptions defaultHidden={defaultHidden} className="my-6 mx-2" />
       {listings.length > 0 ? (
         <ListingsArray listings={listings} />
       ) : (

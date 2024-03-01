@@ -29,6 +29,7 @@ const BookmarksClient: React.FC<BookmarksClientInterface> = ({
         listings={listings}
         totalListingsCount={totalListingsCount}
         listingsPerPage={listingsPerPage}
+        defaultHidden={false}
       />
     </Container>
   );

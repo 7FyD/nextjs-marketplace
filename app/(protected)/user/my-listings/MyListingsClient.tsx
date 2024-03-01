@@ -29,6 +29,7 @@ const MyListingsClient: React.FC<MyListingsClientInterface> = ({
         listings={listings}
         totalListingsCount={totalListingsCount}
         listingsPerPage={listingsPerPage}
+        defaultHidden={false}
       />
     </Container>
   );
