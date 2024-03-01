@@ -2,7 +2,7 @@
  These routes do not require authentification.
  @type {string[]}
  */
-export const dynamicRoutes = ["/listings", "/profile"];
+export const dynamicRoutes = ["/listings", "/user/profile"];
 
 /**  An array of public routes that are accessible to the public.
 These routes do not require authentification.
