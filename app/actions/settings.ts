@@ -5,6 +5,7 @@ import {
   SettingsChangeEmailSchema,
   SettingsNewPasswordSchema,
   SettingsChangeNameSchema,
+  SettingsGeneralSchema,
 } from "@/schemas/user-schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 import {
@@ -135,8 +136,8 @@ export const settingsChangePassword = async (
   return { success: "Password succesfully changed." };
 };
 
-export const settingsChangeName = async (
-  values: z.infer<typeof SettingsChangeNameSchema>
+export const settingsGeneral = async (
+  values: z.infer<typeof SettingsGeneralSchema>
 ) => {
   const user = await currentUser();
   if (!user || !user.id) {
@@ -153,10 +154,10 @@ export const settingsChangeName = async (
     return { error: "New name is required." };
   }
 
-  const validatedFields = SettingsChangeNameSchema.safeParse(values);
+  const validatedFields = SettingsGeneralSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid new name." };
+    return { error: "Invalid input." };
   }
   await db.user.update({
     where: { id: user.id },

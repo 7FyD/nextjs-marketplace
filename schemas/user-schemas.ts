@@ -6,6 +6,15 @@ export const SettingsChangeNameSchema = z.object({
   }),
 });
 
+export const SettingsGeneralSchema = z.object({
+  name: z.optional(
+    z.string().min(2, {
+      message: "Minimum of 2 characters required.",
+    })
+  ),
+  imageUrl: z.optional(z.string()),
+});
+
 export const SettingsChangeEmailSchema = z.object({
   email: z.string().email({
     message: "New email is required.",
