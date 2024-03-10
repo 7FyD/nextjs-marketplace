@@ -30,7 +30,6 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({
   className,
   defaultHidden,
 }) => {
-  console.log(defaultHidden);
   const params = useSearchParams();
   const [isHidden, setIsHidden] = useState(defaultHidden);
   const [countryFilter, setCountryFilter] = useState("");

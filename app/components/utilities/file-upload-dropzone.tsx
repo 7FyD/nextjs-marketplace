@@ -13,7 +13,11 @@ interface FileUploadProps {
   endpoint: "listingImage";
 }
 
-export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
+export const FileUploadDropzone = ({
+  onChange,
+  value,
+  endpoint,
+}: FileUploadProps) => {
   if (value) {
     return (
       <div className="relative w-[525px] h-[190px]">
@@ -30,7 +34,7 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
   }
   return (
     <UploadDropzone
-      endpoint={endpoint}
+      endpoint="listingImage"
       onClientUploadComplete={(res) => {
         onChange(res?.[0].url);
       }}

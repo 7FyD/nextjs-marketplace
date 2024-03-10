@@ -50,7 +50,7 @@ import { Button } from "@/app/components/ui/button";
 import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
 import { BeatLoader } from "react-spinners";
-import { FileUpload } from "@/app/components/utilities/file-upload";
+import { FileUploadDropzone } from "@/app/components/utilities/file-upload-dropzone";
 import { useModal } from "@/app/hooks/use-modal-store";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { createNewListing } from "@/app/actions/new-listing";
@@ -207,7 +207,7 @@ const NewListingModal = () => {
                   <FormItem>
                     <FormLabel>Image</FormLabel>
                     <FormControl>
-                      <FileUpload
+                      <FileUploadDropzone
                         endpoint="listingImage"
                         value={field.value}
                         onChange={field.onChange}

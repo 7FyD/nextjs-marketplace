@@ -7,6 +7,7 @@ import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { Listing } from "@prisma/client";
 import { Ban, MessageSquareWarning, UserPlus } from "lucide-react";
 import Image from "next/image";
+import { useEffect } from "react";
 
 interface UserProfileClientInterface {
   user: {
