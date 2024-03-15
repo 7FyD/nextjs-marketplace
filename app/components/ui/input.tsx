@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { Checkbox } from "@/app/components/ui/checkbox";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -10,14 +10,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
 
-    const handleCheckboxChange = () => {
+    const showPassword = () => {
       setIsPasswordVisible((prev) => !prev);
     };
 
-    const initial_type = type;
-
     return (
-      <>
+      <div className="relative max-w-full">
         <input
           type={isPasswordVisible ? "text" : type}
           className={cn(
@@ -28,20 +26,19 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {type === "password" && (
-          <div className="flex space-x-2">
-            <Checkbox
-              id="terms1"
-              onClick={handleCheckboxChange}
-              className="mt-2"
-            />
-            <div className="grid gap-1.5 leading-none">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mt-2">
-                Show password
-              </label>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={showPassword}
+            className="h-100 aspect-square absolute right-3 top-2"
+          >
+            {!isPasswordVisible ? (
+              <FaEye className="h-5 w-5" />
+            ) : (
+              <FaEyeSlash className="h-5 w-5" />
+            )}
+          </button>
         )}
-      </>
+      </div>
     );
   }
 );
