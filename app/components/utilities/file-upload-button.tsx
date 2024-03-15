@@ -8,15 +8,18 @@ interface FileUploadProps {
   onChange: (url?: string) => void;
   value?: string;
   endpoint: "listingImage";
+  className?: string;
 }
 
 export const FileUploadButton = ({
   onChange,
   value,
   endpoint,
+  className,
 }: FileUploadProps) => {
   return (
     <UploadButton
+      className={className}
       endpoint="listingImage"
       onClientUploadComplete={(res) => {
         onChange(res?.[0].url);

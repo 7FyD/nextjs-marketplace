@@ -1,6 +1,6 @@
-import SettingsGeneral from "./SettingsGeneral";
+import SettingsClient from "./SettingsClient";
 const SettingsPage = async () => {
-  return <SettingsGeneral />;
+  return <SettingsClient />;
 };
 
 export default SettingsPage;

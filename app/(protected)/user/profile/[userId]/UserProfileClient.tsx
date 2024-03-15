@@ -4,6 +4,7 @@ import ListingsDisplay from "@/app/components/listings/listings-display";
 import { Button } from "@/app/components/ui/button";
 import Container from "@/app/components/utilities/Container";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
+import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { Listing } from "@prisma/client";
 import { Ban, MessageSquareWarning, UserPlus } from "lucide-react";
 import Image from "next/image";
@@ -28,10 +29,15 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
   totalListingsCount,
   listingsPerPage,
 }) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const currentUser = useCurrentUser();
   return (
     <Container>
-      <div className="flex flex-col md:flex-row gap-10 md:gap-0 items-center mt-16 p-6 border-2 rounded-full bg-gray-200 ">
+      <div
+        className={`flex ${
+          isDesktop ? "flex-row gap-0" : "flex-col gap-10"
+        } items-center mt-16 p-6 border-2 rounded-full bg-gray-200 `}
+      >
         <Image
           className="rounded-full"
           src={user.image ? user.image : "/images/default.png"}
