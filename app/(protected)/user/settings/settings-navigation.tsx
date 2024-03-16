@@ -19,7 +19,7 @@ const SettingsNavigation: React.FC<SettingsNavigationInterface> = ({
       return (
         <p
           className={cn(
-            `block w-max ml-3 mt-4 
+            `block w-max ml-3 ${isDesktop ? "mt-4" : "mt-1"} 
                 font-medium underline hover:cursor-default
             }`,
             className
@@ -31,7 +31,9 @@ const SettingsNavigation: React.FC<SettingsNavigationInterface> = ({
     return (
       <Link
         className={cn(
-          `block w-max ml-3 mt-4 font-normal hover:underline
+          `block w-max ml-3 ${
+            isDesktop ? "mt-4" : "mt-1"
+          }  font-normal hover:underline
           }`,
           className
         )}
@@ -45,13 +47,13 @@ const SettingsNavigation: React.FC<SettingsNavigationInterface> = ({
     <div
       className={` ${
         isDesktop
-          ? "flex-col w-1/4 border-r"
+          ? "flex-col justify-start w-1/4 border-r"
           : "w-full border-b justify-between"
       } flex gap-4 p-2`}
     >
       {link("general")}
       {link("security", "mt-1")}
-      {link("test", "mt-1")}
+      {link("delete account", "mt-1 text-rose-500")}
     </div>
   );
 };

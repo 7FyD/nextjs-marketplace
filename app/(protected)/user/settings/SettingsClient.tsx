@@ -30,6 +30,17 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import SettingsNavigation from "./settings-navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/components/ui/alert-dialog";
 
 // import { CardWrapper } from "@/app/components/auth/card-wrapper";
 // import { Input } from "@/app/components/ui/input";
@@ -175,23 +186,38 @@ const SettingsClient = () => {
     user?.image ? user?.image : ""
   );
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [isDeleteFAHidden, setIsDeleteFAHidden] = useState<boolean>(true);
 
-  if (query !== null && query !== "security" && query !== "general")
-    return <div>muie</div>;
+  const handleDeleteClick = () => {
+    if (isDeleteFAHidden === true) {
+      setIsDeleteFAHidden(false);
+    } else {
+    }
+  };
 
   return (
-    <div className="border bg-card text-card-foreground shadow w-3/4 md:w-1/2 mx-auto mt-24 rounded-sm">
+    <div className="border bg-card text-card-foreground shadow-md w-3/4 md:w-1/2 mx-auto mt-24 rounded-sm">
       <div className={`flex ${isDesktop ? "flex-row" : "flex-col"}`}>
         <SettingsNavigation
           isDesktop={isDesktop}
           pathname={pathname}
           currentRoute={query}
         />
-        <div className="flex flex-col mx-auto mt-4">
+        <div className="flex flex-col mt-4 w-full">
+          {query !== null &&
+            query !== "security" &&
+            query !== "general" &&
+            query !== "delete account" && <div>muie</div>}
           {(query === null || query === "general") && (
             <>
-              <h2 className="mt-4 font-semibold px-6">General info</h2>
-              <div className="grid grid-cols-2 mt-4 gap-8 p-6">
+              <h2 className="mt-4 text-center font-semibold px-6">
+                General info
+              </h2>
+              <div
+                className={`mt-4 gap-8 p-6 mb-16 grid ${
+                  isDesktop ? "ml-14 mr-14 grid-cols-2" : "grid-cols-1"
+                }`}
+              >
                 <div>
                   <Label>User avatar: </Label>
                   <Image
@@ -226,7 +252,12 @@ const SettingsClient = () => {
                   <Label className="h-min">Public email</Label>{" "}
                   <HoverCard>
                     <HoverCardTrigger asChild>
-                      <Info className="inline w-[18px] h-[18px]" />
+                      <Button
+                        variant="link"
+                        className="p-0 h-max inline hover:cursor-default"
+                      >
+                        <Info className="inline w-[18px] h-[18px]" />
+                      </Button>
                     </HoverCardTrigger>
                     <HoverCardContent>
                       <p className="text-sm">
@@ -270,11 +301,92 @@ const SettingsClient = () => {
                   </Dialog>
                 </div>
                 <div className="mb-12">
-                  <Label className="h-min block">
-                    Allow people to follow you
-                  </Label>
-                  <Switch className="mt-3 ml-16" />
+                  <Label className="h-min">Allow people to follow you</Label>
+                  <Switch className="mt-3 ml-20 block" />
                 </div>
+              </div>
+            </>
+          )}
+          {query === "security" && (
+            <>
+              <h2 className="mt-4 text-center font-semibold px-6">
+                Security information
+              </h2>
+              <div
+                className={`mt-4 gap-8 p-6 mb-16 grid ${
+                  isDesktop ? "ml-14 mr-14 grid-cols-2" : "grid-cols-1"
+                }`}
+              >
+                <div>
+                  <Label className="h-min">Email</Label>
+                  <Input type="email" />
+                </div>
+                <div>
+                  <Label>Password</Label>
+                  <Input type="password" />
+                </div>
+                <div>
+                  <Label className="block">Email confirmation:</Label>
+                  <Button type="button">Send confirmation</Button>
+                  <p>Confirmed.</p>
+                </div>
+                <div>
+                  <Label>Two factor Authentification</Label>
+                  <Switch className="mt-3 ml-20 block" />
+                </div>
+              </div>
+            </>
+          )}
+          {query === "delete account" && (
+            <>
+              <h2 className="mt-4 text-center font-semibold">
+                Permanently delete your account
+              </h2>
+              <div className="mt-6 mb-24">
+                <p className="ml-12 mb-16">
+                  This is a permanent action. Please note that it cannot be
+                  undone, and contacting support afterwards is pointless.
+                </p>
+                <AlertDialog
+                  onOpenChange={() => {
+                    setIsDeleteFAHidden(true);
+                  }}
+                >
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" className="block mx-auto">
+                      Delete account
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your account and remove your data from our
+                        servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div
+                      className={`mx-4 ${
+                        isDeleteFAHidden ? "hidden" : "block"
+                      }`}
+                    >
+                      <p className="mb-2">
+                        A confirmation code has been sent to your email.
+                      </p>
+                      <Label>2FA Code:</Label>
+                      <Input type="text" placeholder="123456"></Input>
+                    </div>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <Button onClick={handleDeleteClick} className="mt-2">
+                        Continue
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </>
           )}
