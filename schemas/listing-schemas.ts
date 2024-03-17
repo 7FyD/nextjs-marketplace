@@ -2,7 +2,7 @@ import { Condition, CountryEnum } from "@/data/const-data";
 
 import * as z from "zod";
 
-const phoneRegex = new RegExp(
+export const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 );
 
@@ -47,6 +47,6 @@ export const NewListingSchema = z.object({
       return { message: "Please select a country." };
     },
   }),
-  phone: z.string().regex(phoneRegex, "Invalid Number!"),
+  phone: z.string().regex(phoneRegex, "Invalid phone number!"),
   email: z.string().email(),
 });
