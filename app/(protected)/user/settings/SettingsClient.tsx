@@ -19,9 +19,8 @@ import {
 } from "@/app/components/ui/hover-card";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Switch } from "@/app/components/ui/switch";
@@ -43,28 +42,29 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/app/components/ui/form";
-
-import { phoneRegex } from "@/schemas/listing-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { generalSettingsSchema } from "@/schemas/settings-schemas";
+import { generalSettings } from "@/app/actions/settings";
+import { User } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
-const SettingsClient = () => {
-  const user = useCurrentUser();
+interface SettingsClientInterface {
+  user: User | null;
+}
+
+const SettingsClient: React.FC<SettingsClientInterface> = ({ user }) => {
+  const router = useRouter();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const pathname = usePathname();
   const query = useSearchParams().get("type");
-  const [avatarSrc, setAvatarSrc] = useState<string | undefined>(
-    user?.image ? user?.image : ""
-  );
-  const [date, setDate] = useState<Date | undefined>(new Date());
   const [isDeleteFAHidden, setIsDeleteFAHidden] = useState<boolean>(true);
-
+  const [isPending, startTransition] = useTransition();
   const handleDeleteClick = () => {
     if (isDeleteFAHidden === true) {
       setIsDeleteFAHidden(false);
@@ -72,37 +72,37 @@ const SettingsClient = () => {
     }
   };
 
-  const generalFormSchema = z.object({
-    imageUrl: z.optional(z.string()),
-    firstName: z.optional(z.string()),
-    lastName: z.optional(z.string()),
-    phone: z
-      .optional(z.string().regex(phoneRegex, "Invalid phone number!"))
-      .or(z.literal("")),
-    publicEmail: z.optional(z.string().email()).or(z.literal("")),
-    dateOfBirth: z.optional(z.coerce.date()),
-    allowFollow: z.optional(z.boolean()),
-  });
-
-  const generalForm = useForm<z.infer<typeof generalFormSchema>>({
-    resolver: zodResolver(generalFormSchema),
+  const generalForm = useForm<z.infer<typeof generalSettingsSchema>>({
+    resolver: zodResolver(generalSettingsSchema),
     defaultValues: {
-      imageUrl: user?.image || undefined,
-      firstName: user?.name || undefined, //add user
-      lastName: user?.name || undefined, //add user
-      phone: "", //add user
-      publicEmail: "", // add user
-      dateOfBirth: undefined, // add user
-      allowFollow: false, // add user
+      image: user?.image || undefined,
+      name: user?.name || undefined,
+      username: user?.username || "",
+      phoneNumber: user?.phoneNumber || "",
+      publicEmail: user?.publicEmail || undefined,
+      dateOfBirth: user?.dateOfBirth || undefined,
+      allowFollow: user?.allowFollow || false,
     },
   });
 
-  function onGeneralFormSubmit(values: z.infer<typeof generalFormSchema>) {
-    console.log(values);
+  function onGeneralFormSubmit(values: z.infer<typeof generalSettingsSchema>) {
+    startTransition(() => {
+      console.log(values);
+      generalSettings(values)
+        .then((data) => {
+          if (data.success) {
+            toast.success(data.success);
+          }
+          if (data.error) {
+            toast.error(data.error);
+          }
+        })
+        .catch((e) => console.log(e));
+    });
   }
 
   return (
-    <div className="border bg-card text-card-foreground shadow-md w-3/4 md:w-1/2 mx-auto mt-24 rounded-sm">
+    <div className="border bg-card text-card-foreground shadow-md w-3/4 md:w-1/2 mx-auto mt-24 rounded-sm mb-24">
       <div className={`flex ${isDesktop ? "flex-row" : "flex-col"}`}>
         <SettingsNavigation
           isDesktop={isDesktop}
@@ -123,7 +123,7 @@ const SettingsClient = () => {
                 <form onSubmit={generalForm.handleSubmit(onGeneralFormSubmit)}>
                   <FormField
                     control={generalForm.control}
-                    name="imageUrl"
+                    name="image"
                     render={({ field }) => (
                       <FormItem className="ml-auto">
                         <div
@@ -136,7 +136,7 @@ const SettingsClient = () => {
                           <div>
                             <Label>User avatar: </Label>
                             <Image
-                              className="rounded-full max-w-[96px] max-h-[96px] mt-3"
+                              className="rounded-full h-[96px] w-[96px] max-w-[96px] max-h-[96px] mt-3"
                               src={
                                 field.value ? field.value : "/public/public.png"
                               }
@@ -165,11 +165,11 @@ const SettingsClient = () => {
                   >
                     <FormField
                       control={generalForm.control}
-                      name="firstName"
+                      name="name"
                       render={({ field }) => (
                         <FormItem>
                           <div>
-                            <Label className="h-min">First name</Label>
+                            <Label className="h-min">Name</Label>
                             <FormControl>
                               <Input {...field} />
                             </FormControl>
@@ -180,11 +180,11 @@ const SettingsClient = () => {
                     />
                     <FormField
                       control={generalForm.control}
-                      name="lastName"
+                      name="username"
                       render={({ field }) => (
                         <FormItem className="mb-12">
                           <div>
-                            <Label className="h-min">Last name</Label>
+                            <Label className="h-min">Username</Label>
                             <FormControl>
                               <Input {...field} />
                             </FormControl>
@@ -195,7 +195,7 @@ const SettingsClient = () => {
                     />
                     <FormField
                       control={generalForm.control}
-                      name="phone"
+                      name="phoneNumber"
                       render={({ field }) => (
                         <FormItem className="mb-12">
                           <div>
@@ -305,7 +305,7 @@ const SettingsClient = () => {
                               <Switch
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="mt-3 ml-20 block"
+                                className="mt-3 ml-16 block"
                               />
                             </FormControl>
                           </div>
