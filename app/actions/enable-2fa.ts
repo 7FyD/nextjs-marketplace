@@ -24,14 +24,20 @@ export const enableTwoFactor = async (token: string) => {
     return { error: "User does not exist." };
   }
 
+  let change = existingUser.isTwoFactorEnabled;
+
   await db.user.update({
     where: { id: existingUser.id },
-    data: { isTwoFactorEnabled: true },
+    data: { isTwoFactorEnabled: !change },
   });
 
   await db.addTwoFactorToken.delete({
     where: { id: existingToken.id },
   });
 
-  return { success: "Two factor authentification has been enabled." };
+  return {
+    success: `Two factor authentification has been ${
+      change === true ? "disabled" : "enabled"
+    }.`,
+  };
 };
