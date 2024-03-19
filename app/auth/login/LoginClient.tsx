@@ -145,6 +145,7 @@ export const LoginClient = () => {
                           type="password"
                           id="password"
                           autoComplete="password"
+                          displayShowPassword={!!field.value.length}
                         />
                       </FormControl>
                       <Button

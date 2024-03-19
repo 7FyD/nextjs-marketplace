@@ -4,10 +4,12 @@ import { cn } from "@/lib/utils";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  displayShowPassword?: boolean;
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, displayShowPassword = true, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
 
     const showPassword = () => {
@@ -25,7 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {type === "password" && (
+        {displayShowPassword && type === "password" && (
           <button
             type="button"
             onClick={showPassword}

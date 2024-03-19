@@ -117,6 +117,7 @@ export const RegisterClient = () => {
                       type="password"
                       id="password"
                       autoComplete="password"
+                      displayShowPassword={!!field.value.length}
                     />
                   </FormControl>
                   <FormMessage />

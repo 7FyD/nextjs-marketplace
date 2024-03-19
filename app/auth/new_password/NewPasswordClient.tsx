@@ -79,6 +79,7 @@ const NewPasswordClient = () => {
                       placeholder="********"
                       type="password"
                       id="password"
+                      displayShowPassword={!!field.value.length}
                     />
                   </FormControl>
                   <FormMessage />
