@@ -20,31 +20,31 @@ import bcrypt from "bcryptjs";
 import { generalSettingsSchema } from "@/schemas/settings-schemas";
 import { update } from "@/auth";
 
-// export const settingsVerifyEmail = async () => {
-//   const user = await currentUser();
-//   if (!user || !user.id) {
-//     return { error: "Unauthorized." };
-//   }
+export const settingsSendVerifyEmail = async () => {
+  const user = await currentUser();
+  if (!user || !user.id) {
+    return { error: "Unauthorized." };
+  }
 
-//   const dbUser = await getUserById(user.id);
+  const dbUser = await getUserById(user.id);
 
-//   if (!dbUser) {
-//     return { error: "Unauthorized" };
-//   }
+  if (!dbUser) {
+    return { error: "Unauthorized" };
+  }
 
-//   if (!user.email) {
-//     return { error: "Account does not use email." };
-//   }
+  if (!user.email) {
+    return { error: "Account does not use email." };
+  }
 
-//   if (user.emailVerified) {
-//     return { error: "Email already verified." };
-//   }
+  if (user.emailVerified) {
+    return { error: "Email already verified." };
+  }
 
-//   const verificationToken = await generateVerificationToken(user.email);
-//   await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  const verificationToken = await generateVerificationToken(user.email);
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
-//   return { inform: "An email has been sent with a verification link." };
-// };
+  return { success: "An email has been sent with a verification link." };
+};
 
 export const settingsSendTwoFactorEmail = async () => {
   const user = await currentUser();
