@@ -37,14 +37,20 @@ export const sendTwoFactorEmail = async (email: string, token: string) => {
   });
 };
 
-export const sendAddTwoFactorEmail = async (email: string, token: string) => {
+export const sendToggleTwoFactorEmail = async (
+  email: string,
+  token: string,
+  isTwoFactorEnabled: boolean
+) => {
   const confirmLink = `http://localhost:3000/auth/enable_2fa?token=${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: email,
-    subject: "Activate 2FA",
-    html: `<p>Click <a href="${confirmLink}"here</a> to confirm email.</p>
+    subject: `${isTwoFactorEnabled ? "Disable" : "Activate"} 2FA`,
+    html: `<p>Click <a href="${confirmLink}"here</a> to ${
+      isTwoFactorEnabled ? "disable" : "activate"
+    } two factor authentificator.</p>
     <p>This code will expire in one hour.</p>`,
   });
 };
