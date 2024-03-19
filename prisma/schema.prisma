@@ -20,14 +20,20 @@ enum UserRole {
 
 model User {
   id            String    @id @default(cuid())
+  image         String    @default("/images/default.png")
   name          String?
+  username      String?
   email         String?   @unique
+  publicEmail   String?
+  phoneNumber   String?   @unique
+  dateOfBirth   DateTime?
+  allowFollow   Boolean   @default(false)
   emailVerified DateTime?
-  image         String?   @default("/images/default.png")
   password      String?
 
   favoriteIds   String[]  @default([])
 
+  isOAuth       Boolean   @default(false)
   isTwoFactorEnabled Boolean @default(false)
 
   role          UserRole @default(USER)

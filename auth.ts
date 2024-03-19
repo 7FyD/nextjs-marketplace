@@ -8,6 +8,7 @@ import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation
 declare module "next-auth" {
   interface Session {
     user: {
+      username: string | null;
       role: "ADMIN" | "USER";
       emailVerified: true | false;
       isTwoFactorEnabled: true | false;
@@ -21,6 +22,7 @@ export const {
   auth,
   signIn,
   signOut,
+  update,
 } = NextAuth({
   pages: {
     signIn: "/auth/login",
@@ -30,7 +32,20 @@ export const {
     async linkAccount({ user }) {
       await db.user.update({
         where: { id: user.id },
-        data: { emailVerified: new Date() },
+        data: {
+          emailVerified: new Date(),
+          username: user.name,
+          publicEmail: user.email,
+          isOAuth: true,
+        },
+      });
+    },
+    async createUser({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: {
+          publicEmail: user.email,
+        },
       });
     },
   },
@@ -68,6 +83,9 @@ export const {
       session.user.isTwoFactorEnabled =
         token.isTwoFactorEnabled === true ? true : false;
       session.user.favoriteIds = token.favoriteIds as string[];
+      session.user.name = token.name;
+      session.user.image = token.picture;
+      session.user.username = token.username as string;
       return session;
     },
 
@@ -79,9 +97,12 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
+      token.name = existingUser.name;
+      token.picture = existingUser.image;
       token.emailVerified = existingUser.emailVerified && 1 == 1;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.favoriteIds = existingUser.favoriteIds;
+      token.username = existingUser.username;
       return token;
     },
   },
