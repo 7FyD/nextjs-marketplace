@@ -40,14 +40,6 @@ export const {
         },
       });
     },
-    async createUser({ user }) {
-      await db.user.update({
-        where: { id: user.id },
-        data: {
-          publicEmail: user.email,
-        },
-      });
-    },
   },
   callbacks: {
     async signIn({ user, account }) {
