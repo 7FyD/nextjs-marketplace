@@ -1,35 +1,5 @@
 import * as z from "zod";
 
-export const SettingsChangeNameSchema = z.object({
-  name: z.string().min(2, {
-    message: "New name is required. Minimum 2 characters.",
-  }),
-});
-
-export const SettingsGeneralSchema = z.object({
-  name: z.optional(
-    z.string().min(2, {
-      message: "Minimum of 2 characters required.",
-    })
-  ),
-  imageUrl: z.optional(z.string()),
-});
-
-export const SettingsChangeEmailSchema = z.object({
-  email: z.string().email({
-    message: "New email is required.",
-  }),
-});
-
-export const SettingsNewPasswordSchema = z.object({
-  oldPassword: z.string().min(1, {
-    message: "Old password is required",
-  }),
-  password: z.string().min(6, {
-    message: "Minimum of 6 characters required",
-  }),
-});
-
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, {
     message: "Minimum of 6 characters required",
