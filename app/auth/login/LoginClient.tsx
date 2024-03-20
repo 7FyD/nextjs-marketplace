@@ -46,6 +46,7 @@ export const LoginClient = () => {
     defaultValues: {
       email: "",
       password: "",
+      code: "",
     },
   });
 
