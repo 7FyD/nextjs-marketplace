@@ -28,4 +28,5 @@ export const securitySettingsSchema = z.object({
       z.string().min(6, "Your new password must contain at least 6 characters.")
     )
     .or(z.literal("")),
+  code: z.optional(z.string()),
 });

@@ -1,24 +1,27 @@
 "use server";
 
 import * as z from "zod";
-import {
-  SettingsChangeEmailSchema,
-  SettingsNewPasswordSchema,
-  SettingsChangeNameSchema,
-  SettingsGeneralSchema,
-} from "@/schemas/user-schemas";
 import { getTwoFactorAddByEmail } from "@/data/two-factor-add";
 import {
   generateToggleTwoFactorToken,
+  generateTwoFactorToken,
   generateVerificationToken,
 } from "@/lib/tokens";
-import { sendToggleTwoFactorEmail, sendVerificationEmail } from "@/lib/mail";
+import {
+  sendToggleTwoFactorEmail,
+  sendTwoFactorEmail,
+  sendVerificationEmail,
+} from "@/lib/mail";
 import { currentUser } from "@/lib/user";
 import { getUserByEmail, getUserById } from "@/data/user";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
-import { generalSettingsSchema } from "@/schemas/settings-schemas";
+import {
+  generalSettingsSchema,
+  securitySettingsSchema,
+} from "@/schemas/settings-schemas";
 import { update } from "@/auth";
+import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 
 export const settingsSendVerifyEmail = async () => {
   const user = await currentUser();
@@ -245,4 +248,103 @@ export const generalSettings = async (
     },
   });
   return { success: "Settings Updated!" };
+};
+
+export const securitySettings = async (
+  values: z.infer<typeof securitySettingsSchema>
+) => {
+  const user = await currentUser();
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+  const dbUser = await getUserById(user.id);
+  if (!dbUser) {
+    return { error: "Unauthorized." };
+  }
+  if (dbUser.isOAuth) {
+    return {
+      error: "You cannot change the security information of an OAuth account.",
+    };
+  }
+  const validatedFields = securitySettingsSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields!" };
+  }
+  const { email, password, code } = validatedFields.data;
+  type newValuesType = {
+    isTwoFactorEnabled?: boolean | undefined;
+    emailVerified?: Date | null | undefined;
+    email?: string | undefined;
+    password?: string | undefined;
+  };
+  if (user.email && user.isTwoFactorEnabled) {
+    if (!code) {
+      const twoFactorCode = await generateTwoFactorToken(user.email);
+      await sendTwoFactorEmail(twoFactorCode.email, twoFactorCode.token);
+      return { twoFactorCode: true };
+    } else {
+      const twoFactorToken = await getTwoFactorTokenByEmail(user.email);
+
+      if (!twoFactorToken) {
+        return { twoFactorError: "Invalid code!" };
+      }
+
+      if (twoFactorToken.token !== code) {
+        return { twoFactorError: "Invalid code!" };
+      }
+
+      const hasExpired = new Date(twoFactorToken.expires) < new Date();
+
+      if (hasExpired) {
+        return { twoFactorError: "Code expired!" };
+      }
+
+      await db.twoFactorToken.delete({
+        where: { id: twoFactorToken.id },
+      });
+    }
+  }
+  if (values.password && dbUser.password) {
+    const passwordMatch = await bcrypt.compare(
+      values.password,
+      dbUser.password
+    );
+    if (passwordMatch) {
+      return {
+        error: "Your new password is your old password.",
+      };
+    }
+    const hashedPassword = await bcrypt.hash(values.password, 10);
+    values.password = hashedPassword;
+  }
+  let newValues: newValuesType = {
+    email: values.email,
+    password: values.password,
+  };
+  newValues.emailVerified = undefined;
+  if (values.email && values.email !== user.email) {
+    const existingUser = await getUserByEmail(values.email);
+
+    if (existingUser && existingUser.id !== user.id) {
+      return { error: "Email already in use!" };
+    }
+    newValues.emailVerified = null;
+    newValues.isTwoFactorEnabled = false;
+  }
+  const updatedUser = await db.user.update({
+    where: { id: dbUser.id },
+    data: {
+      ...newValues,
+    },
+  });
+  update({
+    user: {
+      email: updatedUser.email,
+      isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
+      emailVerified: !!updatedUser.emailVerified,
+    },
+  });
+
+  return { success: "Settings updated!" };
 };

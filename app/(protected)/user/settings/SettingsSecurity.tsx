@@ -23,12 +23,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { securitySettingsSchema } from "@/schemas/settings-schemas";
 import {
+  securitySettings,
   settingsSendTwoFactorEmail,
   settingsSendVerifyEmail,
 } from "@/app/actions/settings";
 import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/app/components/ui/dialog";
+import { FormError } from "@/app/components/utilities/form-error";
 
 interface SettingsInterface {
   user: User | null;
@@ -46,14 +57,38 @@ const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
     defaultValues: {
       email: user?.email || "",
       password: "",
+      code: "",
     },
   });
 
-  const onGeneralFormSubmit = (
+  const onSecurityFormSubmit = (
     values: z.infer<typeof securitySettingsSchema>
   ) => {
+    setTwoFactorError("");
     startFormTransition(() => {
-      console.log(values);
+      if (twoFactorOpen === true && !values.code)
+        setTwoFactorError("Please input a valid 2FA code.");
+      else {
+        securitySettings(values).then((data) => {
+          console.log(values);
+          if (data?.twoFactorCode) {
+            setTwoFactorOpen(true);
+          }
+          if (data?.twoFactorError) {
+            setTwoFactorError(data.twoFactorError);
+          }
+          if (data.error) {
+            setTwoFactorOpen(false);
+            setTwoFactorError("");
+            toast.error(data.error);
+          }
+          if (data.success) {
+            setTwoFactorOpen(false);
+            setTwoFactorError("");
+            toast.success(data.success);
+          }
+        });
+      }
     });
   };
 
@@ -104,11 +139,22 @@ const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
     });
   };
 
+  const [twoFactorOpen, setTwoFactorOpen] = useState<boolean>(false);
+  const [twoFactorError, setTwoFactorError] = useState<string>("");
+  const onDialogChange = () => {
+    setTwoFactorOpen(!twoFactorOpen);
+    securityForm.resetField("code");
+  };
   return (
     <div>
-      <h2 className="mt-4 text-center font-semibold px-6">General info</h2>
+      <h2 className="mt-4 text-center font-semibold px-6">
+        Security information
+      </h2>
       <Form {...securityForm}>
-        <form onSubmit={securityForm.handleSubmit(onGeneralFormSubmit)}>
+        <form
+          id="securityForm"
+          onSubmit={securityForm.handleSubmit(onSecurityFormSubmit)}
+        >
           <div
             className={`mt-4 gap-8 p-6 mb-16 grid ${
               isDesktop ? "ml-14 mr-14 grid-cols-2" : "grid-cols-1"
@@ -226,6 +272,39 @@ const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
               )}
             />
           </div>
+          <FormField
+            control={securityForm.control}
+            name="code"
+            render={({ field }) => (
+              <>
+                <FormItem>
+                  <Dialog open={twoFactorOpen} onOpenChange={onDialogChange}>
+                    <DialogContent className="w-auto">
+                      <DialogHeader>
+                        <DialogTitle>Input 2FA Code</DialogTitle>
+                        <DialogDescription>
+                          We have sent a confirmation code to {user?.email}.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="flex flex-col justify-center items-center gap-2">
+                        <Label>Two Factor Code</Label>
+                        <FormControl>
+                          <Input {...field} type="text" placeholder="123456" />
+                        </FormControl>
+                      </div>
+                      <DialogFooter className="justify-center">
+                        <Button type="submit" form="securityForm">
+                          Submit code
+                        </Button>
+                      </DialogFooter>
+                      <FormError message={twoFactorError}></FormError>
+                    </DialogContent>
+                  </Dialog>
+                </FormItem>
+              </>
+            )}
+          />
+
           <Button className="w-[100px] mb-12 block mx-auto" type="submit">
             Submit
           </Button>
