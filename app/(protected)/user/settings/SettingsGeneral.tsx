@@ -17,7 +17,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/app/components/ui/hover-card";
-import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { Input } from "@/app/components/ui/input";
@@ -41,12 +40,15 @@ import { generalSettings } from "@/app/actions/settings";
 import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 
-interface SettingsInterface {
+interface SettingsGeneralInterface {
   user: User | null;
+  isDesktop: boolean;
 }
 
-const SettingsGeneral: React.FC<SettingsInterface> = ({ user }) => {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
+  user,
+  isDesktop,
+}) => {
   const [isPending, startTransition] = useTransition();
   const generalForm = useForm<z.infer<typeof generalSettingsSchema>>({
     resolver: zodResolver(generalSettingsSchema),
@@ -93,7 +95,7 @@ const SettingsGeneral: React.FC<SettingsInterface> = ({ user }) => {
                     isDesktop ? "ml-14 mr-14 grid-cols-2" : "grid-cols-1"
                   }`}
                 >
-                  <div>
+                  <div className="mx-auto">
                     <Label>User avatar: </Label>
                     <Image
                       className="rounded-full h-[96px] w-[96px] max-w-[96px] max-h-[96px] mt-3"
@@ -201,7 +203,7 @@ const SettingsGeneral: React.FC<SettingsInterface> = ({ user }) => {
               control={generalForm.control}
               name="dateOfBirth"
               render={({ field }) => (
-                <FormItem className="mb-12">
+                <FormItem className={`mb-12 ${!isDesktop && "mx-auto"}`}>
                   <div>
                     <Label className="h-min block">Date of birth</Label>
                     <Dialog>
@@ -248,7 +250,7 @@ const SettingsGeneral: React.FC<SettingsInterface> = ({ user }) => {
               control={generalForm.control}
               name="allowFollow"
               render={({ field }) => (
-                <FormItem className="mb-12">
+                <FormItem className="mb-12 mx-auto">
                   <div>
                     <Label className="h-min">Allow people to follow you</Label>
                     <FormControl>

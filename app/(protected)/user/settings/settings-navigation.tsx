@@ -47,13 +47,13 @@ const SettingsNavigation: React.FC<SettingsNavigationInterface> = ({
     <div
       className={` ${
         isDesktop
-          ? "flex-col justify-start w-1/4 border-r"
-          : "w-full border-b justify-between"
-      } flex gap-4 p-2`}
+          ? "flex-col justify-start w-1/4 border-r p-2"
+          : "w-full border-b justify-between py-5 p-1"
+      } flex gap-4`}
     >
-      {link("general")}
+      {link("general", `${isDesktop ? "ml-3" : "ml-1"}`)}
       {link("security", "mt-1")}
-      {link("delete account", "mt-1 text-rose-500")}
+      {link("delete account", "mt-1 mr-1 text-rose-500")}
     </div>
   );
 };

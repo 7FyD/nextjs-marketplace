@@ -29,10 +29,15 @@ import { deleteAccount } from "@/app/actions/settings";
 import toast from "react-hot-toast";
 import { FormError } from "@/app/components/utilities/form-error";
 import { logout } from "@/app/actions/logout";
-import { FaSpinner } from "react-icons/fa";
 import { BeatLoader } from "react-spinners";
 
-const SettingsDeleteAccount = () => {
+interface SettingsDeleteAccountInterface {
+  isDesktop: boolean;
+}
+
+const SettingsDeleteAccount: React.FC<SettingsDeleteAccountInterface> = ({
+  isDesktop,
+}) => {
   const [isPending, startTransition] = useTransition();
   const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
   const [twoFactorError, setTwoFactorError] = useState<string>("");
@@ -89,7 +94,7 @@ const SettingsDeleteAccount = () => {
         Permanently delete your account
       </h2>
       <div className="mt-6 mb-24">
-        <p className="ml-12 mb-16">
+        <p className="mb-16 text-center mx-2">
           This is a permanent action. Please note that it cannot be undone, and
           contacting support afterwards is pointless.
         </p>

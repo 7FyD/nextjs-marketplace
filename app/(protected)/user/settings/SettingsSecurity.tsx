@@ -6,7 +6,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/app/components/ui/hover-card";
-import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { Input } from "@/app/components/ui/input";
@@ -40,14 +39,16 @@ import {
 } from "@/app/components/ui/dialog";
 import { FormError } from "@/app/components/utilities/form-error";
 
-interface SettingsInterface {
+interface SettingsSecurityInterface {
   user: User | null;
+  isDesktop: boolean;
 }
 
-const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
+const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
+  user,
+  isDesktop,
+}) => {
   const isOAuth = user?.isOAuth ? true : false;
-
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const [isTwoFactorPending, startTwoFactorTransition] = useTransition();
   const [isEmailConfirmedPending, startEmailConfirmedTransition] =
