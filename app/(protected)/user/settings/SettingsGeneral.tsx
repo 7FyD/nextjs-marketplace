@@ -96,10 +96,10 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
                     isDesktop ? "ml-14 mr-14 grid-cols-2" : "grid-cols-1"
                   }`}
                 >
-                  <div className="mx-auto">
+                  <div className="mx-auto ">
                     <Label>User avatar: </Label>
                     <Image
-                      className="rounded-full h-[96px] w-[96px] max-w-[96px] max-h-[96px] mt-3"
+                      className="rounded-full h-[96px] w-[96px] max-w-[96px] max-h-[96px] mt-3 object-cover"
                       src={field.value ? field.value : "/public/public.png"}
                       width={96}
                       height={96}

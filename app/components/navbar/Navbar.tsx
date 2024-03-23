@@ -101,10 +101,11 @@ const Navbar = () => {
                       className="rounded-full hover:cursor-pointer"
                     >
                       <Image
-                        src={user.image ? user.image : ""}
-                        alt="User image"
+                        className="rounded-full h-[48px] w-[48px] max-w-[48px] max-h-[48px] mt-3 object-cover"
+                        src={user.image ? user.image : "/public/public.png"}
                         width={48}
                         height={48}
+                        alt={`${user?.name}'s image`}
                       />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
@@ -112,8 +113,8 @@ const Navbar = () => {
                         <Image
                           src={user.image ? user.image : ""}
                           alt="User image"
-                          width={32}
-                          height={32}
+                          width={48}
+                          height={48}
                         />
                         {user.name}
                       </DropdownMenuLabel>
