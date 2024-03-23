@@ -32,7 +32,6 @@ import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -47,11 +46,21 @@ interface SettingsInterface {
 
 const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
   const isOAuth = user?.isOAuth ? true : false;
+
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
   const [isTwoFactorPending, startTwoFactorTransition] = useTransition();
   const [isEmailConfirmedPending, startEmailConfirmedTransition] =
     useTransition();
   const [isFormPending, startFormTransition] = useTransition();
+
+  const [twoFactorOpen, setTwoFactorOpen] = useState<boolean>(false);
+  const [twoFactorError, setTwoFactorError] = useState<string>("");
+
+  const [twoFactorButton, setTwoFactorButton] = useState<string>(
+    user?.isTwoFactorEnabled ? "Disable 2FA" : "Enable 2FA"
+  );
+  const [twoFactorEmailSent, setTwoFactorEmailSent] = useState<boolean>(false);
   const securityForm = useForm<z.infer<typeof securitySettingsSchema>>({
     resolver: zodResolver(securitySettingsSchema),
     defaultValues: {
@@ -60,6 +69,11 @@ const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
       code: "",
     },
   });
+
+  const onDialogChange = () => {
+    setTwoFactorOpen(!twoFactorOpen);
+    securityForm.resetField("code");
+  };
 
   const onSecurityFormSubmit = (
     values: z.infer<typeof securitySettingsSchema>
@@ -70,7 +84,6 @@ const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
         setTwoFactorError("Please input a valid 2FA code.");
       else {
         securitySettings(values).then((data) => {
-          console.log(values);
           if (data?.twoFactorCode) {
             setTwoFactorOpen(true);
           }
@@ -108,10 +121,6 @@ const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
     });
   };
 
-  const [twoFactorButton, setTwoFactorButton] = useState<string>(
-    user?.isTwoFactorEnabled ? "Disable 2FA" : "Enable 2FA"
-  );
-  const [twoFactorEmailSent, setTwoFactorEmailSent] = useState<boolean>(false);
   const toggleTwoFactor = () => {
     startTwoFactorTransition(() => {
       settingsSendTwoFactorEmail()
@@ -139,12 +148,6 @@ const SettingsSecurity: React.FC<SettingsInterface> = ({ user }) => {
     });
   };
 
-  const [twoFactorOpen, setTwoFactorOpen] = useState<boolean>(false);
-  const [twoFactorError, setTwoFactorError] = useState<string>("");
-  const onDialogChange = () => {
-    setTwoFactorOpen(!twoFactorOpen);
-    securityForm.resetField("code");
-  };
   return (
     <div>
       <h2 className="mt-4 text-center font-semibold px-6">
