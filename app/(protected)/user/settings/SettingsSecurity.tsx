@@ -308,10 +308,16 @@ const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
               </>
             )}
           />
-
-          <Button className="w-[100px] mb-12 block mx-auto" type="submit">
-            Submit
-          </Button>
+          <div className="flex flex-col justify-center items-center mb-8">
+            <Button
+              className="w-[100px] mb-4 block mx-auto"
+              type="submit"
+              disabled={isFormPending}
+            >
+              Submit
+            </Button>
+            {isFormPending && <BeatLoader />}
+          </div>
         </form>
       </Form>
     </div>

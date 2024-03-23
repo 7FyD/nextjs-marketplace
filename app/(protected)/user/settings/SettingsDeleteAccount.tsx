@@ -143,13 +143,14 @@ const SettingsDeleteAccount: React.FC<SettingsDeleteAccountInterface> = ({
                   )}
                 />
                 <AlertDialogFooter>
-                  <div className="flex flex-col gap-2 justify-center items-center">
+                  <div className="flex flex-col gap-4 justify-center items-center">
                     <div className="flex flex-row sm:space-x-2">
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <Button
                         form="deleteAccountForm"
                         type="submit"
                         className="mt-2"
+                        disabled={isPending}
                       >
                         Continue
                       </Button>

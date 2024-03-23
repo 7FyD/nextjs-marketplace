@@ -39,6 +39,7 @@ import { generalSettingsSchema } from "@/schemas/settings-schemas";
 import { generalSettings } from "@/app/actions/settings";
 import { User } from "@prisma/client";
 import toast from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 interface SettingsGeneralInterface {
   user: User | null;
@@ -266,9 +267,16 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
               )}
             />
           </div>
-          <Button className="w-[100px] mb-12 block mx-auto" type="submit">
-            Submit
-          </Button>
+          <div className="flex flex-col justify-center items-center mb-8">
+            <Button
+              className="w-[100px] mb-4 block mx-auto"
+              type="submit"
+              disabled={isPending}
+            >
+              Submit
+            </Button>
+            {isPending && <BeatLoader />}
+          </div>
         </form>
       </Form>
     </div>
