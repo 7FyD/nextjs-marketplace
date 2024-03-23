@@ -17,6 +17,7 @@ import { getUserByEmail, getUserById } from "@/data/user";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import {
+  deleteAccountSettingsSchema,
   generalSettingsSchema,
   securitySettingsSchema,
 } from "@/schemas/settings-schemas";
@@ -347,4 +348,73 @@ export const securitySettings = async (
   });
 
   return { success: "Settings updated!" };
+};
+
+export const deleteAccount = async (
+  values: z.infer<typeof deleteAccountSettingsSchema>
+) => {
+  const user = await currentUser();
+  if (!user) {
+    return { error: "Unauthorized." };
+  }
+  const dbUser = await getUserById(user.id);
+  if (!dbUser) {
+    return { error: "Unauthorized." };
+  }
+
+  const validatedFields = deleteAccountSettingsSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { error: "Invalid code!" };
+  }
+
+  const code = values.code;
+
+  if (user.email && user.isTwoFactorEnabled) {
+    if (!code) {
+      const existingToken = await getTwoFactorTokenByEmail(user.email);
+      if (existingToken) {
+        const hasExpired = new Date(existingToken.expires) < new Date();
+        if (hasExpired) {
+          const twoFactorCode = await generateTwoFactorToken(user.email);
+          await sendTwoFactorEmail(twoFactorCode.email, twoFactorCode.token);
+          return { twoFactorCode: true };
+        } else {
+          return {
+            existingTwoFactorCode: "Please check your email for your code.",
+          };
+        }
+      } else {
+        const twoFactorCode = await generateTwoFactorToken(user.email);
+        await sendTwoFactorEmail(twoFactorCode.email, twoFactorCode.token);
+        return { twoFactorCode: true };
+      }
+    } else {
+      const twoFactorToken = await getTwoFactorTokenByEmail(user.email);
+
+      if (!twoFactorToken) {
+        return { twoFactorError: "Invalid code!" };
+      }
+
+      if (twoFactorToken.token !== code) {
+        return { twoFactorError: "Invalid code!" };
+      }
+
+      const hasExpired = new Date(twoFactorToken.expires) < new Date();
+
+      if (hasExpired) {
+        return { twoFactorError: "Code expired!" };
+      }
+
+      await db.twoFactorToken.delete({
+        where: { id: twoFactorToken.id },
+      });
+    }
+  }
+
+  const deletedUser = await db.user.delete({
+    where: { id: user.id },
+  });
+
+  return { success: "Account successfully deleted. Redirecting..." };
 };

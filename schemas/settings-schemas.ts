@@ -30,3 +30,7 @@ export const securitySettingsSchema = z.object({
     .or(z.literal("")),
   code: z.optional(z.string()),
 });
+
+export const deleteAccountSettingsSchema = z.object({
+  code: z.optional(z.string().min(6, "Invalid code!")).or(z.literal("")),
+});
