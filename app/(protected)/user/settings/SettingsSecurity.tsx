@@ -214,6 +214,7 @@ const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
                       <HoverCard>
                         <HoverCardTrigger asChild>
                           <Button
+                            type="button"
                             variant="link"
                             className="p-0 h-max inline hover:cursor-default"
                           >
@@ -258,6 +259,7 @@ const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
                       <HoverCard>
                         <HoverCardTrigger asChild>
                           <Button
+                            type="button"
                             variant="link"
                             className="p-0 h-max inline hover:cursor-default"
                           >
