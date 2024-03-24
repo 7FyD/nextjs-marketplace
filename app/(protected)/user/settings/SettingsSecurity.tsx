@@ -210,28 +210,26 @@ const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
                   </div>
                   <FormMessage />
                   {isOAuth && (
-                    <FormDescription>
-                      <HoverCard>
-                        <HoverCardTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="link"
-                            className="p-0 h-max inline hover:cursor-default"
-                          >
-                            Why can't I change this?
-                          </Button>
-                        </HoverCardTrigger>
-                        <HoverCardContent>
-                          <p className="text-sm">
-                            You cannot change the email associated with this
-                            account.
-                            <br /> <br />
-                            Your account uses a third party application for
-                            authentification.
-                          </p>
-                        </HoverCardContent>
-                      </HoverCard>
-                    </FormDescription>
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="link"
+                          className="p-0 h-max inline hover:cursor-default"
+                        >
+                          Why can't I change this?
+                        </Button>
+                      </HoverCardTrigger>
+                      <HoverCardContent>
+                        <p className="text-sm">
+                          You cannot change the email associated with this
+                          account.
+                          <br /> <br />
+                          Your account uses a third party application for
+                          authentification.
+                        </p>
+                      </HoverCardContent>
+                    </HoverCard>
                   )}
                 </FormItem>
               )}
@@ -243,7 +241,7 @@ const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
               render={({ field }) => (
                 <FormItem className="mb-12">
                   <div>
-                    <Label className="h-min">Password</Label>
+                    <Label className="h-min">New password</Label>
                     <FormControl>
                       <Input
                         {...field}
@@ -255,24 +253,22 @@ const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
                   </div>
                   <FormMessage />
                   {isOAuth && (
-                    <FormDescription>
-                      <HoverCard>
-                        <HoverCardTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="link"
-                            className="p-0 h-max inline hover:cursor-default"
-                          >
-                            Why can't I change this?
-                          </Button>
-                        </HoverCardTrigger>
-                        <HoverCardContent>
-                          <p className="text-sm">
-                            Your account does not use password authentification.
-                          </p>
-                        </HoverCardContent>
-                      </HoverCard>
-                    </FormDescription>
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="link"
+                          className="p-0 h-max inline hover:cursor-default"
+                        >
+                          Why can't I change this?
+                        </Button>
+                      </HoverCardTrigger>
+                      <HoverCardContent>
+                        <p className="text-sm">
+                          Your account does not use password authentification.
+                        </p>
+                      </HoverCardContent>
+                    </HoverCard>
                   )}
                 </FormItem>
               )}

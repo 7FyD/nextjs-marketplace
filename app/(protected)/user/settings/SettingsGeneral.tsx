@@ -187,6 +187,7 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
                     <HoverCard>
                       <HoverCardTrigger asChild>
                         <Button
+                          type="button"
                           variant="link"
                           className="p-0 h-max inline hover:cursor-default"
                         >
@@ -221,8 +222,8 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
                       <DialogTrigger asChild>
                         <Button className="inline-block" variant="outline">
                           {field.value
-                            ? format(field.value, "P")
-                            : "Change birthday"}
+                            ? format(field.value, "PPP")
+                            : "Add birthday"}
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="max-w-min flex flex-col justify-center items-center">
@@ -231,7 +232,7 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
                         </DialogHeader>
                         <DialogDescription>
                           {field.value
-                            ? `Curent birthday: ${format(field.value, "P")}`
+                            ? `Curent birthday: ${format(field.value, "PPP")}`
                             : ""}
                         </DialogDescription>
                         <FormControl>
@@ -239,8 +240,8 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
                             className="rounded-md border shadow mx-28 my-6"
                             mode="single"
                             captionLayout="dropdown"
-                            fromYear={1950}
-                            toYear={2016}
+                            fromYear={new Date().getFullYear() - 100}
+                            toYear={new Date().getFullYear() - 18}
                             selected={field.value}
                             onSelect={field.onChange}
                           />
