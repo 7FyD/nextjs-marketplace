@@ -109,7 +109,7 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
                   <FormControl>
                     <FileUploadButton
                       className="mt-14"
-                      endpoint="listingImage"
+                      endpoint="profilePicture"
                       value={field.value}
                       onChange={field.onChange}
                     />

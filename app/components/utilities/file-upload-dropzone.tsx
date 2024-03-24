@@ -10,7 +10,7 @@ import "@uploadthing/react/styles.css";
 interface FileUploadProps {
   onChange: (url?: string) => void;
   value?: string;
-  endpoint: "listingImage";
+  endpoint: "listingImage" | "profilePicture";
 }
 
 export const FileUploadDropzone = ({
@@ -34,7 +34,7 @@ export const FileUploadDropzone = ({
   }
   return (
     <UploadDropzone
-      endpoint="listingImage"
+      endpoint={endpoint}
       onClientUploadComplete={(res) => {
         onChange(res?.[0].url);
       }}
