@@ -1,5 +1,7 @@
 import * as z from "zod";
 
+import { phoneRegex } from "./listing-schemas";
+
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, {
     message: "Minimum of 6 characters required",
@@ -30,6 +32,19 @@ export const RegisterSchema = z.object({
     message: "Minimum 6 characters required",
   }),
   name: z.string().min(2, {
-    message: "Name is required. Minimum 2 characters.",
+    message: "Name is required. Minimum 2 characters",
   }),
+  username: z.string().min(2, {
+    message: "Username is required. Minimum 2 characters",
+  }),
+  publicEmail: z.optional(
+    z
+      .string()
+      .email({
+        message: "Public email invalid",
+      })
+      .or(z.literal(""))
+  ),
+  phoneNumber: z.string().regex(phoneRegex, "Invalid phone number"),
+  dateOfBirth: z.date(),
 });
