@@ -29,8 +29,10 @@ import Image from "next/image";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/app/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +42,7 @@ import { generalSettings } from "@/app/actions/settings";
 import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
+import { PhoneInput } from "@/app/components/ui/phone-input";
 
 interface SettingsGeneralInterface {
   user: User | null;
@@ -158,11 +161,18 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
               control={generalForm.control}
               name="phoneNumber"
               render={({ field }) => (
-                <FormItem className="mb-12">
-                  <div>
-                    <Label className="h-min">Phone number</Label>
-                    <Input {...field} />
-                  </div>
+                <FormItem className="flex flex-col items-start">
+                  <FormLabel className="text-left">Phone Number</FormLabel>
+                  <FormControl className="w-full">
+                    <PhoneInput
+                      international
+                      placeholder="Enter a phone number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-left">
+                    Enter a phone number
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
