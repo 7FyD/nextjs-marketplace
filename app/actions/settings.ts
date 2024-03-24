@@ -230,9 +230,24 @@ export const generalSettings = async (
     dateOfBirth,
     allowFollow,
   } = validatedFields.data;
-  if (!name || !phoneNumber || !publicEmail) {
-    // TODO: implement better solution
-    return { error: "You cannot leave empty fields." };
+  if (!name && dbUser.name) {
+    return { error: "You cannot remove your name." };
+  }
+
+  if (!phoneNumber && dbUser.phoneNumber) {
+    return { error: "You cannot remove your phone number." };
+  }
+
+  if (!publicEmail && dbUser.publicEmail) {
+    return { error: "You cannot remove your public email." };
+  }
+
+  if (!username && dbUser.username) {
+    return { error: "You cannot remove your username." };
+  }
+
+  if (!dateOfBirth && dbUser.dateOfBirth) {
+    return { error: "You cannot remove your date of birth." };
   }
   const updatedUser = await db.user.update({
     where: { id: dbUser.id },
@@ -272,7 +287,13 @@ export const securitySettings = async (
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
   }
+
   const { email, password, code } = validatedFields.data;
+
+  if (!email) {
+    return { error: "You cannot remove your security email." };
+  }
+
   type newValuesType = {
     isTwoFactorEnabled?: boolean | undefined;
     emailVerified?: Date | null | undefined;
