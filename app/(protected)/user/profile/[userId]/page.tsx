@@ -20,6 +20,9 @@ const UserProfilePage = async ({ params }: { params: IParams }) => {
     image: user.image,
     email: user.email,
     role: user.role,
+    allowFollow: user.allowFollow,
+    followers: user.followers,
+    followings: user.followings,
   };
   return (
     <UserProfileClient

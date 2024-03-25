@@ -32,6 +32,8 @@ model User {
   password      String?
 
   favoriteIds   String[]  @default([])
+  followers     String[]  @default([])
+  followings    String[]  @default([])
 
   isOAuth       Boolean   @default(false)
   isTwoFactorEnabled Boolean @default(false)
