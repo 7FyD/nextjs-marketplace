@@ -6,6 +6,7 @@ import { FormError } from "@/app/components/utilities/form-error";
 import { FormSuccess } from "@/app/components/utilities/form-success";
 import { Listing, User } from "@prisma/client";
 import Image from "next/image";
+import Link from "next/link";
 import { startTransition, useState } from "react";
 
 interface ListingClientProps {
@@ -49,6 +50,9 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
       </Button>
       <FormError message={error} />
       <FormSuccess message={success} />
+      <Link href={`/user/profile/${listing.user.id}`}>
+        {listing.user.name}'s profile
+      </Link>
     </div>
   );
 };
