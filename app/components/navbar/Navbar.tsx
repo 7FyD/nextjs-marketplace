@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Container from "../utilities/Container";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { logout } from "@/app/actions/logout";
-import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,12 +13,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import Image from "next/image";
 import Link from "next/link";
-import { Bell } from "lucide-react";
+import NotificationMenu from "./notifications-menu";
 
 const Navbar = () => {
   const user = useCurrentUser();
@@ -94,22 +92,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <div className="flex flex-row gap-6 items-center">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Bell className="mt-2" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-100">
-                      <DropdownMenuLabel className="flex flex-row justify-between">
-                        <Button variant="ghost">Follow notifications</Button>
-                        <Button variant="ghost">Post notifications</Button>
-                        <Button variant="ghost">Report notifications</Button>
-                      </DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <p>Lol</p>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <NotificationMenu />
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       asChild
@@ -123,7 +106,6 @@ const Navbar = () => {
                         alt={`${user?.name}'s image`}
                       />
                     </DropdownMenuTrigger>
-
                     <DropdownMenuContent className="w-56">
                       <DropdownMenuLabel className="flex flex-row items-center gap-4">
                         <Image
