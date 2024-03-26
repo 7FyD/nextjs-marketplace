@@ -14,10 +14,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
 import Image from "next/image";
 import Link from "next/link";
+import { Bell } from "lucide-react";
 
 const Navbar = () => {
   const user = useCurrentUser();
@@ -54,9 +56,6 @@ const Navbar = () => {
   const signOut = () => {
     logout();
   };
-  // TO DO!!
-  // basically add a way to detect if logged in, if not logged in display upper nav with login if logged in do it with user, if not logged in dont display
-  // vertical navbar
   return (
     <div className="">
       <div className="w-full bg-[#212529] z-[1] text-l pt-3 pb-3 border-b-[2px] border-black">
@@ -94,7 +93,23 @@ const Navbar = () => {
                   </button>
                 </>
               ) : (
-                <>
+                <div className="flex flex-row gap-6 items-center">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Bell className="mt-2" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-100">
+                      <DropdownMenuLabel className="flex flex-row justify-between">
+                        <Button variant="ghost">Follow notifications</Button>
+                        <Button variant="ghost">Post notifications</Button>
+                        <Button variant="ghost">Report notifications</Button>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <p>Lol</p>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       asChild
@@ -108,6 +123,7 @@ const Navbar = () => {
                         alt={`${user?.name}'s image`}
                       />
                     </DropdownMenuTrigger>
+
                     <DropdownMenuContent className="w-56">
                       <DropdownMenuLabel className="flex flex-row items-center gap-4">
                         <Image
@@ -149,7 +165,7 @@ const Navbar = () => {
                       </Link>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </>
+                </div>
               )}
             </div>
           </div>
