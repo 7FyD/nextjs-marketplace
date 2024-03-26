@@ -18,8 +18,19 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import NotificationMenu from "./notifications-menu";
+import { Notification } from "@prisma/client";
 
-const Navbar = () => {
+interface NavbarInterface {
+  followNotifications: Notification[];
+  listingNotifications: Notification[];
+  reportNotifications: Notification[];
+}
+
+const Navbar: React.FC<NavbarInterface> = ({
+  followNotifications,
+  listingNotifications,
+  reportNotifications,
+}) => {
   const user = useCurrentUser();
   const widthRef = useRef(769);
   const [width, setWidth] = useState(769);
@@ -51,9 +62,6 @@ const Navbar = () => {
     document.body.style.backgroundColor = "white";
   };
   const router = useRouter();
-  const signOut = () => {
-    logout();
-  };
   return (
     <div className="">
       <div className="w-full bg-[#212529] z-[1] text-l pt-3 pb-3 border-b-[2px] border-black">
@@ -92,7 +100,11 @@ const Navbar = () => {
                 </>
               ) : (
                 <div className="flex flex-row gap-6 items-center">
-                  <NotificationMenu />
+                  <NotificationMenu
+                    followNotifications={followNotifications}
+                    listingNotifications={listingNotifications}
+                    reportNotifications={reportNotifications}
+                  />
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       asChild

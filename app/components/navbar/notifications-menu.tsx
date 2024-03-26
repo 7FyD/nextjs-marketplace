@@ -1,4 +1,5 @@
 "use client";
+import { getNotifications } from "@/app/actions/get-notifications";
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
@@ -11,12 +12,23 @@ import {
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { Bell } from "lucide-react";
 import { useState } from "react";
-const NotificationMenu = () => {
-  const followNotifs = ["1", "2"];
-  const listingNotifs = ["3", "4"];
-  const reportNotifs = ["5", "6"];
+import { Notification } from "@prisma/client";
+import Link from "next/link";
+
+interface NotificationMenuInterface {
+  followNotifications: Notification[];
+  listingNotifications: Notification[];
+  reportNotifications: Notification[];
+}
+
+const NotificationMenu: React.FC<NotificationMenuInterface> = ({
+  followNotifications,
+  listingNotifications,
+  reportNotifications,
+}) => {
   const [notificationsArray, setNotificationsArray] =
-    useState<string[]>(followNotifs);
+    useState<Notification[]>(followNotifications);
+
   const [currentCategory, setCurrentCategory] = useState<string>("follow");
   return (
     <DropdownMenu>
@@ -27,7 +39,7 @@ const NotificationMenu = () => {
         <DropdownMenuLabel className="flex flex-row justify-between">
           <Button
             onClick={() => {
-              setNotificationsArray(followNotifs);
+              setNotificationsArray(followNotifications);
               setCurrentCategory("follow");
             }}
             variant="ghost"
@@ -37,7 +49,7 @@ const NotificationMenu = () => {
           </Button>
           <Button
             onClick={() => {
-              setNotificationsArray(listingNotifs);
+              setNotificationsArray(listingNotifications);
               setCurrentCategory("listing");
             }}
             variant="ghost"
@@ -47,7 +59,7 @@ const NotificationMenu = () => {
           </Button>
           <Button
             onClick={() => {
-              setNotificationsArray(reportNotifs);
+              setNotificationsArray(reportNotifications);
               setCurrentCategory("report");
             }}
             variant="ghost"
@@ -57,10 +69,21 @@ const NotificationMenu = () => {
           </Button>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          {notificationsArray.map((item, index) => (
-            <DropdownMenuItem key={index}>Notification {item}</DropdownMenuItem>
-          ))}
+        <DropdownMenuGroup className="mb-8">
+          {notificationsArray.length > 0 ? (
+            notificationsArray.map((item, index) => (
+              <DropdownMenuItem key={index}>
+                {item.title}!
+                <Link className="mx-1" href={`/user/profile/${item.nameId}`}>
+                  {item.name}
+                </Link>
+                just followed you!
+              </DropdownMenuItem>
+            ))
+          ) : (
+            <h1 className="text-center font-semibold mt-4">Nothing found.</h1>
+          )}
+          {}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -69,6 +69,18 @@ export const followUser = async (userId: string) => {
       },
     });
 
+    if (operation === "added") {
+      await db.notification.create({
+        data: {
+          userId: targetUser.id,
+          type: "FOLLOW",
+          title: "New follower",
+          name: user.name ? user.name : "NULL",
+          nameId: user.id,
+        },
+      });
+    }
+
     return { success: `Follow ${operation}.`, operation: operation };
   } catch (error: any) {
     throw new Error(error);

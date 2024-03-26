@@ -18,6 +18,7 @@ enum UserRole {
   USER
 }
 
+
 model User {
   id            String    @id @default(cuid())
   image         String    @default("/images/default.png")
@@ -35,6 +36,8 @@ model User {
   followers     String[]  @default([])
   followings    String[]  @default([])
 
+  notifications Notification[]
+
   isOAuth       Boolean   @default(false)
   isTwoFactorEnabled Boolean @default(false)
 
@@ -42,6 +45,26 @@ model User {
   accounts      Account[]
   twoFactorConfirmation TwoFactorConfirmation?
   listings Listing[]
+}
+
+enum NotificationType {
+  FOLLOW
+  LISTING
+  REPORT
+}
+
+model Notification {
+  id                String @id @default(cuid())
+  userId            String
+  type              NotificationType
+  title             String
+  name              String
+  nameId            String
+  reporter          String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {
