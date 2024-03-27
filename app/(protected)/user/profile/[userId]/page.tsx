@@ -1,5 +1,5 @@
 import { getListings } from "@/app/actions/get-listings";
-import { getUserById } from "@/data/user";
+import { getUserById, getUsersByIds } from "@/data/user";
 import UserProfileClient from "./UserProfileClient";
 
 interface IParams {
@@ -14,6 +14,8 @@ const UserProfilePage = async ({ params }: { params: IParams }) => {
   const { listings, totalListingsCount, listingsPerPage } = await getListings({
     userId: user.id,
   });
+  const followers = await getUsersByIds(user.followers);
+  const followings = await getUsersByIds(user.followings);
   const safeUser = {
     id: user.id,
     name: user.name,
@@ -21,8 +23,8 @@ const UserProfilePage = async ({ params }: { params: IParams }) => {
     email: user.email,
     role: user.role,
     allowFollow: user.allowFollow,
-    followers: user.followers,
-    followings: user.followings,
+    followers,
+    followings,
   };
   return (
     <UserProfileClient

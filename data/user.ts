@@ -25,3 +25,18 @@ export const getUserById = async (id: string) => {
     return null;
   }
 };
+
+export const getUsersByIds = async (userIds: string[]) => {
+  try {
+    const users = await db.user.findMany({
+      where: {
+        id: {
+          in: userIds,
+        },
+      },
+    });
+    return users;
+  } catch {
+    return [];
+  }
+};

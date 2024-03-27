@@ -13,6 +13,8 @@ declare module "next-auth" {
       emailVerified: true | false;
       isTwoFactorEnabled: true | false;
       favoriteIds: string[];
+      followers: string[];
+      followings: string[];
     } & DefaultSession["user"];
   }
 }
@@ -78,6 +80,9 @@ export const {
       session.user.name = token.name;
       session.user.image = token.picture;
       session.user.username = token.username as string;
+      session.user.followers = token.followers as string[];
+      session.user.followings = token.followings as string[];
+
       return session;
     },
 
@@ -95,6 +100,8 @@ export const {
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.favoriteIds = existingUser.favoriteIds;
       token.username = existingUser.username;
+      token.followers = existingUser.followers;
+      token.followings = existingUser.followings;
       return token;
     },
   },

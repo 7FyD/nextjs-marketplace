@@ -6,7 +6,7 @@ import { Button } from "@/app/components/ui/button";
 import Container from "@/app/components/utilities/Container";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import { Listing } from "@prisma/client";
+import { Listing, User } from "@prisma/client";
 import {
   Ban,
   MessageSquareWarning,
@@ -26,9 +26,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/app/components/ui/dialog";
-import { Label } from "@/app/components/ui/label";
-import { Input } from "@/app/components/ui/input";
 import { DialogClose } from "@radix-ui/react-dialog";
+import Followers from "@/app/components/user-profile/follow-list";
 
 interface UserProfileClientInterface {
   user: {
@@ -38,8 +37,8 @@ interface UserProfileClientInterface {
     email: string | null;
     allowFollow: boolean | null;
     role: "USER" | "ADMIN";
-    followers: string[];
-    followings: string[];
+    followers: User[];
+    followings: User[];
   };
   userListings: Listing[];
   totalListingsCount: number;
@@ -54,9 +53,12 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
 }) => {
   const [isFollowPending, startFollowTransition] = useTransition();
   const [followers, setFollowers] = useState<number>(user.followers.length);
+  const following = user.followings.length;
   const currentUser = useCurrentUser();
   const [isFollowed, setIsFollowed] = useState<boolean>(
-    currentUser ? user.followers.includes(currentUser.id) : false
+    currentUser
+      ? user.followers.some((follower) => follower.id === currentUser.id)
+      : false
   );
 
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -137,7 +139,42 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
                 <DialogTitle>{user.name}'s followers</DialogTitle>
                 <DialogDescription>All followers are public</DialogDescription>
               </DialogHeader>
-              {user.followers}
+              <div className="flex flex-col gap-4">
+                {user.followers.length > 0 ? (
+                  user.followers.map((user: User) => (
+                    <Followers key={user.id} user={user} />
+                  ))
+                ) : (
+                  <h2 className="text-center font-semibold">Nothing found.</h2>
+                )}
+              </div>
+              <DialogFooter>
+                <DialogClose>Close</DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger asChild>
+              <p className="hover:cursor-pointer">
+                <span className="font-medium">{following}</span> following
+              </p>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>{user.name}'s following</DialogTitle>
+                <DialogDescription>
+                  All the people you follow are public
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-4">
+                {user.followings.length > 0 ? (
+                  user.followings.map((user: User) => (
+                    <Followers key={user.id} user={user} />
+                  ))
+                ) : (
+                  <h2 className="text-center font-semibold">Nothing found.</h2>
+                )}
+              </div>
               <DialogFooter>
                 <DialogClose>Close</DialogClose>
               </DialogFooter>
