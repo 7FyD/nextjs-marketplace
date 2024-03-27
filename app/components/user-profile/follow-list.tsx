@@ -18,7 +18,7 @@ const FollowList: React.FC<FollowListInterface> = ({ user }) => {
   const currentUser = useCurrentUser();
   const [isFollowPending, startFollowTransition] = useTransition();
   const [isFollowed, setIsFollowed] = useState<boolean>(
-    currentUser ? currentUser.followers.includes(user.id) : false
+    currentUser ? currentUser.followings.includes(user.id) : false
   );
   const followAction = () => {
     startFollowTransition(() => {
@@ -88,11 +88,11 @@ const FollowList: React.FC<FollowListInterface> = ({ user }) => {
         >
           {isFollowed ? (
             <>
-              Follow <UserPlusIcon className="ml-3" />
+              Unfollow <UserMinusIcon className="ml-3" />
             </>
           ) : (
             <>
-              Unfollow <UserMinusIcon className="ml-3" />
+              Follow <UserPlusIcon className="ml-3" />
             </>
           )}
         </Button>
