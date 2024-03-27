@@ -88,11 +88,11 @@ const FollowList: React.FC<FollowListInterface> = ({ user }) => {
         >
           {isFollowed ? (
             <>
-              Unfollow <UserMinusIcon className="ml-3" />
+              Follow <UserPlusIcon className="ml-3" />
             </>
           ) : (
             <>
-              Follow <UserPlusIcon className="ml-3" />
+              Unfollow <UserMinusIcon className="ml-3" />
             </>
           )}
         </Button>
