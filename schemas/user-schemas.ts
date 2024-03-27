@@ -48,3 +48,10 @@ export const RegisterSchema = z.object({
   phoneNumber: z.string().regex(phoneRegex, "Invalid phone number"),
   dateOfBirth: z.date(),
 });
+
+export const ReportFormSchema = z.object({
+  userId: z.string(),
+  type: z.enum(["name", "photo", "listing", "impersonation", "scam"], {
+    required_error: "You need to select a report type.",
+  }),
+});

@@ -25,9 +25,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/app/components/ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
 import Followers from "@/app/components/user-profile/follow-list";
+import ReportModal from "@/app/components/user-profile/report-modal";
+import FollowersDialog from "@/app/components/user-profile/followers-dialog";
 
 interface UserProfileClientInterface {
   user: {
@@ -127,59 +129,20 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
         <div className="flex flex-col justify-between items-center gap-2 mx-auto">
           <h1 className="font-semibold text-xl">{user.name}</h1>
           <p>Email: {user.email}</p>
-          <Dialog>
-            <DialogTrigger asChild>
-              <p className="hover:cursor-pointer">
-                <span className="font-medium">{followers}</span>{" "}
-                {followers != 1 ? "followers" : "follower"}
-              </p>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>{user.name}'s followers</DialogTitle>
-                <DialogDescription>All followers are public</DialogDescription>
-              </DialogHeader>
-              <div className="flex flex-col gap-4">
-                {user.followers.length > 0 ? (
-                  user.followers.map((user: User) => (
-                    <Followers key={user.id} user={user} />
-                  ))
-                ) : (
-                  <h2 className="text-center font-semibold">Nothing found.</h2>
-                )}
-              </div>
-              <DialogFooter>
-                <DialogClose>Close</DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          <Dialog>
-            <DialogTrigger asChild>
-              <p className="hover:cursor-pointer">
-                <span className="font-medium">{following}</span> following
-              </p>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>{user.name}'s following</DialogTitle>
-                <DialogDescription>
-                  All the people you follow are public
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex flex-col gap-4">
-                {user.followings.length > 0 ? (
-                  user.followings.map((user: User) => (
-                    <Followers key={user.id} user={user} />
-                  ))
-                ) : (
-                  <h2 className="text-center font-semibold">Nothing found.</h2>
-                )}
-              </div>
-              <DialogFooter>
-                <DialogClose>Close</DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <FollowersDialog
+            label="followers"
+            message="All followers are public"
+            followCount={followers}
+            displayName={user.name}
+            userList={user.followers}
+          />
+          <FollowersDialog
+            label="following"
+            message="All the people you follow are public"
+            followCount={following}
+            displayName={user.name}
+            userList={user.followings}
+          />
           <p>Role: {user.role}</p>
           {user.id !== currentUser?.id && (
             <div className="flex flex-row gap-4 mt-8">
@@ -204,12 +167,7 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
                   )}
                 </Button>
               )}
-              <Button
-                type="button"
-                className="w-[150px] bg-red-500 hover:bg-red-700"
-              >
-                Report <MessageSquareWarning className="ml-3" />
-              </Button>
+              <ReportModal userId={user.id} name={user.name} />
               {user.role !== "ADMIN" && currentUser?.role === "ADMIN" && (
                 <Button
                   type="button"

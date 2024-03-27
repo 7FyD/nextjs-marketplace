@@ -1,5 +1,6 @@
 "use server";
 
+import { update } from "@/auth";
 import { getUserById } from "@/data/user";
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/user";
@@ -80,7 +81,11 @@ export const followUser = async (userId: string) => {
         },
       });
     }
-
+    update({
+      user: {
+        followings: updatedFollowings,
+      },
+    });
     return { success: `Follow ${operation}.`, operation: operation };
   } catch (error: any) {
     throw new Error(error);
