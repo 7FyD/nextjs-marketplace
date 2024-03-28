@@ -60,7 +60,8 @@ model Notification {
   title             String
   name              String
   nameId            String
-  reporter          String?
+  reporterId        String?
+  reporterName      String?
 
   createdAt DateTime @default(now())
 

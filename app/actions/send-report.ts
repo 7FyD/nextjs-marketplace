@@ -35,7 +35,7 @@ export const sendReport = async (values: z.infer<typeof ReportFormSchema>) => {
       where: {
         type: "REPORT",
         nameId: values.userId,
-        reporter: user.id,
+        reporterId: user.id,
       },
     });
 
@@ -60,9 +60,10 @@ export const sendReport = async (values: z.infer<typeof ReportFormSchema>) => {
           title: `${
             values.type.charAt(0).toUpperCase() + values.type.slice(1)
           } report`,
-          name: reportedUser.name ? reportedUser.name : values.userId,
+          name: reportedUser.name ? reportedUser.name : reportedUser.id,
           nameId: values.userId,
-          reporter: user.id,
+          reporterId: user.id,
+          reporterName: user.name,
         },
       });
     });
