@@ -18,21 +18,33 @@ import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/app/components/ui/dialog";
-import Followers from "@/app/components/user-profile/follow-list";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/components/ui/alert-dialog";
+import * as z from "zod";
 import ReportModal from "@/app/components/user-profile/report-modal";
 import FollowersDialog from "@/app/components/user-profile/followers-dialog";
 import { deleteUser } from "@/app/actions/delete-user-admin";
 import { useRouter } from "next/navigation";
-
+import { useForm } from "react-hook-form";
+import { NewPasswordSchema } from "@/schemas/user-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/app/components/ui/form";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 interface UserProfileClientInterface {
   user: {
     id: string;
@@ -65,7 +77,6 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
       ? user.followers.some((follower) => follower.id === currentUser.id)
       : false
   );
-
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const followAction = () => {
@@ -115,8 +126,15 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
     });
   };
 
-  const deleteUserAction = () => {
-    deleteUser(user.id).then((data) => {
+  const deleteAccountForm = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
+    defaultValues: {
+      password: "",
+    },
+  });
+
+  const deleteUserAction = (values: z.infer<typeof NewPasswordSchema>) => {
+    deleteUser(user.id, values).then((data) => {
       if (data.error) {
         toast.error(data.error);
       }
@@ -126,6 +144,8 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
       }
     });
   };
+
+  const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
 
   return (
     <Container>
@@ -188,13 +208,67 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
               )}
               <ReportModal userId={user.id} name={user.name} />
               {user.role !== "ADMIN" && currentUser?.role === "ADMIN" && (
-                <Button
-                  onClick={deleteUserAction}
-                  type="button"
-                  className="w-[150px] bg-red-800 hover:bg-red-950"
+                <AlertDialog
+                  open={dialogIsOpen}
+                  onOpenChange={() => setDialogIsOpen(!dialogIsOpen)}
                 >
-                  Delete user <Ban className="ml-3" />
-                </Button>
+                  <Form {...deleteAccountForm}>
+                    <form
+                      id="deleteAccountForm"
+                      onSubmit={deleteAccountForm.handleSubmit(
+                        deleteUserAction
+                      )}
+                    >
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          type="button"
+                          className="w-[150px] bg-red-800 hover:bg-red-950"
+                        >
+                          Delete user <Ban className="ml-3" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Please input your password to confirm your admin
+                            identity.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <FormField
+                          control={deleteAccountForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <div>
+                                <Label>Password</Label>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    type="password"
+                                    id="password"
+                                    placeholder="********"
+                                    autoComplete="password"
+                                    displayShowPassword={!!field.value.length}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <Button form="deleteAccountForm" type="submit">
+                            Continue
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </form>
+                  </Form>
+                </AlertDialog>
               )}
             </div>
           )}
