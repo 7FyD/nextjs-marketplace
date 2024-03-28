@@ -145,7 +145,11 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
           />
           <p>Role: {user.role}</p>
           {user.id !== currentUser?.id && (
-            <div className="flex flex-row gap-4 mt-8">
+            <div
+              className={`flex ${
+                isDesktop ? "flex-row" : "flex-col"
+              } gap-4 mt-8`}
+            >
               {user.allowFollow && (
                 <Button
                   disabled={isFollowPending}
