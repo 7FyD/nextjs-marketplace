@@ -13,7 +13,10 @@ import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { Bell } from "lucide-react";
 import { useState } from "react";
 import { Notification } from "@prisma/client";
-import Link from "next/link";
+import NotificationText from "./notification-text";
+import { useCurrentUser } from "@/app/hooks/use-current-user";
+import { deleteAllNotifications } from "@/app/actions/delete-notification";
+import toast from "react-hot-toast";
 
 interface NotificationMenuInterface {
   followNotifications: Notification[];
@@ -26,10 +29,37 @@ const NotificationMenu: React.FC<NotificationMenuInterface> = ({
   listingNotifications,
   reportNotifications,
 }) => {
+  const currentUser = useCurrentUser();
   const [notificationsArray, setNotificationsArray] =
     useState<Notification[]>(followNotifications);
 
-  const [currentCategory, setCurrentCategory] = useState<string>("follow");
+  const [currentCategory, setCurrentCategory] = useState<
+    "FOLLOW" | "REPORT" | "LISTING"
+  >("FOLLOW");
+
+  const handleDeleteAll = () => {
+    deleteAllNotifications(currentCategory).then((data) => {
+      if (data.error) {
+        toast.error(data.error);
+      }
+      if (data.success) {
+        toast.success(data.success);
+        setNotificationsArray([]);
+        switch (currentCategory) {
+          case "FOLLOW":
+            followNotifications = [];
+            break;
+          case "REPORT":
+            reportNotifications = [];
+            break;
+          case "LISTING":
+            listingNotifications = [];
+            break;
+        }
+      }
+    });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,50 +70,67 @@ const NotificationMenu: React.FC<NotificationMenuInterface> = ({
           <Button
             onClick={() => {
               setNotificationsArray(followNotifications);
-              setCurrentCategory("follow");
+              setCurrentCategory("FOLLOW");
             }}
             variant="ghost"
-            disabled={currentCategory === "follow"}
+            disabled={currentCategory === "FOLLOW"}
           >
             Follow notifications
           </Button>
           <Button
             onClick={() => {
               setNotificationsArray(listingNotifications);
-              setCurrentCategory("listing");
+              setCurrentCategory("LISTING");
             }}
             variant="ghost"
-            disabled={currentCategory === "listing"}
+            disabled={currentCategory === "LISTING"}
           >
             Listing notifications
           </Button>
-          <Button
-            onClick={() => {
-              setNotificationsArray(reportNotifications);
-              setCurrentCategory("report");
-            }}
-            variant="ghost"
-            disabled={currentCategory === "report"}
-          >
-            Report notifications
-          </Button>
+          {currentUser?.role === "ADMIN" && (
+            <Button
+              onClick={() => {
+                setNotificationsArray(reportNotifications);
+                setCurrentCategory("REPORT");
+              }}
+              variant="ghost"
+              disabled={currentCategory === "REPORT"}
+            >
+              Report notifications
+            </Button>
+          )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup className="mb-8">
+        <DropdownMenuGroup className="flex flex-col mb-8">
           {notificationsArray.length > 0 ? (
-            notificationsArray.map((item, index) => (
-              <DropdownMenuItem key={index}>
-                {item.title}!
-                <Link className="mx-1" href={`/user/profile/${item.nameId}`}>
-                  {item.name}
-                </Link>
-                just followed you!
-              </DropdownMenuItem>
-            ))
+            <>
+              {notificationsArray.reverse().map((item, index) => (
+                <DropdownMenuItem key={index}>
+                  {1 && (
+                    <NotificationText
+                      id={item.id}
+                      type={currentCategory}
+                      title={item.title}
+                      name={item.name}
+                      nameId={item.nameId}
+                      secondaryName={item.reporterName}
+                      secondaryId={item.reporterId}
+                    />
+                  )}
+                </DropdownMenuItem>
+              ))}
+              <Button
+                onClick={handleDeleteAll}
+                type="button"
+                variant={"ghost"}
+                className="text-red-500 hover:text-red-700 w-min mx-auto mt-2"
+              >
+                Delete all {currentCategory.toLowerCase()} notifications
+              </Button>
+            </>
           ) : (
             <h1 className="text-center font-semibold mt-4">Nothing found.</h1>
           )}
-          {}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
