@@ -30,6 +30,8 @@ import {
 import Followers from "@/app/components/user-profile/follow-list";
 import ReportModal from "@/app/components/user-profile/report-modal";
 import FollowersDialog from "@/app/components/user-profile/followers-dialog";
+import { deleteUser } from "@/app/actions/delete-user-admin";
+import { useRouter } from "next/navigation";
 
 interface UserProfileClientInterface {
   user: {
@@ -53,6 +55,7 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
   totalListingsCount,
   listingsPerPage,
 }) => {
+  const router = useRouter();
   const [isFollowPending, startFollowTransition] = useTransition();
   const [followers, setFollowers] = useState<number>(user.followers.length);
   const following = user.followings.length;
@@ -109,6 +112,18 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
           }
         })
         .catch(() => toast.error("Something went wrong."));
+    });
+  };
+
+  const deleteUserAction = () => {
+    deleteUser(user.id).then((data) => {
+      if (data.error) {
+        toast.error(data.error);
+      }
+      if (data.success) {
+        toast.success(data.success);
+        router.push("/");
+      }
     });
   };
 
@@ -174,6 +189,7 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
               <ReportModal userId={user.id} name={user.name} />
               {user.role !== "ADMIN" && currentUser?.role === "ADMIN" && (
                 <Button
+                  onClick={deleteUserAction}
                   type="button"
                   className="w-[150px] bg-red-800 hover:bg-red-950"
                 >
