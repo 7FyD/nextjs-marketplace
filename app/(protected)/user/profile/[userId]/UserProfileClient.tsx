@@ -17,34 +17,10 @@ import Image from "next/image";
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/app/components/ui/alert-dialog";
-import * as z from "zod";
 import ReportModal from "@/app/components/user-profile/report-modal";
 import FollowersDialog from "@/app/components/user-profile/followers-dialog";
-import { deleteUser } from "@/app/actions/delete-user-admin";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { NewPasswordSchema } from "@/schemas/user-schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/app/components/ui/form";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
+
+import DeleteUser from "@/app/components/user-profile/delete-user-admin";
 interface UserProfileClientInterface {
   user: {
     id: string;
@@ -67,7 +43,6 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
   totalListingsCount,
   listingsPerPage,
 }) => {
-  const router = useRouter();
   const [isFollowPending, startFollowTransition] = useTransition();
   const [followers, setFollowers] = useState<number>(user.followers.length);
   const following = user.followings.length;
@@ -125,27 +100,6 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
         .catch(() => toast.error("Something went wrong."));
     });
   };
-
-  const deleteAccountForm = useForm<z.infer<typeof NewPasswordSchema>>({
-    resolver: zodResolver(NewPasswordSchema),
-    defaultValues: {
-      password: "",
-    },
-  });
-
-  const deleteUserAction = (values: z.infer<typeof NewPasswordSchema>) => {
-    deleteUser(user.id, values).then((data) => {
-      if (data.error) {
-        toast.error(data.error);
-      }
-      if (data.success) {
-        toast.success(data.success);
-        router.push("/");
-      }
-    });
-  };
-
-  const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
 
   return (
     <Container>
@@ -208,81 +162,25 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
               )}
               <ReportModal userId={user.id} name={user.name} />
               {user.role !== "ADMIN" && currentUser?.role === "ADMIN" && (
-                <AlertDialog
-                  open={dialogIsOpen}
-                  onOpenChange={() => setDialogIsOpen(!dialogIsOpen)}
-                >
-                  <Form {...deleteAccountForm}>
-                    <form
-                      id="deleteAccountForm"
-                      onSubmit={deleteAccountForm.handleSubmit(
-                        deleteUserAction
-                      )}
-                    >
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          type="button"
-                          className="w-[150px] bg-red-800 hover:bg-red-950"
-                        >
-                          Delete user <Ban className="ml-3" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Please input your password to confirm your admin
-                            identity.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <FormField
-                          control={deleteAccountForm.control}
-                          name="password"
-                          render={({ field }) => (
-                            <FormItem>
-                              <div>
-                                <Label>Password</Label>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    type="password"
-                                    id="password"
-                                    placeholder="********"
-                                    autoComplete="password"
-                                    displayShowPassword={!!field.value.length}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </div>
-                            </FormItem>
-                          )}
-                        />
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <Button form="deleteAccountForm" type="submit">
-                            Continue
-                          </Button>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </form>
-                  </Form>
-                </AlertDialog>
+                <DeleteUser id={user.id} />
               )}
             </div>
           )}
         </div>
       </div>
-      <h1 className="text-center font-semibold text-xl mt-6">
-        User listings:{" "}
-      </h1>
-      <ListingsDisplay
-        listings={userListings}
-        totalListingsCount={totalListingsCount}
-        listingsPerPage={listingsPerPage}
-        defaultHidden={true}
-      />
+      {userListings.length > 0 && (
+        <>
+          <h1 className="text-center font-semibold text-xl mt-6">
+            User listings:{" "}
+          </h1>
+          <ListingsDisplay
+            listings={userListings}
+            totalListingsCount={totalListingsCount}
+            listingsPerPage={listingsPerPage}
+            defaultHidden={true}
+          />
+        </>
+      )}
     </Container>
   );
 };
