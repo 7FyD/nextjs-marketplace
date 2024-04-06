@@ -274,15 +274,19 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
           )}
         </div>
       </div>
-      <h1 className="text-center font-semibold text-xl mt-6">
-        User listings:{" "}
-      </h1>
-      <ListingsDisplay
-        listings={userListings}
-        totalListingsCount={totalListingsCount}
-        listingsPerPage={listingsPerPage}
-        defaultHidden={true}
-      />
+      {userListings.length > 0 && (
+        <>
+          <h1 className="text-center font-semibold text-xl mt-6">
+            User listings:{" "}
+          </h1>
+          <ListingsDisplay
+            listings={userListings}
+            totalListingsCount={totalListingsCount}
+            listingsPerPage={listingsPerPage}
+            defaultHidden={true}
+          />
+        </>
+      )}
     </Container>
   );
 };

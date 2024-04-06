@@ -20,17 +20,25 @@ const MyListingsClient: React.FC<MyListingsClientInterface> = ({
 }) => {
   return (
     <Container>
-      <div className="mt-12">
-        <h1 className="text-center text-3xl font-semibold">
-          These are your listings.
+      {listings.length > 0 ? (
+        <>
+          <div className="mt-12">
+            <h1 className="text-center text-3xl font-semibold">
+              These are your listings.
+            </h1>
+          </div>
+          <ListingsDisplay
+            listings={listings}
+            totalListingsCount={totalListingsCount}
+            listingsPerPage={listingsPerPage}
+            defaultHidden={false}
+          />
+        </>
+      ) : (
+        <h1 className="mt-12  text-red-500 text-center font-semibold text-xl">
+          You don't have any posted listings.
         </h1>
-      </div>
-      <ListingsDisplay
-        listings={listings}
-        totalListingsCount={totalListingsCount}
-        listingsPerPage={listingsPerPage}
-        defaultHidden={false}
-      />
+      )}
     </Container>
   );
 };
