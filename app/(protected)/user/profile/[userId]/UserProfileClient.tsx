@@ -106,7 +106,7 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
       <div
         className={`flex ${
           isDesktop ? "flex-row gap-0" : "flex-col gap-10"
-        } items-center mt-16 p-6 border-2 rounded-full bg-gray-200 `}
+        } items-center mt-16 p-6 border-2 rounded-full bg-gray-200 dark:bg-gray-800`}
       >
         <Image
           className="rounded-full"

@@ -1,58 +1,80 @@
-"use client";
-
-import { deleteListing } from "@/app/actions/delete-listing";
 import { Button } from "@/app/components/ui/button";
-import { FormError } from "@/app/components/utilities/form-error";
-import { FormSuccess } from "@/app/components/utilities/form-success";
-import { Listing, User } from "@prisma/client";
+import { Separator } from "@/app/components/ui/separator";
+import { Listing } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
-import { startTransition, useState } from "react";
+import { Bookmark, StarIcon } from "lucide-react";
 
 interface ListingClientProps {
-  listing: Listing & {
-    user: User;
-  };
+  listing: Listing;
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
-  const onSubmit = (listingId: string) => {
-    setError("");
-    setSuccess("");
-
-    startTransition(() => {
-      deleteListing(listingId)
-        .then((data) => {
-          if (data?.error) {
-            console.log(data.error);
-            setError(data.error);
-          }
-
-          if (data?.success) {
-            setSuccess(data.success);
-          }
-        })
-        .catch(() => setError("Something went wrong"));
-    });
-  };
   return (
-    <div>
+    <div className="flex flex-col max-w-6xl px-4 mx-auto gap-6 lg:gap-12 py-6 mt-12">
+      <div className="flex flex-row gap-4">
+        <div className="flex flex-row justify-between min-w-[450px] max-w-[450px] ml-4">
+          <div className="flex flex-col gap-4">
+            <h1 className="font-bold text-3xl">{listing.title}</h1>
+            <div className="flex flex-row items-center gap-0.5">
+              <StarIcon className="w-5 h-5 fill-primary" />
+              <StarIcon className="w-5 h-5 fill-primary" />
+              <StarIcon className="w-5 h-5 fill-primary" />
+              <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+              <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+            </div>
+            <div>
+              <p>Servers: any</p>
+              <p>Ranks: unranked - Challenger 1000LP</p>
+            </div>
+          </div>
+          <div className="text-4xl font-bold ml-auto">{listing.price}€</div>
+          <Separator className="mx-4" orientation="vertical" />
+        </div>
+
+        <div className="flex flex-col justify-between w-[900px]">
+          <div className="grid gap-4 text-sm leading-loose">
+            <p className="max-w-[620px]">
+              Selling Challenger, Grandmaster, Master accounts from all servers!
+              EUW, EUNE, NA, LAN, anything you might want! Korea accounts are
+              LEVEL 30 UNRANKED Master accounts from all servers! EUW, EUNE, NA,
+              LAN, anything you might want! Korea accounts are LEVEL 30
+              UNRANKED.
+            </p>
+          </div>
+          <Button className="max-w-[200px] mx-auto" size="lg" variant="outline">
+            <Bookmark className="w-4 h-4 mr-2 min-w-min" />
+            Add to bookmarks
+          </Button>
+        </div>
+      </div>
+      {/* mobile version */}
+      {/* <div className="grid gap-3 items-start">
+        <div className="flex md:hidden items-start">
+          <div className="grid gap-4">
+            <h1 className="font-bold text-2xl sm:text-3xl">{listing.title}</h1>
+            <div>
+              <p>60% combed ringspun cotton/40% polyester jersey tee.</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-0.5">
+                <StarIcon className="w-5 h-5 fill-primary" />
+                <StarIcon className="w-5 h-5 fill-primary" />
+                <StarIcon className="w-5 h-5 fill-primary" />
+                <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+                <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+              </div>
+            </div>
+          </div>
+          <div className="text-4xl font-bold ml-auto">{listing.price}€</div>
+        </div>
+      </div> */}
       <Image
-        src={listing?.imageUrl}
-        alt="Listing image"
-        width={250}
-        height={250}
+        alt={`${listing.title} image`}
+        className="object-cover border border-gray-200 w-full rounded-lg overflow-hidden dark:border-gray-800"
+        height={400}
+        src={listing.imageUrl}
+        width={900}
       />
-      <Button onClick={() => onSubmit(listing.id)} variant={"destructive"}>
-        Delete listing
-      </Button>
-      <FormError message={error} />
-      <FormSuccess message={success} />
-      <Link href={`/user/profile/${listing.user.id}`}>
-        {listing.user.name}'s profile
-      </Link>
     </div>
   );
 };
