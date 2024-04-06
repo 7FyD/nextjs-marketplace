@@ -19,7 +19,7 @@ const ToggleTheme = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="hover:bg-transparent hover:text-white border-0"
+          className="hover:bg-transparent hover:text-white border-0 mt-2"
           variant="ghost"
           size="icon"
         >

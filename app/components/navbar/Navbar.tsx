@@ -5,7 +5,6 @@ import MenuItem from "./MenuItem";
 import { useRouter } from "next/navigation";
 import Container from "../utilities/Container";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
-import { logout } from "@/app/actions/logout";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -83,7 +82,7 @@ const Navbar: React.FC<NavbarInterface> = ({
                 F
               </p>
             </div>
-            <div className="flex flex-row items-center gap-6 md:gap-12 lg:gap-18 text-white">
+            <div className="flex flex-row items-center gap-8 text-white">
               <ToggleTheme />
               {!user?.id ? (
                 <>
