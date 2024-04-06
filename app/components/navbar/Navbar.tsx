@@ -19,6 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import NotificationMenu from "./notifications-menu";
 import { Notification } from "@prisma/client";
+import ToggleTheme from "./toggle-theme";
 
 interface NavbarInterface {
   followNotifications: Notification[];
@@ -82,7 +83,8 @@ const Navbar: React.FC<NavbarInterface> = ({
                 F
               </p>
             </div>
-            <div className="flex flex-row items-start gap-6 md:gap-12 lg:gap-18 text-white">
+            <div className="flex flex-row items-center gap-6 md:gap-12 lg:gap-18 text-white">
+              <ToggleTheme />
               {!user?.id ? (
                 <>
                   <button

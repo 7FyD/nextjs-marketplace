@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 import Navbar from "./components/navbar/Navbar";
 import { getNotifications } from "./actions/get-notifications";
+import { ThemeProvider } from "./components/utilities/theme-provider";
 
 export const metadata: Metadata = {
   title: "Marketplace | 7FyD.dev",
@@ -27,15 +28,22 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className={inter.className}>
-          <ToasterProvider />
-          <Navbar
-            followNotifications={followNotifications}
-            listingNotifications={listingNotifications}
-            reportNotifications={reportNotifications}
-          />
-          <div className="flex flex-col min-h-screen">
-            <div className="flex-grow">{children}</div>
-          </div>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ToasterProvider />
+            <Navbar
+              followNotifications={followNotifications}
+              listingNotifications={listingNotifications}
+              reportNotifications={reportNotifications}
+            />
+            <div className="flex flex-col min-h-screen">
+              <div className="flex-grow">{children}</div>
+            </div>
+          </ThemeProvider>
         </body>
       </html>
     </SessionProvider>
