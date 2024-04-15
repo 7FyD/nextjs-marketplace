@@ -354,7 +354,16 @@ const NewListingModal = () => {
                     </FormControl>
                     <FormDescription>
                       This email will be shown to the people who order your
-                      items. It is linked to your account's email.
+                      items. It is your account's{" "}
+                      <Link
+                        className="hover:underline text-cyan-500"
+                        href="/user/settings#publicEmail"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        public email
+                      </Link>
+                      .
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

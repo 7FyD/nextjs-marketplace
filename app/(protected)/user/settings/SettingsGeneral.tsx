@@ -181,7 +181,7 @@ const SettingsGeneral: React.FC<SettingsGeneralInterface> = ({
               control={generalForm.control}
               name="publicEmail"
               render={({ field }) => (
-                <FormItem className="mb-12">
+                <FormItem id="publicEmail" className="mb-12">
                   <div>
                     <Label className="h-min">Public email</Label>{" "}
                     <HoverCard>
