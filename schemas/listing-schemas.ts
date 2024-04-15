@@ -18,10 +18,18 @@ export const NewListingSchema = z.object({
   description: z.string().min(16, {
     message: "A description of minimum 16 characters is required",
   }),
+  category: z.string().min(1, {
+    message: "Please select your item's category",
+  }),
+  currency: z.nativeEnum(Condition, {
+    errorMap: (issue, ctx) => {
+      return { message: "Please select your item's desired currency" };
+    },
+  }),
   price: z.coerce
     .number()
     .nonnegative({
-      message: "Please input a price >= $0",
+      message: "Please input a price >= 0",
     })
     .finite()
     .refine(
@@ -32,21 +40,20 @@ export const NewListingSchema = z.object({
       { message: "Maximum 2 decimals allowed" }
     ),
   imageUrl: z.string().min(1, {
-    message: "Image is required.",
-  }),
-  category: z.string().min(1, {
-    message: "Please select your item's category",
-  }),
-  condition: z.nativeEnum(Condition, {
-    errorMap: (issue, ctx) => {
-      return { message: "Please select your item's condition" };
-    },
+    message: "Image is required",
   }),
   country: z.nativeEnum(CountryEnum, {
     errorMap: (issue, ctx) => {
       return { message: "Please select a country" };
     },
   }),
-  phone: z.string().regex(phoneRegex, "Invalid phone number"),
+
+  details: z.string().min(1, {
+    message: "Field missing",
+  }),
+  optionalDetails: z
+    .optional(z.string().min(1, "Invalid field input"))
+    .or(z.literal("")),
+
   email: z.string().email(),
 });

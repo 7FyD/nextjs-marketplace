@@ -62,6 +62,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { countriesArray } from "@/data/const-data";
 import { Condition } from "@/data/const-data";
 import { CountryEnum } from "@/data/const-data";
+import Link from "next/link";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 const NewListingModal = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -76,16 +78,13 @@ const NewListingModal = () => {
       title: "",
       description: "",
       category: "",
+      details: "",
+      optionalDetails: "",
       price: 0,
       imageUrl: "",
-      phone: "",
       email: user?.email ? user.email : "",
     },
   });
-  const handleClose = () => {
-    form.reset();
-    onClose();
-  };
 
   const onSubmit = (values: z.infer<typeof NewListingSchema>) => {
     setError("");
@@ -191,9 +190,10 @@ const NewListingModal = () => {
                     <FormLabel>Category</FormLabel>
                     <FormControl>
                       <PickCategoryModal
-                        onSelectCategory={(category) =>
-                          field.onChange(category)
-                        }
+                        onSelectCategory={(category) => {
+                          field.onChange(category);
+                          form.resetField("details");
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -220,35 +220,285 @@ const NewListingModal = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="condition"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Item condition</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+              {form.watch("category") === "Software" && (
+                <FormField
+                  control={form.control}
+                  name="details"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Software services provided</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select the software services that you are providing" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Websites">Websites</SelectItem>
+                          <SelectItem value="Web applications">
+                            Web applications
+                          </SelectItem>
+                          <SelectItem value="Desktop applications">
+                            Desktop applications
+                          </SelectItem>
+                          <SelectItem value="Hosting services">
+                            Hosting services
+                          </SelectItem>
+                          <SelectItem value="Other services">
+                            Other services
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {form.watch("category") === "Smartphones" && (
+                <FormField
+                  control={form.control}
+                  name="details"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Item condition</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your item's condition" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value={Condition.NEW}>New</SelectItem>
+                          <SelectItem value={Condition.EXCELLENT}>
+                            Excellent
+                          </SelectItem>
+                          <SelectItem value={Condition.GOOD}>Good</SelectItem>
+                          <SelectItem value={Condition.USED}>Used</SelectItem>
+                          <SelectItem value={Condition.Broken}>
+                            Broken
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {form.watch("category") === "Hardware" && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="details"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hardware item</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select the hardware item category that you are selling" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Periferics">
+                              Periferics
+                            </SelectItem>
+                            <SelectItem value="PC Components">
+                              PC Components
+                            </SelectItem>
+                            <SelectItem value="Whole PC systems">
+                              Whole PC systems
+                            </SelectItem>
+                            <SelectItem value="Laptop">Laptop</SelectItem>
+                            <SelectItem value="Other hardware">
+                              Other hardware
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="optionalDetails"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Item condition</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select your item's condition" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value={Condition.NEW}>New</SelectItem>
+                            <SelectItem value={Condition.EXCELLENT}>
+                              Excellent
+                            </SelectItem>
+                            <SelectItem value={Condition.GOOD}>Good</SelectItem>
+                            <SelectItem value={Condition.USED}>Used</SelectItem>
+                            <SelectItem value={Condition.Broken}>
+                              Broken
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+              {form.watch("category") === "Digital goods" && (
+                <FormField
+                  control={form.control}
+                  name="details"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Digital goods</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="What digital goods are you selling?" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Video games accounts">
+                            Video games accounts
+                          </SelectItem>
+                          <SelectItem value="Social media accounts">
+                            Social media accounts
+                          </SelectItem>
+                          <SelectItem value="Online courses">
+                            Online courses
+                          </SelectItem>
+                          <SelectItem value="Other hardware">
+                            Other goods
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {form.watch("category") === "Clothing" && (
+                <FormField
+                  control={form.control}
+                  name="details"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Clothing</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="What piece of clothing are you selling?" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Shirts">Shirts</SelectItem>
+                          <SelectItem value="T-Shirts">T-Shirts</SelectItem>
+                          <SelectItem value="Jeans">Jeans</SelectItem>
+                          <SelectItem value="Sweatpants">Sweatpants</SelectItem>
+                          <SelectItem value="Hoodies">Hoodies</SelectItem>
+                          <SelectItem value="Jackets">Jackets</SelectItem>
+                          <SelectItem value="Other clothing items">
+                            Other clothing items
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {form.watch("category") === "Art" && (
+                <FormField
+                  control={form.control}
+                  name="details"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Art style</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your item's condition" />
-                        </SelectTrigger>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex flex-row space-x-7"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Digital art" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Digital art
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Physical art" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Physical art
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value={Condition.NEW}>New</SelectItem>
-                        <SelectItem value={Condition.EXCELLENT}>
-                          Excellent
-                        </SelectItem>
-                        <SelectItem value={Condition.GOOD}>Good</SelectItem>
-                        <SelectItem value={Condition.USED}>Used</SelectItem>
-                        <SelectItem value={Condition.Broken}>Broken</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              {form.watch("category") === "Housing" && (
+                <FormField
+                  control={form.control}
+                  name="details"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Transaction type</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex flex-row space-x-16"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Sale" />
+                            </FormControl>
+                            <FormLabel className="font-normal">Sale</FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="Renting" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Renting
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="country"
@@ -314,30 +564,7 @@ const NewListingModal = () => {
                       </PopoverContent>
                     </Popover>
                     <FormDescription>
-                      Specify the country to which you can ship your item.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="John Doe"
-                        id="name"
-                        autoComplete="name"
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      This phone number is going to be displayed as a way for
-                      users to contact you.
+                      Specify the area where you are marketing your item.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -26,7 +26,7 @@ model User {
   username      String?
   email         String?   @unique
   publicEmail   String?
-  phoneNumber   String?   @unique
+  phoneNumber   String?   
   dateOfBirth   DateTime?
   allowFollow   Boolean   @default(false)
   emailVerified DateTime?
@@ -136,32 +136,40 @@ model TwoFactorConfirmation {
 
 // USER RELATED SCHEMAS END
 
-enum Condition { 
-  None
-  New
-  Excellent
-  Good
-  Used
-  Broken
+enum Category { 
+  Software
+  Smartphones
+  Hardware
+  Digital_Goods
+  Clothing
+  Art
+  Housing
 }
 
-// enum Category { bla bla}
+enum Currency {
+  USD
+  EUR
+  GBP
+  CHF
+  RON
+}
 
 model Listing {
-  id String @id @default(cuid())
-  createdAt DateTime @default(now())
-  title String
-  description String
-  price Float
-  imageUrl String
-  category String
-  country String
-  phone String
+  id              String @id @default(cuid())
+  createdAt       DateTime @default(now())
+  title           String
+  description     String
+  category        Category
+  currency        Currency
+  price           Float
+  imageUrl        String
+  country         String
   
-  condition Condition
+  details         String
+  optionalDetails String?
   
-  userId String 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String 
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
   // comments Comment[]
 }
 

@@ -40,7 +40,7 @@ const PickCategoryModal: React.FC<PickCategoryModalProps> = ({
         </Button>
       </DialogTrigger>
       <DialogContent
-        className={`overflow-y-scroll max-h-[80%] sm:max-w-2xl p-16 bg-white text-black`}
+        className={`overflow-hidden  max-h-[80%] sm:max-w-2xl p-8 bg-white text-black`}
       >
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
@@ -51,31 +51,42 @@ const PickCategoryModal: React.FC<PickCategoryModalProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <div className="flex flex-col gap-12 w-full h-full justify-center">
+          <div className="flex flex-row justify-between gap-12">
+            <PickCategoryButton
+              label="Software 👨‍💻"
+              handleClick={handleCategorySelect}
+            />
+            <PickCategoryButton
+              label="Smartphones 📱"
+              handleClick={handleCategorySelect}
+            />
+          </div>
+          <div className="flex flex-row justify-between gap-12">
+            <PickCategoryButton
+              label="Hardware 🖥"
+              handleClick={handleCategorySelect}
+            />
+            <PickCategoryButton
+              label="Digital goods 💻"
+              handleClick={handleCategorySelect}
+            />
+          </div>
+          <div className="flex flex-row justify-between gap-12">
+            <PickCategoryButton
+              label="Clothing 🧥"
+              handleClick={handleCategorySelect}
+            />
+            <PickCategoryButton
+              label="Art 🎨"
+              handleClick={handleCategorySelect}
+            />
+          </div>
           <PickCategoryButton
-            label="Software"
+            className="mx-auto"
+            label="Housing 🏡"
             handleClick={handleCategorySelect}
           />
-          <PickCategoryButton
-            label="Smartphones"
-            handleClick={handleCategorySelect}
-          />
-          <PickCategoryButton
-            label="PC Hardware"
-            handleClick={handleCategorySelect}
-          />
-          <PickCategoryButton
-            label="PC Periferics"
-            handleClick={handleCategorySelect}
-          />
-          <PickCategoryButton label="Etc" handleClick={handleCategorySelect} />
-          <PickCategoryButton label="vad" handleClick={handleCategorySelect} />
-          <PickCategoryButton label="eu" handleClick={handleCategorySelect} />
-          <PickCategoryButton label="ce" handleClick={handleCategorySelect} />
-          <PickCategoryButton label="mai" handleClick={handleCategorySelect} />
-          <PickCategoryButton label="pun" handleClick={handleCategorySelect} />
-          <PickCategoryButton label="aici" handleClick={handleCategorySelect} />
-          <PickCategoryButton label="xd" handleClick={handleCategorySelect} />
         </div>
       </DialogContent>
     </Dialog>
