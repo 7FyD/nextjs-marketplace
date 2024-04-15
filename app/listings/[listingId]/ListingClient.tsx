@@ -33,13 +33,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
 
         <div className="flex flex-col justify-between w-[900px]">
           <div className="grid gap-4 text-sm leading-loose">
-            <p className="max-w-[620px]">
-              Selling Challenger, Grandmaster, Master accounts from all servers!
-              EUW, EUNE, NA, LAN, anything you might want! Korea accounts are
-              LEVEL 30 UNRANKED Master accounts from all servers! EUW, EUNE, NA,
-              LAN, anything you might want! Korea accounts are LEVEL 30
-              UNRANKED.
-            </p>
+            <p className="max-w-[620px]">{listing.description}</p>
           </div>
           <Button className="max-w-[200px] mx-auto" size="lg" variant="outline">
             <Bookmark className="w-4 h-4 mr-2 min-w-min" />
