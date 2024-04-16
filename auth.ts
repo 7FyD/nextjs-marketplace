@@ -15,6 +15,7 @@ declare module "next-auth" {
       favoriteIds: string[];
       followers: string[];
       followings: string[];
+      publicEmail: string;
     } & DefaultSession["user"];
   }
 }
@@ -82,7 +83,7 @@ export const {
       session.user.username = token.username as string;
       session.user.followers = token.followers as string[];
       session.user.followings = token.followings as string[];
-
+      session.user.publicEmail = token.publicEmail as string;
       return session;
     },
 
@@ -102,6 +103,7 @@ export const {
       token.username = existingUser.username;
       token.followers = existingUser.followers;
       token.followings = existingUser.followings;
+      token.publicEmail = existingUser.publicEmail;
       return token;
     },
   },

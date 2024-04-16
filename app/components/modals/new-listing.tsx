@@ -84,7 +84,7 @@ const NewListingModal = () => {
       optionalDetails: "",
       price: 0,
       imageUrl: "",
-      email: user?.email ? user.email : "",
+      email: user?.publicEmail ? user.publicEmail : "",
     },
   });
 
@@ -167,30 +167,30 @@ const NewListingModal = () => {
                 )}
               />
               <div className="flex flex-row justify-between">
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          disabled={isPending}
                           placeholder="0.00"
-                        id="price"
-                        type="number"
-                      />
-                    </FormControl>
+                          id="price"
+                          type="number"
+                        />
+                      </FormControl>
                       <FormDescription>
                         {form.watch("currency")
                           ? `The price is set in ${form.watch("currency")}.`
                           : "You haven't selected a currency yet."}
                       </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="currency"
@@ -668,8 +668,8 @@ const NewListingModal = () => {
                       <Input {...field} disabled id="email" type="email" />
                     </FormControl>
                     <FormDescription>
-                      This email will be shown to the people who order your
-                      items. It is your account's{" "}
+                      This email will be shown to the people who are interested
+                      in your items. It is your account's{" "}
                       <Link
                         className="hover:underline text-cyan-500"
                         href="/user/settings#publicEmail"
