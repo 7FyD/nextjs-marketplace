@@ -7,6 +7,24 @@ export enum Condition {
   Broken = "Broken",
 }
 
+export enum Category {
+  Software = "Software",
+  Smartphones = "Smartphones",
+  Hardware = "Hardware",
+  DigitalGoods = "Digital_Goods",
+  Clothing = "Clothing",
+  Art = "Art",
+  Housing = "Housing",
+}
+
+export enum Currency {
+  USD = "USD",
+  EUR = "EUR",
+  GBP = "GBP",
+  CHF = "CHF",
+  RON = "RON",
+}
+
 export const countriesArray = [
   { label: "Global", value: "GLB" },
   { label: "Afghanistan", value: "AF" },

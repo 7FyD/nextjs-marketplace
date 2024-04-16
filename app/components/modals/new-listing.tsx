@@ -20,7 +20,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -65,7 +64,11 @@ import { CountryEnum } from "@/data/const-data";
 import Link from "next/link";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+
 const NewListingModal = () => {
+  const router = useRouter();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -77,7 +80,6 @@ const NewListingModal = () => {
     defaultValues: {
       title: "",
       description: "",
-      category: "",
       details: "",
       optionalDetails: "",
       price: 0,
@@ -100,8 +102,10 @@ const NewListingModal = () => {
           }
 
           if (data?.success) {
-            setSuccess(data.success);
+            toast.success(data.success);
             setError("");
+            setOpen(false);
+            router.push(`/listings/${data.id}`);
           }
         })
         .catch(() => setError("Something went wrong"));
@@ -276,6 +280,7 @@ const NewListingModal = () => {
                         onSelectCategory={(category) => {
                           field.onChange(category);
                           form.resetField("details");
+                          form.resetField("optionalDetails");
                         }}
                       />
                     </FormControl>
@@ -443,7 +448,7 @@ const NewListingModal = () => {
                   />
                 </>
               )}
-              {form.watch("category") === "Digital goods" && (
+              {form.watch("category") === "Digital_Goods" && (
                 <FormField
                   control={form.control}
                   name="details"

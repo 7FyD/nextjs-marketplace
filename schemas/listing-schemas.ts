@@ -1,4 +1,4 @@
-import { Condition, CountryEnum } from "@/data/const-data";
+import { Condition, CountryEnum, Category, Currency } from "@/data/const-data";
 
 import * as z from "zod";
 
@@ -18,10 +18,12 @@ export const NewListingSchema = z.object({
   description: z.string().min(16, {
     message: "A description of minimum 16 characters is required",
   }),
-  category: z.string().min(1, {
-    message: "Please select your item's category",
+  category: z.nativeEnum(Category, {
+    errorMap: (issue, ctx) => {
+      return { message: "Please select your item's category" };
+    },
   }),
-  currency: z.nativeEnum(Condition, {
+  currency: z.nativeEnum(Currency, {
     errorMap: (issue, ctx) => {
       return { message: "Please select your item's desired currency" };
     },

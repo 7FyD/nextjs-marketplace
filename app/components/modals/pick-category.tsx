@@ -36,7 +36,7 @@ const PickCategoryModal: React.FC<PickCategoryModalProps> = ({
         <Button variant="outline">
           {selectedCategory === ""
             ? "Select a category"
-            : `${selectedCategory} - change`}
+            : `${selectedCategory.replace("_", " ")} - change`}
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -54,37 +54,37 @@ const PickCategoryModal: React.FC<PickCategoryModalProps> = ({
         <div className="flex flex-col gap-12 w-full h-full justify-center">
           <div className="flex flex-row justify-between gap-12">
             <PickCategoryButton
-              label="Software 👨‍💻"
+              label="Software"
               handleClick={handleCategorySelect}
             />
             <PickCategoryButton
-              label="Smartphones 📱"
-              handleClick={handleCategorySelect}
-            />
-          </div>
-          <div className="flex flex-row justify-between gap-12">
-            <PickCategoryButton
-              label="Hardware 🖥"
-              handleClick={handleCategorySelect}
-            />
-            <PickCategoryButton
-              label="Digital goods 💻"
+              label="Smartphones"
               handleClick={handleCategorySelect}
             />
           </div>
           <div className="flex flex-row justify-between gap-12">
             <PickCategoryButton
-              label="Clothing 🧥"
+              label="Hardware"
               handleClick={handleCategorySelect}
             />
             <PickCategoryButton
-              label="Art 🎨"
+              label="Digital_Goods"
+              handleClick={handleCategorySelect}
+            />
+          </div>
+          <div className="flex flex-row justify-between gap-12">
+            <PickCategoryButton
+              label="Clothing"
+              handleClick={handleCategorySelect}
+            />
+            <PickCategoryButton
+              label="Art"
               handleClick={handleCategorySelect}
             />
           </div>
           <PickCategoryButton
             className="mx-auto"
-            label="Housing 🏡"
+            label="Housing"
             handleClick={handleCategorySelect}
           />
         </div>
