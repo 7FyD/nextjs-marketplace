@@ -1,5 +1,5 @@
 "use client";
-
+import { US, EU, GB, CH, RO } from "country-flag-icons/react/3x2";
 import * as z from "zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -162,6 +162,7 @@ const NewListingModal = () => {
                   </FormItem>
                 )}
               />
+              <div className="flex flex-row justify-between">
               <FormField
                 control={form.control}
                 name="price"
@@ -172,16 +173,98 @@ const NewListingModal = () => {
                       <Input
                         {...field}
                         disabled={isPending}
-                        placeholder="John Doe"
+                          placeholder="0.00"
                         id="price"
                         type="number"
                       />
                     </FormControl>
-                    <FormDescription>The price is set in €.</FormDescription>
+                      <FormDescription>
+                        {form.watch("currency")
+                          ? `The price is set in ${form.watch("currency")}.`
+                          : "You haven't selected a currency yet."}
+                      </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+                <FormField
+                  control={form.control}
+                  name="currency"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Currency</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-[250px]">
+                            <SelectValue placeholder="Select your preferred currency" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="USD">
+                            <div className="flex flex-row gap-3 items-center w-[200px] mr-2">
+                              <US
+                                className="block"
+                                title="USD"
+                                width="24px"
+                                height="24px"
+                              />
+                              United States Dollar ($)
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="EUR">
+                            <div className="flex flex-row gap-3 items-center w-[200px] mr-2">
+                              <EU
+                                className="block"
+                                title="EUR"
+                                width="24px"
+                                height="24px"
+                              />
+                              Euro (€)
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="GBP">
+                            <div className="flex flex-row gap-3 items-center w-[200px] mr-2">
+                              <GB
+                                className="block"
+                                title="GBP"
+                                width="24px"
+                                height="24px"
+                              />
+                              British Pound (£)
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="CHF">
+                            <div className="flex flex-row gap-3 items-center w-[200px] mr-2">
+                              <CH
+                                className="block"
+                                title="CHF"
+                                width="24px"
+                                height="24px"
+                              />
+                              Swiss Franc (₣)
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="RON">
+                            <div className="flex flex-row gap-3 items-center w-[200px] mr-2">
+                              <RO
+                                className="block"
+                                title="RON"
+                                width="24px"
+                                height="24px"
+                              />
+                              Romanian Leu (L)
+                            </div>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="category"
