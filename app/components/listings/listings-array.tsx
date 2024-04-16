@@ -16,7 +16,9 @@ const ListingsArray: React.FC<ListingsDisplayProps> = ({ listings }) => {
             title={listing.title}
             country={listing.country}
             price={listing.price}
-            specific={listing.condition}
+            details={listing.details}
+            optionalDetails={listing.optionalDetails}
+            currency={listing.currency}
             image={listing.imageUrl}
             id={listing.id}
             userId={listing.userId}

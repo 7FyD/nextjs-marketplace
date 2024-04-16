@@ -4,7 +4,9 @@ interface ListingCardProps {
   title: string;
   country: string;
   price: number;
-  specific: string;
+  details: string;
+  optionalDetails: string | null;
+  currency: string;
   image: string;
   id: string;
   userId: string;
@@ -29,7 +31,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
   title,
   country,
   price,
-  specific,
+  details,
+  optionalDetails,
+  currency,
   image,
   id,
   userId,
@@ -43,11 +47,18 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <CardTitle>{title}</CardTitle>
             <Bookmark listingId={id} currentUser={user} />
           </div>
-          <CardDescription>{country}</CardDescription>
+          <CardDescription>
+            Country: {country} - Currency: {currency}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <AspectRatio ratio={16 / 9}>
-            <Image src={image} alt={`${title} image.`} fill />
+            <Image
+              className="object-cover"
+              src={image}
+              alt={`${title} image.`}
+              fill
+            />
           </AspectRatio>
         </CardContent>
         <CardFooter className="font-light flex flex-col items-start gap-6">
@@ -59,7 +70,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
               maximumFractionDigits: 2,
             })}
           </p>
-          <p>{specific}</p>
+          <p>{details}</p>
+          <p>{optionalDetails}</p>
           {user && user.id === userId && <p>Delete!</p>}
         </CardFooter>
       </Card>
