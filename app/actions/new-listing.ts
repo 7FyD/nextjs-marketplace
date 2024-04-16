@@ -16,7 +16,7 @@ export const createNewListing = async (
   if (!dbUser) return { error: "Unauthorized." };
 
   const validatedFields = NewListingSchema.safeParse(data);
-  if (!validatedFields.success) return { error: "Invalid fields." };
+  if (!validatedFields.success) return { error: "Missing or invalid fields. " };
 
   const {
     title,
@@ -25,25 +25,29 @@ export const createNewListing = async (
     imageUrl,
     category,
     country,
-    phone,
-    condition,
+    details,
+    optionalDetails,
+    currency,
   } = data;
 
-  // to do: check if the category requires a specific condition
+  if (category === "Hardware" && !optionalDetails) {
+    return { error: "Missing or invalid fields. " };
+  }
 
-  await db.listing.create({
+  const newListing = await db.listing.create({
     data: {
       title,
       description,
       price,
       imageUrl,
       category,
+      details,
+      optionalDetails,
+      currency,
       country,
-      phone,
-      condition,
       userId: user.id,
     },
   });
 
-  return { success: "Listing created." };
+  return { success: "Listing created.", id: newListing.id };
 };
