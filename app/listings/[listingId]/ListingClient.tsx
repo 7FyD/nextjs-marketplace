@@ -4,12 +4,19 @@ import { Button } from "@/app/components/ui/button";
 import { Separator } from "@/app/components/ui/separator";
 import { Listing } from "@prisma/client";
 import Image from "next/image";
-import { Bookmark, StarIcon, X } from "lucide-react";
+import {
+  Bookmark,
+  BookmarkCheckIcon,
+  BookmarkX,
+  StarIcon,
+  X,
+} from "lucide-react";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { deleteListing } from "@/app/actions/delete-listing";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
+import { toggleFavoriteListing } from "@/app/actions/toggle-favorite";
 
 interface ListingClientProps {
   listing: Listing;
@@ -18,6 +25,7 @@ interface ListingClientProps {
 const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
   const currentUser = useCurrentUser();
   const router = useRouter();
+  const [isDeletePending, startDeleteTransition] = useTransition();
 
   const getCurrencySymbolByCode = (code: string) => {
     switch (code) {
@@ -38,7 +46,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
   const currency = getCurrencySymbolByCode(listing.currency);
 
   const handleDelete = (id: string) => {
-    startTransition(() => {
+    startDeleteTransition(() => {
       deleteListing(id).then((data) => {
         if (data.success) {
           toast.success(data.success);
@@ -51,6 +59,59 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
       });
     });
   };
+
+  const [isBookmarked, setIsBookmarked] = useState(
+    currentUser?.favoriteIds?.includes(listing.id)
+  );
+  const [isBookmarkPending, startBookmarkTransition] = useTransition();
+  const handleBookmark = (id: string) => {
+    startBookmarkTransition(() => {
+      toggleFavoriteListing(id)
+        .then((data) => {
+          const operation = data.operation;
+          if (data.error) {
+            console.log(data.error);
+            toast.error(data.error);
+          }
+          if (data.success) {
+            toast.custom(
+              (t) => (
+                <div
+                  className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md p-4 shadow-lg w-80 ${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  }`}
+                >
+                  <div className="flex items-center gap-10">
+                    {operation === "added" ? (
+                      <BookmarkCheckIcon
+                        size={24}
+                        className="text-green-500 mr-2"
+                      />
+                    ) : (
+                      <BookmarkX size={24} className="text-red-500 mr-2" />
+                    )}
+                    <div className="w-40">
+                      <p className="text-lg font-medium text-center">
+                        Success!
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400 text-center">
+                        {data.success}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ),
+              {
+                duration: 2500,
+              }
+            );
+            setIsBookmarked(!isBookmarked);
+          }
+        })
+        .catch(() => toast.error("Something went wrong."));
+    });
+  };
+
   return (
     <div className="flex flex-col max-w-6xl px-4 mx-auto gap-6 lg:gap-12 py-6 mt-12">
       <div className="flex flex-row gap-4">
@@ -111,9 +172,22 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
                 className="max-w-[200px] mx-auto"
                 size="lg"
                 variant="outline"
+                onClick={() => {
+                  handleBookmark(listing.id);
+                }}
+                disabled={isBookmarkPending}
               >
-                <Bookmark className="w-4 h-4 mr-2 min-w-min" />
-                Add to bookmarks
+                {!isBookmarked ? (
+                  <>
+                    <Bookmark className="w-4 h-4 mr-2 min-w-min" />
+                    Add bookmark
+                  </>
+                ) : (
+                  <>
+                    <BookmarkX className="w-4 h-4 mr-2 min-w-min" /> Remove
+                    bookmark
+                  </>
+                )}
               </Button>
             )}
           </div>
