@@ -1,14 +1,38 @@
+"use client";
+
 import { Button } from "@/app/components/ui/button";
 import { Separator } from "@/app/components/ui/separator";
 import { Listing } from "@prisma/client";
 import Image from "next/image";
-import { Bookmark, StarIcon } from "lucide-react";
+import { Bookmark, StarIcon, X } from "lucide-react";
+import { useCurrentUser } from "@/app/hooks/use-current-user";
+import { deleteListing } from "@/app/actions/delete-listing";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import toast from "react-hot-toast";
 
 interface ListingClientProps {
   listing: Listing;
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
+  const currentUser = useCurrentUser();
+  const router = useRouter();
+  const [isDeletePending, startTransition] = useTransition();
+  const handleDelete = (id: string) => {
+    startTransition(() => {
+      deleteListing(id).then((data) => {
+        if (data.success) {
+          toast.success(data.success);
+          router.push("/");
+          router.refresh();
+        }
+        if (data.error) {
+          toast.error(data.error);
+        }
+      });
+    });
+  };
   return (
     <div className="flex flex-col max-w-6xl px-4 mx-auto gap-6 lg:gap-12 py-6 mt-12">
       <div className="flex flex-row gap-4">
@@ -23,8 +47,10 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
               <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
             </div>
             <div>
-              <p>Servers: any</p>
-              <p>Ranks: unranked - Challenger 1000LP</p>
+              <p>{listing.details}</p>
+              {listing.optionalDetails && (
+                <p>Usage: {listing.optionalDetails}</p>
+              )}
             </div>
           </div>
           <div className="text-4xl font-bold ml-auto">{listing.price}€</div>
@@ -35,10 +61,32 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
           <div className="grid gap-4 text-sm leading-loose">
             <p className="max-w-[620px]">{listing.description}</p>
           </div>
-          <Button className="max-w-[200px] mx-auto" size="lg" variant="outline">
-            <Bookmark className="w-4 h-4 mr-2 min-w-min" />
-            Add to bookmarks
-          </Button>
+
+          <div className="flex flex-row">
+            {listing.userId === currentUser?.id ? (
+              <Button
+                className="max-w-[200px] mx-auto hover:bg-red-700"
+                size="lg"
+                variant="destructive"
+                onClick={() => {
+                  handleDelete(listing.id);
+                }}
+                disabled={isDeletePending}
+              >
+                <X className="w-4 h-4 mr-2 min-w-min" />
+                Delete listing
+              </Button>
+            ) : (
+              <Button
+                className="max-w-[200px] mx-auto"
+                size="lg"
+                variant="outline"
+              >
+                <Bookmark className="w-4 h-4 mr-2 min-w-min" />
+                Add to bookmarks
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       {/* mobile version */}
