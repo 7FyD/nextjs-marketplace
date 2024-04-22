@@ -18,7 +18,25 @@ interface ListingClientProps {
 const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
   const currentUser = useCurrentUser();
   const router = useRouter();
-  const [isDeletePending, startTransition] = useTransition();
+
+  const getCurrencySymbolByCode = (code: string) => {
+    switch (code) {
+      case "USD":
+        return "$";
+      case "EUR":
+        return "€";
+      case "GBP":
+        return "£";
+      case "CHF":
+        return "₣";
+      case "RON":
+        return "L";
+      default:
+        return "$";
+    }
+  };
+  const currency = getCurrencySymbolByCode(listing.currency);
+
   const handleDelete = (id: string) => {
     startTransition(() => {
       deleteListing(id).then((data) => {
@@ -53,7 +71,19 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
               )}
             </div>
           </div>
-          <div className="text-4xl font-bold ml-auto">{listing.price}€</div>
+          <div className="text-4xl font-bold ml-auto">
+            {currency === "$" ? (
+              <p>
+                {currency}
+                {listing.price}
+              </p>
+            ) : (
+              <p>
+                {listing.price}
+                {currency}
+              </p>
+            )}
+          </div>
           <Separator className="mx-4" orientation="vertical" />
         </div>
 
