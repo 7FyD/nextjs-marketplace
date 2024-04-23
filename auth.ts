@@ -16,6 +16,7 @@ declare module "next-auth" {
       followers: string[];
       followings: string[];
       publicEmail: string;
+      isActive: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -74,6 +75,7 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role === "USER" ? "USER" : "ADMIN";
       }
+
       session.user.emailVerified = token.emailVerified === true ? true : false;
       session.user.isTwoFactorEnabled =
         token.isTwoFactorEnabled === true ? true : false;
@@ -84,6 +86,7 @@ export const {
       session.user.followers = token.followers as string[];
       session.user.followings = token.followings as string[];
       session.user.publicEmail = token.publicEmail as string;
+      session.user.isActive = token.isActive as boolean;
       return session;
     },
 
@@ -92,8 +95,11 @@ export const {
 
       const existingUser = await getUserById(token.sub);
 
-      if (!existingUser) return token;
-
+      if (!existingUser) {
+        token.isActive = false;
+        return token;
+      }
+      token.isActive = true;
       token.role = existingUser.role;
       token.name = existingUser.name;
       token.picture = existingUser.image;

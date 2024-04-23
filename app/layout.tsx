@@ -36,6 +36,7 @@ export default async function RootLayout({
           >
             <ToasterProvider />
             <Navbar
+              deletedUser={session !== null && !session?.user.isActive}
               followNotifications={followNotifications}
               listingNotifications={listingNotifications}
               reportNotifications={reportNotifications}

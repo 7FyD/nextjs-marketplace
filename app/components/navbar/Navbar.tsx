@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import MenuItem from "./MenuItem";
 import { useRouter } from "next/navigation";
@@ -19,18 +18,27 @@ import NotificationMenu from "./notifications-menu";
 import { Notification } from "@prisma/client";
 import ToggleTheme from "./toggle-theme";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { logout } from "@/app/actions/logout";
 
 interface NavbarInterface {
   followNotifications: Notification[];
   listingNotifications: Notification[];
   reportNotifications: Notification[];
+  deletedUser?: boolean;
 }
 
 const Navbar: React.FC<NavbarInterface> = ({
   followNotifications,
   listingNotifications,
   reportNotifications,
+  deletedUser,
 }) => {
+  useEffect(() => {
+    if (deletedUser) {
+      logout();
+    }
+  }, []);
+
   const user = useCurrentUser();
   const widthRef = useRef(769);
   const [width, setWidth] = useState(769);
