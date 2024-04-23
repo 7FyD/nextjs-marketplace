@@ -14,11 +14,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu";
-import Image from "next/image";
 import Link from "next/link";
 import NotificationMenu from "./notifications-menu";
 import { Notification } from "@prisma/client";
 import ToggleTheme from "./toggle-theme";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface NavbarInterface {
   followNotifications: Notification[];
@@ -111,22 +111,17 @@ const Navbar: React.FC<NavbarInterface> = ({
                       asChild
                       className="rounded-full hover:cursor-pointer"
                     >
-                      <Image
-                        className="rounded-full h-[48px] w-[48px] max-w-[48px] max-h-[48px] mt-3 object-cover"
-                        src={user.image ? user.image : "/public/public.png"}
-                        width={48}
-                        height={48}
-                        alt={`${user?.name}'s image`}
-                      />
+                      <Avatar>
+                        <AvatarImage
+                          src={user.image ? user.image : "/public/public.png"}
+                          alt={user?.name ? user.name : "User"}
+                          className="object-cover"
+                        />
+                        <AvatarFallback>User</AvatarFallback>
+                      </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
-                      <DropdownMenuLabel className="flex flex-row items-center gap-4">
-                        <Image
-                          src={user.image ? user.image : ""}
-                          alt="User image"
-                          width={48}
-                          height={48}
-                        />
+                      <DropdownMenuLabel className="text-start">
                         {user.name}
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />

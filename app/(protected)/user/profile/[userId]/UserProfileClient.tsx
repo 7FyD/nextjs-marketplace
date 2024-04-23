@@ -7,13 +7,7 @@ import Container from "@/app/components/utilities/Container";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { Listing, User } from "@prisma/client";
-import {
-  Ban,
-  MessageSquareWarning,
-  UserMinusIcon,
-  UserPlusIcon,
-} from "lucide-react";
-import Image from "next/image";
+import { UserMinusIcon, UserPlusIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 
@@ -21,6 +15,11 @@ import ReportModal from "@/app/components/user-profile/report-modal";
 import FollowersDialog from "@/app/components/user-profile/followers-dialog";
 
 import DeleteUser from "@/app/components/user-profile/delete-user-admin";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/components/ui/avatar";
 interface UserProfileClientInterface {
   user: {
     id: string;
@@ -108,13 +107,14 @@ const UserProfileClient: React.FC<UserProfileClientInterface> = ({
           isDesktop ? "flex-row gap-0" : "flex-col gap-10"
         } items-center mt-16 p-6 border-2 rounded-full bg-gray-200 dark:bg-gray-800`}
       >
-        <Image
-          className="rounded-full"
-          src={user.image ? user.image : "/images/default.png"}
-          width={256}
-          height={256}
-          alt={`${user.name} image`}
-        />
+        <Avatar className="size-[256px]">
+          <AvatarImage
+            src={user.image ? user.image : "/public/public.png"}
+            alt={user?.name ? user.name : "User"}
+            className="object-cover"
+          />
+          <AvatarFallback>User</AvatarFallback>
+        </Avatar>
         <div className="flex flex-col justify-between items-center gap-2 mx-auto">
           <h1 className="font-semibold text-xl">{user.name}</h1>
           <p>Email: {user.email}</p>

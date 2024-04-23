@@ -2,13 +2,13 @@
 
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { User } from "@prisma/client";
-import Image from "next/image";
 import { useState, useTransition } from "react";
 import { Button } from "../ui/button";
 import { UserMinusIcon, UserPlusIcon } from "lucide-react";
 import { followUser } from "@/app/actions/follow-user";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface FollowListInterface {
   user: User;
@@ -66,13 +66,14 @@ const FollowList: React.FC<FollowListInterface> = ({ user }) => {
   };
   return (
     <div className="flex flex-row items-center">
-      <Image
-        className="rounded-full max-w-[44px] max-h-[44px] w-[44px] h-[44px]"
-        src={user.image}
-        alt={`${user.name}'s image`}
-        width={44}
-        height={44}
-      />
+      <Avatar className="size-[44px]">
+        <AvatarImage
+          src={user.image ? user.image : "/public/public.png"}
+          alt={`${user.name}'s image`}
+          className="object-cover"
+        />
+        <AvatarFallback>User</AvatarFallback>
+      </Avatar>
       <div className="flex flex-col gap-1 mt-0.5 ml-1">
         <Link href={`/user/profile/${user.id}`}>
           <p className="font-normal text-sm">{user.name}</p>
