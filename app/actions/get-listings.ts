@@ -24,9 +24,10 @@ export const getListings = async (params: ListingQueryProps) => {
       };
     }
     if (category) {
+      const formattedCategory =
+        category[0].toUpperCase() + category.toLowerCase().slice(1);
       query.category = {
-        contains: category,
-        mode: "insensitive",
+        equals: formattedCategory,
       };
     }
 
