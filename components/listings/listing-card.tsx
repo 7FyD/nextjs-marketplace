@@ -43,7 +43,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
     <Link href={`/listings/${id}`} className="inline-block">
       <Card className="mx-auto w-[300px] md:w-[400px] 2xl:w-[350px] hover:scale-105 transition-all h-[450px]">
         <CardHeader>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between items-center">
             <CardTitle>{title}</CardTitle>
             <Bookmark listingId={id} currentUser={user} />
           </div>
@@ -66,7 +66,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             {price.toLocaleString("en-US", {
               style: "currency",
               currency: "EUR",
-              minimumFractionDigits: price % 1 !== 0 ? 2 : 0, // Adjust as needed
+              minimumFractionDigits: price % 1 !== 0 ? 2 : 0,
               maximumFractionDigits: 2,
             })}
           </p>
