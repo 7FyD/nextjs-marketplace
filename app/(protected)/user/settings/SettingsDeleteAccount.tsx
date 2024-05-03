@@ -9,17 +9,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/app/components/ui/alert-dialog";
-import { Button } from "@/app/components/ui/button";
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/app/components/ui/form";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,7 @@ import * as z from "zod";
 import { deleteAccountSettingsSchema } from "@/schemas/settings-schemas";
 import { deleteAccount } from "@/app/actions/settings";
 import toast from "react-hot-toast";
-import { FormError } from "@/app/components/utilities/form-error";
+import { FormError } from "@/components/utilities/form-error";
 import { logout } from "@/app/actions/logout";
 import { BeatLoader } from "react-spinners";
 

@@ -6,7 +6,7 @@ import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { ResetSchema } from "@/schemas/user-schemas";
-import { Input } from "@/app/components/ui/input";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -14,11 +14,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/components/ui/form";
-import { Button } from "@/app/components/ui/button";
-import { FormError } from "@/app/components/utilities/form-error";
-import { FormSuccess } from "@/app/components/utilities/form-success";
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/utilities/form-error";
+import { FormSuccess } from "@/components/utilities/form-success";
+import { CardWrapper } from "@/components/auth/card-wrapper";
 import { reset } from "@/app/actions/reset";
 
 const ForgotPasswordClient = () => {

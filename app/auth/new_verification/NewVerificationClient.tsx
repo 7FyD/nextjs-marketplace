@@ -3,10 +3,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { BeatLoader } from "react-spinners";
 
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
+import { CardWrapper } from "@/components/auth/card-wrapper";
 import { newVerification } from "@/app/actions/new-verification";
-import { FormError } from "@/app/components/utilities/form-error";
-import { FormSuccess } from "@/app/components/utilities/form-success";
+import { FormError } from "@/components/utilities/form-error";
+import { FormSuccess } from "@/components/utilities/form-success";
 
 const NewVerificationClient = () => {
   const [error, setError] = useState<string | undefined>();

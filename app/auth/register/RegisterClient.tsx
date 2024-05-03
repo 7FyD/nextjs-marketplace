@@ -15,8 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { Input } from "@/app/components/ui/input";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -25,24 +25,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/components/ui/form";
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
-import { Button } from "@/app/components/ui/button";
-import { FormError } from "@/app/components/utilities/form-error";
-import { FormSuccess } from "@/app/components/utilities/form-success";
+} from "@/components/ui/form";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/utilities/form-error";
+import { FormSuccess } from "@/components/utilities/form-success";
 import { register } from "@/app/actions/register";
 import { BeatLoader } from "react-spinners";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/app/components/ui/hover-card";
+} from "@/components/ui/hover-card";
 import { Info } from "lucide-react";
-import { Calendar } from "@/app/components/ui/calendar";
+import { Calendar } from "@/components/ui/calendar";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
-import { Label } from "@/app/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
-import { PhoneInput } from "@/app/components/ui/phone-input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const RegisterClient = () => {

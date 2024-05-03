@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/app/components/ui/button";
-import { Calendar } from "@/app/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogClose,
@@ -11,18 +11,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
+} from "@/components/ui/dialog";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/app/components/ui/hover-card";
+} from "@/components/ui/hover-card";
 import { useForm } from "react-hook-form";
 import { useTransition } from "react";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
-import { Switch } from "@/app/components/ui/switch";
-import { FileUploadButton } from "@/app/components/utilities/file-upload-button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { FileUploadButton } from "@/components/utilities/file-upload-button";
 import { format } from "date-fns";
 import { Info } from "lucide-react";
 import Image from "next/image";
@@ -34,7 +34,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/components/ui/form";
+} from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { generalSettingsSchema } from "@/schemas/settings-schemas";
@@ -42,7 +42,7 @@ import { generalSettings } from "@/app/actions/settings";
 import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 import { BeatLoader } from "react-spinners";
-import { PhoneInput } from "@/app/components/ui/phone-input";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 interface SettingsGeneralInterface {
   user: User | null;

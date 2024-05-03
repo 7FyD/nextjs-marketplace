@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "@/app/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/app/components/ui/hover-card";
+} from "@/components/ui/hover-card";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -17,7 +17,7 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "@/app/components/ui/form";
+} from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { securitySettingsSchema } from "@/schemas/settings-schemas";
@@ -36,8 +36,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/app/components/ui/dialog";
-import { FormError } from "@/app/components/utilities/form-error";
+} from "@/components/ui/dialog";
+import { FormError } from "@/components/utilities/form-error";
 
 interface SettingsSecurityInterface {
   user: User | null;

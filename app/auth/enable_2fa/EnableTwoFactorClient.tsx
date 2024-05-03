@@ -3,9 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { BeatLoader } from "react-spinners";
 
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
-import { FormError } from "@/app/components/utilities/form-error";
-import { FormSuccess } from "@/app/components/utilities/form-success";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import { FormError } from "@/components/utilities/form-error";
+import { FormSuccess } from "@/components/utilities/form-success";
 import { enableTwoFactor } from "@/app/actions/enable-2fa";
 const EnableTwoFactorClient = () => {
   const [error, setError] = useState<string | undefined>();

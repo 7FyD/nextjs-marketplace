@@ -1,9 +1,9 @@
 "use client";
 
 import { followUser } from "@/app/actions/follow-user";
-import ListingsDisplay from "@/app/components/listings/listings-display";
-import { Button } from "@/app/components/ui/button";
-import Container from "@/app/components/utilities/Container";
+import ListingsDisplay from "@/components/listings/listings-display";
+import { Button } from "@/components/ui/button";
+import Container from "@/components/utilities/Container";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { Listing, User } from "@prisma/client";
@@ -11,15 +11,11 @@ import { UserMinusIcon, UserPlusIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 
-import ReportModal from "@/app/components/user-profile/report-modal";
-import FollowersDialog from "@/app/components/user-profile/followers-dialog";
+import ReportModal from "@/components/user-profile/report-modal";
+import FollowersDialog from "@/components/user-profile/followers-dialog";
 
-import DeleteUser from "@/app/components/user-profile/delete-user-admin";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/components/ui/avatar";
+import DeleteUser from "@/components/user-profile/delete-user-admin";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 interface UserProfileClientInterface {
   user: {
     id: string;

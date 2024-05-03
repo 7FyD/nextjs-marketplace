@@ -7,9 +7,9 @@ import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 const inter = Inter({ subsets: ["latin"] });
 
-import Navbar from "./components/navbar/Navbar";
+import Navbar from "@/components/navbar/Navbar";
 import { getNotifications } from "./actions/get-notifications";
-import { ThemeProvider } from "./components/utilities/theme-provider";
+import { ThemeProvider } from "@/components/utilities/theme-provider";
 
 export const metadata: Metadata = {
   title: "Marketplace | 7FyD.dev",

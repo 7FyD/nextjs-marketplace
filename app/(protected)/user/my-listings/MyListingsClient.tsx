@@ -1,7 +1,7 @@
 "use client";
 
-import ListingsDisplay from "@/app/components/listings/listings-display";
-import Container from "@/app/components/utilities/Container";
+import ListingsDisplay from "@/components/listings/listings-display";
+import Container from "@/components/utilities/Container";
 import { ExtendedUser } from "@/types";
 import { Listing } from "@prisma/client";
 
