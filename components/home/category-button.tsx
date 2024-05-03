@@ -46,7 +46,7 @@ const CategoryButton: React.FC<CategoryButtonInterface> = ({
   return (
     <button
       onClick={onClick}
-      className={`flex flex-col items-center justify-center border-2 rounded-full transition active:scale-125 hover:scale-[1.20] hover:cursor-pointer size-[130px] lg:size-[140px] ${className} ${
+      className={`flex flex-col items-center justify-center border-2 rounded-full transition active:scale-125 hover:scale-[1.20] hover:cursor-pointer size-[120px] lg:size-[130px] ${className} ${
         isActive ? "scale-125" : ""
       }`}
     >

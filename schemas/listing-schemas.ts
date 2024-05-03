@@ -1,4 +1,4 @@
-import { Condition, CountryEnum, Category, Currency } from "@/data/const-data";
+import {CountryEnum, Category, Currency } from "@/data/const-data";
 
 import * as z from "zod";
 

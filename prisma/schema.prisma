@@ -140,10 +140,11 @@ enum Category {
   Software
   Smartphones
   Hardware
-  Digital_Goods
+  Digitalgoods
   Clothing
   Art
   Housing
+  Cars
 }
 
 enum Currency {

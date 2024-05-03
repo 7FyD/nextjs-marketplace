@@ -13,7 +13,7 @@ const PickCategoryButton: React.FC<PickCategoryButtonProps> = ({
   className,
 }) => {
   return (
-    <DialogClose className={`grow w-[280px] ${className}`} asChild>
+    <DialogClose className={`grow w-[150px] ${className}`} asChild>
       <Button onClick={() => handleClick(`${label}`)}>
         {label.replace("_", " ")}
       </Button>

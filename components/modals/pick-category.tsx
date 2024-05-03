@@ -26,8 +26,13 @@ const PickCategoryModal: React.FC<PickCategoryModalProps> = ({
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
-    onSelectCategory(category);
+    if (category !== "Digital Goods") {
+      setSelectedCategory(category);
+      onSelectCategory(category);
+    } else {
+      setSelectedCategory("Digitalgoods");
+      onSelectCategory("Digitalgoods");
+    }
   };
 
   return (
@@ -36,11 +41,13 @@ const PickCategoryModal: React.FC<PickCategoryModalProps> = ({
         <Button variant="outline">
           {selectedCategory === ""
             ? "Select a category"
-            : `${selectedCategory.replace("_", " ")} - change`}
+            : selectedCategory === "Digitalgoods"
+            ? `Digital Goods - change`
+            : `${selectedCategory} - change`}
         </Button>
       </DialogTrigger>
       <DialogContent
-        className={`overflow-hidden  max-h-[80%] sm:max-w-2xl p-8 bg-white text-black`}
+        className={`overflow-hidden max-h-[80%] max-w-max p-8 bg-white text-black`}
       >
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
@@ -50,39 +57,39 @@ const PickCategoryModal: React.FC<PickCategoryModalProps> = ({
             What will it be?
           </DialogDescription>
         </DialogHeader>
-
-        <div className="flex flex-col gap-12 w-full h-full justify-center">
-          <div className="flex flex-row justify-between gap-12">
-            <PickCategoryButton
-              label="Software"
-              handleClick={handleCategorySelect}
-            />
-            <PickCategoryButton
-              label="Smartphones"
-              handleClick={handleCategorySelect}
-            />
-          </div>
-          <div className="flex flex-row justify-between gap-12">
-            <PickCategoryButton
-              label="Hardware"
-              handleClick={handleCategorySelect}
-            />
-            <PickCategoryButton
-              label="Clothing"
-              handleClick={handleCategorySelect}
-            />
-          </div>
-          <div className="flex flex-row justify-between gap-12">
-            <PickCategoryButton
-              label="Art"
-              handleClick={handleCategorySelect}
-            />
-            <PickCategoryButton
-              className="mx-auto"
-              label="Housing"
-              handleClick={handleCategorySelect}
-            />
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 w-full h-full justify-center">
+          <PickCategoryButton
+            label="Software"
+            handleClick={handleCategorySelect}
+          />
+          <PickCategoryButton
+            label="Smartphones"
+            handleClick={handleCategorySelect}
+          />
+          <PickCategoryButton
+            label="Hardware"
+            handleClick={handleCategorySelect}
+          />
+          <PickCategoryButton
+            label="Clothing"
+            handleClick={handleCategorySelect}
+          />
+          <PickCategoryButton label="Art" handleClick={handleCategorySelect} />
+          <PickCategoryButton
+            className="mx-auto"
+            label="Housing"
+            handleClick={handleCategorySelect}
+          />
+          <PickCategoryButton
+            className="mx-auto"
+            label="Digital Goods"
+            handleClick={handleCategorySelect}
+          />
+          <PickCategoryButton
+            className="mx-auto"
+            label="Cars"
+            handleClick={handleCategorySelect}
+          />
         </div>
       </DialogContent>
     </Dialog>

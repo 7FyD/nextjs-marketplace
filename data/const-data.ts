@@ -11,10 +11,11 @@ export enum Category {
   Software = "Software",
   Smartphones = "Smartphones",
   Hardware = "Hardware",
-  DigitalGoods = "Digital_Goods",
+  DigitalGoods = "Digitalgoods",
   Clothing = "Clothing",
   Art = "Art",
   Housing = "Housing",
+  Cars = "Cars",
 }
 
 export enum Currency {

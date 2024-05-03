@@ -72,8 +72,7 @@ const NewListingModal = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-  const { isOpen, onClose, type } = useModal();
-  // const isModalOpen = isOpen && type === "newListing";
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const user = useCurrentUser();
   const form = useForm<z.infer<typeof NewListingSchema>>({
     resolver: zodResolver(NewListingSchema),
@@ -104,7 +103,7 @@ const NewListingModal = () => {
           if (data?.success) {
             toast.success(data.success);
             setError("");
-            setOpen(false);
+            setDialogOpen(false);
             router.push(`/listings/${data.id}`);
           }
         })
@@ -113,7 +112,13 @@ const NewListingModal = () => {
   };
   const [open, setOpen] = useState(false);
   return (
-    <Dialog onOpenChange={() => form.reset()}>
+    <Dialog
+      open={dialogOpen}
+      onOpenChange={() => {
+        form.reset();
+        setDialogOpen(!dialogOpen);
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant="secondary" className="text-black">
           Create new listing
@@ -304,7 +309,8 @@ const NewListingModal = () => {
                       />
                     </FormControl>
                     <FormDescription>
-                      Add an image to better advertise your product!
+                      Add an image to better advertise your product! Image will
+                      be fully displayed (not stretched) on your listing page.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -450,7 +456,7 @@ const NewListingModal = () => {
                   />
                 </>
               )}
-              {form.watch("category") === "Digital_Goods" && (
+              {form.watch("category") === "Digitalgoods" && (
                 <FormField
                   control={form.control}
                   name="details"
