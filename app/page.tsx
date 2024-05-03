@@ -1,6 +1,6 @@
 import { ListingQueryProps } from "./actions/get-listings";
 import Container from "@/components/utilities/Container";
-import ListingsDisplay from "@/components/listings/listings-display";
+import ListingsDisplay from "@/components/home/listings-display";
 import CategorySelection from "@/components/home/category-selection";
 import Loading from "@/components/listings/loading";
 import { Suspense } from "react";

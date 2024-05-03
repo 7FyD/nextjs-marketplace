@@ -1,22 +1,23 @@
+import { Listing } from "@prisma/client";
 import SearchOptions from "./search-options";
 import ListingsArray from "./listings-array";
 import PaginationMenu from "../home/pagination-menu";
-import { ListingQueryProps, getListings } from "@/app/actions/get-listings";
 
 interface ListingsPageInterface {
-  params: ListingQueryProps;
+  listings: Listing[];
+  totalListingsCount: number;
+  listingsPerPage: number;
   defaultHidden: boolean;
 }
 
-const ListingsDisplay: React.FC<ListingsPageInterface> = async ({
-  params,
+const ListingsDisplay: React.FC<ListingsPageInterface> = ({
+  listings,
+  totalListingsCount,
+  listingsPerPage,
   defaultHidden,
 }) => {
-  const { listings, totalListingsCount, listingsPerPage } = await getListings(
-    params
-  );
   return (
-    <>
+    <div>
       <SearchOptions defaultHidden={defaultHidden} className="my-6 mx-2" />
       {listings.length > 0 ? (
         <ListingsArray listings={listings} />
@@ -27,7 +28,7 @@ const ListingsDisplay: React.FC<ListingsPageInterface> = async ({
         totalPages={Math.ceil(totalListingsCount / listingsPerPage)}
         className="mt-12"
       />
-    </>
+    </div>
   );
 };
 
