@@ -1,25 +1,20 @@
-import { getListings, ListingQueryProps } from "./actions/get-listings";
+import { ListingQueryProps } from "./actions/get-listings";
 import Container from "@/components/utilities/Container";
 import ListingsDisplay from "@/components/listings/listings-display";
 import CategorySelection from "@/components/home/category-selection";
-
+import Loading from "@/components/listings/loading";
+import { Suspense } from "react";
 interface HomeProps {
   searchParams: ListingQueryProps;
 }
 
 const HomePage = async ({ searchParams }: HomeProps) => {
-  const { listings, totalListingsCount, listingsPerPage } = await getListings(
-    searchParams
-  );
   return (
     <Container>
       <CategorySelection />
-      <ListingsDisplay
-        listings={listings}
-        totalListingsCount={totalListingsCount}
-        listingsPerPage={listingsPerPage}
-        defaultHidden={true}
-      />
+      <Suspense fallback={<Loading />}>
+        <ListingsDisplay params={searchParams} defaultHidden={true} />
+      </Suspense>
     </Container>
   );
 };
