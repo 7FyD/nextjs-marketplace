@@ -50,7 +50,6 @@ import { FormError } from "@/components/utilities/form-error";
 import { FormSuccess } from "@/components/utilities/form-success";
 import { BeatLoader } from "react-spinners";
 import { FileUploadDropzone } from "@/components/utilities/file-upload-dropzone";
-import { useModal } from "@/app/hooks/use-modal-store";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { createNewListing } from "@/app/actions/new-listing";
 import PickCategoryModal from "./pick-category";
@@ -67,7 +66,11 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-const NewListingModal = () => {
+interface NewListingModalProps {
+  className?: string;
+}
+
+const NewListingModal: React.FC<NewListingModalProps> = ({ className }) => {
   const router = useRouter();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -120,7 +123,7 @@ const NewListingModal = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="secondary" className="text-black">
+        <Button variant="secondary" className={cn("text-black", className)}>
           Create new listing
         </Button>
       </DialogTrigger>
