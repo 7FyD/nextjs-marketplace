@@ -23,12 +23,12 @@ import PickCategoryModal from "../modals/pick-category";
 
 interface SearchOptionsProps {
   className?: string;
-  defaultHidden: boolean;
+  defaultHidden?: boolean;
 }
 
 const SearchOptions: React.FC<SearchOptionsProps> = ({
   className,
-  defaultHidden,
+  defaultHidden = true,
 }) => {
   const params = useSearchParams();
   const [isHidden, setIsHidden] = useState(defaultHidden);
