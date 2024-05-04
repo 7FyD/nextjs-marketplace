@@ -149,7 +149,7 @@ const Navbar: React.FC<NavbarInterface> = ({
       {!isDesktop && (
         <div className="flex flex-row justify-between items-center text-white mx-8">
           <Button
-            className="text-4xl py-8 cursor-pointe text-white"
+            className="text-4xl py-8 cursor-point text-white hover:bg-[#212529] hover:text-white"
             onClick={openNav}
             variant={"ghost"}
           >
