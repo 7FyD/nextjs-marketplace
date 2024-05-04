@@ -4,7 +4,6 @@ import { AspectRatio } from "../ui/aspect-ratio";
 import {
   Card,
   CardHeader,
-  CardTitle,
   CardDescription,
   CardContent,
   CardFooter,
@@ -16,9 +15,7 @@ const SkeletonCard = () => {
     <Card className="mx-auto w-[300px] md:w-[400px] 2xl:w-[350px] h-[450px]">
       <CardHeader>
         <div className="flex flex-row justify-between">
-          <CardTitle>
-            <Skeleton className="h-8 w-64 rounded-full" />
-          </CardTitle>
+          <Skeleton className="h-8 w-64 rounded-full" />
         </div>
         <CardDescription>
           <Skeleton className="h-6 w-48 rounded-full" />
