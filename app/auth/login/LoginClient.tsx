@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 
@@ -26,8 +26,9 @@ import { FormInform } from "@/components/utilities/form-inform";
 import { BeatLoader } from "react-spinners";
 
 export const LoginClient = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl"); // will add redirect back to callback once login is fully implemented
+  const callbackUrl = searchParams.get("callbackUrl");
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
@@ -55,8 +56,9 @@ export const LoginClient = () => {
     setSuccess("");
 
     startTransition(() => {
-      login(values)
+      login(values, callbackUrl)
         .then((data) => {
+          window.location.reload();
           if (data?.error) {
             setTwoFactorMessage("");
             if (data.errorCode === "1") {

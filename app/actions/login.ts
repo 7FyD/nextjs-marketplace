@@ -17,7 +17,10 @@ import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation
 
 // error codes: 0 internal error, 1 invalid login, 2 invalid 2FAcode
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string | null
+) => {
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -102,7 +105,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
     return { success: "Sucessfully logged in." };
   } catch (error) {
