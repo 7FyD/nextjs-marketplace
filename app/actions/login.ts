@@ -35,14 +35,6 @@ export const login = async (
     return { error: "Email or password invalid.", errorCode: "1" };
   }
 
-  // development only making sending verification email easier
-  if (!existingUser.emailVerified) {
-    const verificationToken = await generateVerificationToken(
-      existingUser.email
-    );
-    await sendVerificationEmail(existingUser.email, verificationToken.token);
-  }
-
   // 2FA start
   if (existingUser.isTwoFactorEnabled && existingUser.emailVerified) {
     if (code) {
@@ -105,7 +97,7 @@ export const login = async (
     await signIn("credentials", {
       email,
       password,
-      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl ? callbackUrl : DEFAULT_LOGIN_REDIRECT,
     });
     return { success: "Sucessfully logged in." };
   } catch (error) {
