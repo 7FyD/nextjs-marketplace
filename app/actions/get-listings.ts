@@ -8,12 +8,13 @@ export interface ListingQueryProps {
   category?: string;
   country?: string;
   free?: boolean;
+  input?: string;
   page?: string;
 }
 
 export const getListings = async (params: ListingQueryProps) => {
   try {
-    const { userId, listingsId, category, country, free, page } = params;
+    const { userId, listingsId, category, country, free, input, page } = params;
     let query: any = {};
     if (userId) {
       query.userId = userId;
@@ -40,6 +41,13 @@ export const getListings = async (params: ListingQueryProps) => {
     if (free) {
       query.price = {
         lte: 0,
+      };
+    }
+    if (input) {
+      const sanitizedInput = input.trim().replace(/\s+/g, " ");
+      query.title = {
+        contains: sanitizedInput,
+        mode: "insensitive",
       };
     }
     const pageNumber = page ? parseInt(page) : 1;

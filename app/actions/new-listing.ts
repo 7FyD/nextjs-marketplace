@@ -33,10 +33,10 @@ export const createNewListing = async (
   if (category === "Hardware" && !optionalDetails) {
     return { error: "Missing or invalid fields. " };
   }
-
+  const sanitizedTitle = title.trim().replace(/\s+/g, " ");
   const newListing = await db.listing.create({
     data: {
-      title,
+      title: sanitizedTitle,
       description,
       price,
       imageUrl,
