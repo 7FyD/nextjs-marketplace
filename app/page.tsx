@@ -11,7 +11,7 @@ interface HomeProps {
 
 const HomePage = async ({ searchParams }: HomeProps) => {
   return (
-    <Container>
+    <Container className="mb-64">
       <SearchBar />
       <CategorySelection />
       <Suspense fallback={<Loading />}>

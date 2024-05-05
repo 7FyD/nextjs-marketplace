@@ -111,39 +111,32 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing }) => {
         .catch(() => toast.error("Something went wrong."));
     });
   };
-
   return (
     <div className="flex flex-col max-w-6xl px-4 mx-auto gap-6 lg:gap-12 py-6 mt-12">
       <div className="flex flex-row gap-4">
         <div className="flex flex-row justify-between min-w-[450px] max-w-[450px] ml-4">
           <div className="flex flex-col gap-4">
             <h1 className="font-bold text-3xl">{listing.title}</h1>
-            <div className="flex flex-row items-center gap-0.5">
+
+            <p className="text-2xl font-bold mt-1 max-w-[300px]">
+              {currency === "$"
+                ? `${currency}${listing.price}`
+                : `${listing.price}${currency}`}
+            </p>
+
+            {/* <div className="flex flex-row items-center gap-0.5">
               <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
               <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-            </div>
+            </div> */}
             <div>
               <p>{listing.details}</p>
               {listing.optionalDetails && (
                 <p>Usage: {listing.optionalDetails}</p>
               )}
             </div>
-          </div>
-          <div className="text-4xl font-bold ml-auto">
-            {currency === "$" ? (
-              <p>
-                {currency}
-                {listing.price}
-              </p>
-            ) : (
-              <p>
-                {listing.price}
-                {currency}
-              </p>
-            )}
           </div>
           <Separator className="mx-4" orientation="vertical" />
         </div>

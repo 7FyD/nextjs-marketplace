@@ -14,7 +14,7 @@ import {
 
 const CategorySelection = () => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 my-12 lg:mx-64 space-y-6 md:space-y-0 md:gap-6 place-items-center">
+    <div className="grid grid-cols-2 md:grid-cols-4 mb-20 mt-0 lg:mx-64 space-y-6 md:space-y-0 md:gap-6 place-items-center">
       <CategoryButton label="Software" href="Software">
         <Cpu width={48} height={48} />
       </CategoryButton>

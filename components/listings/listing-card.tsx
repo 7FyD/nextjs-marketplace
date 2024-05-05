@@ -72,7 +72,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
           </p>
           <p>{details}</p>
           <p>{optionalDetails}</p>
-          {user && user.id === userId && <p>Delete!</p>}
         </CardFooter>
       </Card>
     </Link>
