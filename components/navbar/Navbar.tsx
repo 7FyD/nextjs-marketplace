@@ -68,7 +68,6 @@ const Navbar: React.FC<NavbarInterface> = ({
             </div>
             <div className="flex flex-row items-center gap-8 text-white">
               <ToggleTheme />
-              <NewListingModal />
               {!user?.id ? (
                 <>
                   <button
@@ -86,6 +85,7 @@ const Navbar: React.FC<NavbarInterface> = ({
                 </>
               ) : (
                 <div className="flex flex-row gap-6 items-center">
+                  <NewListingModal />
                   <NotificationMenu
                     followNotifications={followNotifications}
                     listingNotifications={listingNotifications}
