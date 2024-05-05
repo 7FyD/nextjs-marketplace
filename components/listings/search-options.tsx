@@ -20,6 +20,7 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
 import { Switch } from "../ui/switch";
 import PickCategoryModal from "../modals/pick-category";
+import ResetFilters from "../home/reset-filters";
 
 interface SearchOptionsProps {
   className?: string;
@@ -167,13 +168,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({
         >
           Set filters.
         </Button>
-        <Button
-          className="mx-auto block w-[250px] mb-8"
-          variant={"destructive"}
-          onClick={() => clearFilters()}
-        >
-          Clear filters.
-        </Button>
+        <ResetFilters handleClick={clearFilters} />
       </div>
     </div>
   );
