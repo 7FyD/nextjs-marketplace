@@ -58,7 +58,6 @@ export const LoginClient = () => {
     startTransition(() => {
       login(values, callbackUrl)
         .then((data) => {
-          window.location.reload();
           if (data?.error) {
             setTwoFactorMessage("");
             if (data.errorCode === "1") {
@@ -72,6 +71,7 @@ export const LoginClient = () => {
           if (data?.success) {
             form.reset();
             setSuccess(data.success);
+            window.location.reload();
           }
 
           if (data?.twoFactor) {

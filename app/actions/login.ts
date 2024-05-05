@@ -97,7 +97,7 @@ export const login = async (
     await signIn("credentials", {
       email,
       password,
-      redirectTo: callbackUrl ? callbackUrl : DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
     });
     return { success: "Sucessfully logged in." };
   } catch (error) {
