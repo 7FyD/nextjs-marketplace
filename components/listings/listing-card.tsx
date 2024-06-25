@@ -45,7 +45,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
         <CardHeader>
           <div className="flex flex-row justify-between items-center">
             <CardTitle>{title}</CardTitle>
-            <Bookmark listingId={id} currentUser={user} />
+            <Bookmark
+              listingId={id}
+              isAlreadyBookmarked={
+                user?.favoriteIds.includes(id) ? true : false
+              }
+            />
           </div>
           <CardDescription>
             Country: {country} - Currency: {currency}

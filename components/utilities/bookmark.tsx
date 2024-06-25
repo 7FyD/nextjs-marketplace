@@ -9,13 +9,18 @@ import { useState, useTransition } from "react";
 
 interface BookmarkProps {
   listingId: string;
-  currentUser?: ExtendedUser;
+  isAlreadyBookmarked: boolean;
+  className?: string;
+  variant?: "icon" | "button";
 }
 
-const Bookmark: React.FC<BookmarkProps> = ({ listingId, currentUser }) => {
-  const [isBookmarked, setIsBookmarked] = useState(
-    currentUser?.favoriteIds?.includes(listingId)
-  );
+const Bookmark: React.FC<BookmarkProps> = ({
+  listingId,
+  className,
+  isAlreadyBookmarked,
+  variant = "icon",
+}) => {
+  const [isBookmarked, setIsBookmarked] = useState(isAlreadyBookmarked);
   const [isPending, startTransition] = useTransition();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -66,15 +71,38 @@ const Bookmark: React.FC<BookmarkProps> = ({ listingId, currentUser }) => {
     });
   };
 
-  return (
-    <Button
-      variant={"ghost"}
-      onClick={(event) => handleClick(event)}
-      disabled={isPending}
-    >
-      {!isBookmarked ? <BookmarkIcon /> : <BookmarkCheckIcon />}
-    </Button>
-  );
+  if (variant === "icon")
+    return (
+      <Button
+        className={className}
+        variant={"ghost"}
+        onClick={(event) => handleClick(event)}
+        disabled={isPending}
+      >
+        {!isBookmarked ? <BookmarkIcon /> : <BookmarkCheckIcon />}
+      </Button>
+    );
+  if (variant === "button")
+    return (
+      <Button
+        className={`w-[200px] ${className}`}
+        size="lg"
+        variant="outline"
+        onClick={(event) => handleClick(event)}
+        disabled={isPending}
+      >
+        {!isBookmarked ? (
+          <>
+            <BookmarkIcon className="w-4 h-4 mr-2 min-w-min" />
+            Add bookmark
+          </>
+        ) : (
+          <>
+            <BookmarkX className="w-4 h-4 mr-2 min-w-min" /> Remove bookmark
+          </>
+        )}
+      </Button>
+    );
 };
 
 export default Bookmark;
