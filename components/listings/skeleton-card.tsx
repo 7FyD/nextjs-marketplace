@@ -17,9 +17,9 @@ const SkeletonCard = () => {
         <div className="flex flex-row justify-between">
           <Skeleton className="h-8 w-64 rounded-full" />
         </div>
-        <CardDescription>
-          <Skeleton className="h-6 w-48 rounded-full" />
-        </CardDescription>
+        {/* <CardDescription> */}
+        <Skeleton className="h-6 w-48 rounded-full" />
+        {/* </CardDescription> */}
       </CardHeader>
       <CardContent>
         <AspectRatio ratio={16 / 9}>
