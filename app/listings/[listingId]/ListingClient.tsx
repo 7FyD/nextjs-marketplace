@@ -45,21 +45,6 @@
 //   };
 //   const currency = getCurrencySymbolByCode(listing.currency);
 
-//   const handleDelete = (id: string) => {
-//     startDeleteTransition(() => {
-//       deleteListing(id).then((data) => {
-//         if (data.success) {
-//           toast.success(data.success);
-//           router.push("/");
-//           router.refresh();
-//         }
-//         if (data.error) {
-//           toast.error(data.error);
-//         }
-//       });
-//     });
-//   };
-
 //   const [isBookmarked, setIsBookmarked] = useState(
 //     currentUser?.favoriteIds?.includes(listing.id)
 //   );
@@ -229,10 +214,14 @@ import { format } from "date-fns";
 import { Listing, User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useState } from "react";
-import { Bookmark, X } from "lucide-react";
+import { Fragment, useState, useTransition } from "react";
+import { X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { getCountryLabelByValue } from "@/data/const-data";
+import Bookmark from "@/components/utilities/bookmark";
+import { useCurrentUser } from "@/app/hooks/use-current-user";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface ListingClientProps {
   listing: Listing;
@@ -242,6 +231,23 @@ interface ListingClientProps {
 const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
   const [showPhone, setShowPhone] = useState(false);
   const [showEmail, setShowEmail] = useState(false);
+  const [isDeletePending, startDeleteTransition] = useTransition();
+  const router = useRouter();
+  const currentUser = useCurrentUser();
+  const handleDelete = (id: string) => {
+    startDeleteTransition(() => {
+      deleteListing(id).then((data) => {
+        if (data.success) {
+          toast.success(data.success);
+          router.push("/");
+          router.refresh();
+        }
+        if (data.error) {
+          toast.error(data.error);
+        }
+      });
+    });
+  };
   return (
     <Fragment>
       <SearchBar />
@@ -318,34 +324,32 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
             </div>
           </div>
           <div className="w-full flex flex-col justify-center gap-6 bg-white rounded-md p-12">
-            <p>Posted at {format(listing.createdAt, "dd MMMM yy")}</p>
+            <p>Posted at {format(listing.createdAt, "dd MMMM yyyy")}</p>
             <div className="flex flex-row gap-4">
-              <Button
-                className="max-w-[200px]"
-                size="lg"
-                variant="outline"
-                onClick={() => {}}
-              >
-                <>
-                  <Bookmark className="w-4 h-4 mr-2 min-w-min" />
-                  Add bookmark
-                </>
-              </Button>
-              <Button
-                className="max-w-[200px] hover:bg-red-700"
-                size="lg"
-                variant="destructive"
-                onClick={() => {
-                  deleteListing(listing.id);
-                }}
-              >
-                <X className="w-4 h-4 mr-2 min-w-min" />
-                Delete listing
-              </Button>
+              <Bookmark
+                listingId={listing.id}
+                variant="button"
+                isAlreadyBookmarked={user.favoriteIds.includes(listing.id)}
+              />
+              {(listing.userId === currentUser?.id ||
+                currentUser?.role === "ADMIN") && (
+                <Button
+                  className="w-[200px] hover:bg-red-700"
+                  size="lg"
+                  variant="destructive"
+                  onClick={() => {
+                    handleDelete(listing.id);
+                  }}
+                  disabled={isDeletePending}
+                >
+                  <X className="w-4 h-4 mr-2 min-w-min" />
+                  Delete listing
+                </Button>
+              )}
             </div>
             <Link
               href={`/?category=${listing.category}`}
-              className="italic hover:underline"
+              className="italic hover:underline w-max"
             >
               {listing.category}
             </Link>
