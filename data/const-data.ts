@@ -26,6 +26,11 @@ export enum Currency {
   RON = "RON",
 }
 
+export const getCountryLabelByValue = (value: string): string | undefined => {
+  const country = countriesArray.find((country) => country.value === value);
+  return country ? country.label : undefined;
+};
+
 export const countriesArray = [
   { label: "Global", value: "GLB" },
   { label: "Afghanistan", value: "AF" },

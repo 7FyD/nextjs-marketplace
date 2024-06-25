@@ -148,18 +148,18 @@
 
 //           <div className="flex flex-row">
 //             {listing.userId === currentUser?.id ? (
-//               <Button
-//                 className="max-w-[200px] mx-auto hover:bg-red-700"
-//                 size="lg"
-//                 variant="destructive"
-//                 onClick={() => {
-//                   handleDelete(listing.id);
-//                 }}
-//                 disabled={isDeletePending}
-//               >
-//                 <X className="w-4 h-4 mr-2 min-w-min" />
-//                 Delete listing
-//               </Button>
+// <Button
+//   className="max-w-[200px] mx-auto hover:bg-red-700"
+//   size="lg"
+//   variant="destructive"
+//   onClick={() => {
+//     handleDelete(listing.id);
+//   }}
+//   disabled={isDeletePending}
+// >
+//   <X className="w-4 h-4 mr-2 min-w-min" />
+//   Delete listing
+// </Button>
 //             ) : (
 //               <Button
 //                 className="max-w-[200px] mx-auto"
@@ -176,7 +176,7 @@
 //                     Add bookmark
 //                   </>
 //                 ) : (
-//                   <>
+//                    <>
 //                     <BookmarkX className="w-4 h-4 mr-2 min-w-min" /> Remove
 //                     bookmark
 //                   </>
@@ -225,11 +225,14 @@
 import { deleteListing } from "@/app/actions/delete-listing";
 import SearchBar from "@/components/home/search-bar";
 import { Button } from "@/components/ui/button";
-import Container from "@/components/utilities/Container";
+import { format } from "date-fns";
 import { Listing, User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useState } from "react";
+import { Bookmark, X } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { getCountryLabelByValue } from "@/data/const-data";
 
 interface ListingClientProps {
   listing: Listing;
@@ -239,15 +242,11 @@ interface ListingClientProps {
 const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
   const [showPhone, setShowPhone] = useState(false);
   const [showEmail, setShowEmail] = useState(false);
-  console.log(listing);
   return (
     <Fragment>
       <SearchBar />
-      <div className="container mt-[-4em]">
-        <Button onClick={() => deleteListing(listing.id)} variant="destructive">
-          Delete listing - BETA
-        </Button>
-        <div className="flex flex-col">
+      <div className="container mt-[-4em] mb-64">
+        <div className="flex flex-col gap-12">
           <div className="flex flex-row gap-16">
             <div className="w-3/4 h-[700px] bg-white rounded-md flex items-center justify-center p-12">
               <div className="relative h-full w-full">
@@ -261,7 +260,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
             </div>
             <div className="flex flex-col h-[700px] w-1/4 justify-between">
               <div className="h-2/6 bg-white rounded-md w-full p-6 flex flex-col gap-4">
-                <h2 className="font-semibold">SELLER INFORMATION</h2>
+                <h2 className="font-semibold text-lg">SELLER INFORMATION</h2>
                 <div className="flex flex-row gap-6 items-center">
                   <Link
                     href={`/user/profile/${user.id}`}
@@ -287,10 +286,15 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
                 <p>On marketplace since: dateTime</p>
                 <p>Active listings: number</p>
               </div>
-              <div className="h-3/6 bg-white rounded-md w-full p-6 flex flex-col gap-4">
-                <h2 className="font-semibold">CONTACT INFORMATION</h2>
+              <div className="h-3/6 bg-white rounded-md w-full p-6 flex flex-col gap-4 justify-center">
+                <h2 className="font-semibold text-lg">DELIVERY INFORMATION</h2>
+                <p className="block h-9">
+                  Country: {getCountryLabelByValue(listing.country)}
+                </p>
+                <p className="block h-9">Availability: Contact seller</p>
+                <h2 className="font-semibold text-lg">CONTACT INFORMATION</h2>
                 {user.phoneNumber && (
-                  <div className="flex flex-row gap-2 items-center">
+                  <div className="flex flex-row gap-2 items-center ">
                     <p className="block">Phone number: </p>
                     <Button
                       variant="ghost"
@@ -311,6 +315,53 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
                   </Button>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className="w-full flex flex-col justify-center gap-6 bg-white rounded-md p-12">
+            <p>Posted at {format(listing.createdAt, "dd MMMM yy")}</p>
+            <div className="flex flex-row gap-4">
+              <Button
+                className="max-w-[200px]"
+                size="lg"
+                variant="outline"
+                onClick={() => {}}
+              >
+                <>
+                  <Bookmark className="w-4 h-4 mr-2 min-w-min" />
+                  Add bookmark
+                </>
+              </Button>
+              <Button
+                className="max-w-[200px] hover:bg-red-700"
+                size="lg"
+                variant="destructive"
+                onClick={() => {
+                  deleteListing(listing.id);
+                }}
+              >
+                <X className="w-4 h-4 mr-2 min-w-min" />
+                Delete listing
+              </Button>
+            </div>
+            <Link
+              href={`/?category=${listing.category}`}
+              className="italic hover:underline"
+            >
+              {listing.category}
+            </Link>
+            <p>{listing.details}</p>
+            <Separator />
+            <h2 className="font-semibold text-xl">DESCRIPTION</h2>
+            <p>{listing.description}</p>
+            <Separator />
+            <div className="flex flex-row justify-between">
+              <p className="font-light">ID: {listing.id}</p>
+              <Button
+                variant="ghost"
+                className="text-red-500 hover:text-red-600"
+              >
+                Report
+              </Button>
             </div>
           </div>
         </div>
