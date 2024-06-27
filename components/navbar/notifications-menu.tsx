@@ -1,5 +1,4 @@
 "use client";
-import { getNotifications } from "@/app/actions/get-notifications";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,32 +9,60 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
-import { Bell } from "lucide-react";
-import { useState } from "react";
-import { Notification } from "@prisma/client";
+import { Bell, BellRing } from "lucide-react";
+import { useEffect, useState } from "react";
 import NotificationText from "./notification-text";
 import { useCurrentUser } from "@/app/hooks/use-current-user";
 import { deleteAllNotifications } from "@/app/actions/delete-notification";
 import toast from "react-hot-toast";
+import { Notification } from "@prisma/client";
+import { getNotifications } from "@/app/actions/get-notifications";
+import Bubble from "./notifications-bubble";
 
-interface NotificationMenuInterface {
-  followNotifications: Notification[];
-  listingNotifications: Notification[];
-  reportNotifications: Notification[];
-}
+const DEBOUNCE_DELAY = 2000;
 
-const NotificationMenu: React.FC<NotificationMenuInterface> = ({
-  followNotifications,
-  listingNotifications,
-  reportNotifications,
-}) => {
+const NotificationMenu: React.FC = () => {
   const currentUser = useCurrentUser();
-  const [notificationsArray, setNotificationsArray] =
-    useState<Notification[]>(followNotifications);
+  const [notifications, setNotifications] = useState<{
+    userNotifications: Notification[];
+    reportNotifications: Notification[];
+  }>({
+    userNotifications: [],
+    reportNotifications: [],
+  });
 
-  const [currentCategory, setCurrentCategory] = useState<
-    "FOLLOW" | "REPORT" | "LISTING"
-  >("FOLLOW");
+  const [notificationsArray, setNotificationsArray] = useState<Notification[]>(
+    []
+  );
+  const [currentCategory, setCurrentCategory] = useState<"USER" | "REPORT">(
+    "USER"
+  );
+
+  useEffect(() => {
+    const loadNotifications = async () => {
+      const fetchedNotifications = await getNotifications();
+      try {
+        setNotifications(fetchedNotifications);
+
+        switch (currentCategory) {
+          case "USER":
+            setNotificationsArray(fetchedNotifications.userNotifications);
+            break;
+          case "REPORT":
+            setNotificationsArray(fetchedNotifications.reportNotifications);
+            break;
+          default:
+            setNotificationsArray([]);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadNotifications();
+
+    const interval = setInterval(loadNotifications, 10000); // Poll every 10 seconds
+    return () => clearInterval(interval);
+  }, [currentCategory]);
 
   const handleDeleteAll = () => {
     deleteAllNotifications(currentCategory).then((data) => {
@@ -45,17 +72,10 @@ const NotificationMenu: React.FC<NotificationMenuInterface> = ({
       if (data.success) {
         toast.success(data.success);
         setNotificationsArray([]);
-        switch (currentCategory) {
-          case "FOLLOW":
-            followNotifications = [];
-            break;
-          case "REPORT":
-            reportNotifications = [];
-            break;
-          case "LISTING":
-            listingNotifications = [];
-            break;
-        }
+        setNotifications((prevNotifications) => ({
+          ...prevNotifications,
+          [`${currentCategory.toLowerCase()}Notifications`]: [],
+        }));
       }
     });
   };
@@ -63,41 +83,43 @@ const NotificationMenu: React.FC<NotificationMenuInterface> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Bell className="mt-2" />
+        {notifications.userNotifications.length > 0 ||
+        notifications.reportNotifications.length > 0 ? (
+          <BellRing className="mt-2" />
+        ) : (
+          <Bell className="mt-2" />
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-100">
-        <DropdownMenuLabel className="flex flex-row justify-between">
-          <Button
-            onClick={() => {
-              setNotificationsArray(followNotifications);
-              setCurrentCategory("FOLLOW");
-            }}
-            variant="ghost"
-            disabled={currentCategory === "FOLLOW"}
-          >
-            Follow notifications
-          </Button>
-          <Button
-            onClick={() => {
-              setNotificationsArray(listingNotifications);
-              setCurrentCategory("LISTING");
-            }}
-            variant="ghost"
-            disabled={currentCategory === "LISTING"}
-          >
-            Listing notifications
-          </Button>
-          {currentUser?.role === "ADMIN" && (
+        <DropdownMenuLabel className="flex flex-row justify-center">
+          <div>
             <Button
               onClick={() => {
-                setNotificationsArray(reportNotifications);
-                setCurrentCategory("REPORT");
+                setNotificationsArray(notifications.userNotifications);
+                setCurrentCategory("USER");
               }}
+              className="pr-2"
               variant="ghost"
-              disabled={currentCategory === "REPORT"}
+              disabled={currentCategory === "USER"}
             >
-              Report notifications
+              User notifications
             </Button>
+            <Bubble count={notifications.userNotifications.length} />
+          </div>
+          {currentUser?.role === "ADMIN" && (
+            <div>
+              <Button
+                onClick={() => {
+                  setNotificationsArray(notifications.reportNotifications);
+                  setCurrentCategory("REPORT");
+                }}
+                variant="ghost"
+                disabled={currentCategory === "REPORT"}
+              >
+                Report notifications
+              </Button>
+              <Bubble count={notifications.reportNotifications.length} />
+            </div>
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -106,17 +128,15 @@ const NotificationMenu: React.FC<NotificationMenuInterface> = ({
             <>
               {notificationsArray.reverse().map((item, index) => (
                 <DropdownMenuItem key={index}>
-                  {1 && (
-                    <NotificationText
-                      id={item.id}
-                      type={currentCategory}
-                      title={item.title}
-                      name={item.name}
-                      nameId={item.nameId}
-                      secondaryName={item.reporterName}
-                      secondaryId={item.reporterId}
-                    />
-                  )}
+                  <NotificationText
+                    id={item.id}
+                    type={item.type}
+                    title={item.title}
+                    name={item.name}
+                    nameId={item.nameId}
+                    secondaryName={item.reporterName}
+                    secondaryId={item.reporterId}
+                  />
                 </DropdownMenuItem>
               ))}
               <Button

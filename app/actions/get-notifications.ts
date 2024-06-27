@@ -9,8 +9,7 @@ export const getNotifications = async () => {
     const user = await currentUser();
     if (!user) {
       return {
-        followNotifications: [],
-        listingNotifications: [],
+        userNotifications: [],
         reportNotifications: [],
       };
     }
@@ -18,8 +17,7 @@ export const getNotifications = async () => {
     const dbUser = await getUserById(user.id);
     if (!dbUser) {
       return {
-        followNotifications: [],
-        listingNotifications: [],
+        userNotifications: [],
         reportNotifications: [],
       };
     }
@@ -30,19 +28,16 @@ export const getNotifications = async () => {
       },
     });
 
-    const followNotifications = notifications.filter(
-      (notification) => notification.type === "FOLLOW"
-    );
-    const listingNotifications = notifications.filter(
-      (notification) => notification.type === "LISTING"
+    const userNotifications = notifications.filter(
+      (notification) =>
+        notification.type === "FOLLOW" || notification.type == "LISTING"
     );
     const reportNotifications = notifications.filter(
       (notification) => notification.type === "REPORT"
     );
 
     return {
-      followNotifications,
-      listingNotifications,
+      userNotifications,
       reportNotifications,
     };
   } catch (error: any) {

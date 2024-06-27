@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import MenuItem from "./MenuItem";
 import { useRouter } from "next/navigation";
 import Container from "../utilities/Container";
@@ -25,18 +25,10 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
 interface NavbarInterface {
-  followNotifications: Notification[];
-  listingNotifications: Notification[];
-  reportNotifications: Notification[];
   deletedUser?: boolean;
 }
 
-const Navbar: React.FC<NavbarInterface> = ({
-  followNotifications,
-  listingNotifications,
-  reportNotifications,
-  deletedUser,
-}) => {
+const Navbar: React.FC<NavbarInterface> = ({ deletedUser }) => {
   useEffect(() => {
     if (deletedUser) {
       logout();
@@ -86,11 +78,7 @@ const Navbar: React.FC<NavbarInterface> = ({
               ) : (
                 <div className="flex flex-row gap-6 items-center">
                   <NewListingModal />
-                  <NotificationMenu
-                    followNotifications={followNotifications}
-                    listingNotifications={listingNotifications}
-                    reportNotifications={reportNotifications}
-                  />
+                  <NotificationMenu />
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       asChild

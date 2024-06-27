@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/user";
+import { NotificationType } from "@prisma/client";
 
 export const deleteOneNotification = async (id: string) => {
   const user = await currentUser();
@@ -20,16 +21,19 @@ export const deleteOneNotification = async (id: string) => {
   return { success: "Notification deleted" };
 };
 
-export const deleteAllNotifications = async (
-  type: "REPORT" | "LISTING" | "FOLLOW"
-) => {
+export const deleteAllNotifications = async (type: "USER" | "REPORT") => {
   const user = await currentUser();
   if (!user) {
     return { error: "Invalid request" };
   }
+
+  const types: NotificationType[] =
+    type === "USER" ? ["FOLLOW", "LISTING"] : ["REPORT"];
   const notifications = await db.notification.deleteMany({
     where: {
-      type,
+      type: {
+        in: types,
+      },
       userId: user.id,
     },
   });
