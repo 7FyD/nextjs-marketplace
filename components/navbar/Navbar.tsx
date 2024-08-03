@@ -44,6 +44,7 @@ const Navbar: React.FC<NavbarInterface> = ({ deletedUser }) => {
   const closeNav = () => {
     document.getElementById("sideBar")!.style.width = "0";
   };
+
   const router = useRouter();
   return (
     <div className="w-full bg-[#212529] z-[1] text-l pt-3 pb-3 border-b-[2px] border-black">
@@ -135,27 +136,17 @@ const Navbar: React.FC<NavbarInterface> = ({ deletedUser }) => {
         </Container>
       )}
       {!isDesktop && (
-        <div className="flex flex-row justify-between items-center text-white mx-8">
-          <Button
-            className="text-4xl py-8 cursor-point text-white hover:bg-[#212529] hover:text-white"
-            onClick={openNav}
-            variant={"ghost"}
-          >
-            &#9776;
-          </Button>
+        <div className="flex flex-row justify-start items-center gap-6 mx-8 text-white">
           <div
             id="sideBar"
             className="w-0 h-full fixed z-[2] top-0 left-0 bg-[#111] overflow-x-hidden transition-[width] duration-300 text-white"
           >
-            <div className="p-8 pb-0 flex flex-row justify-between content-center">
-              <p>logo</p>
-              <a
-                className="cursor-pointer right-[25px] text-2xl w-[50px] h-[50px] text-center"
-                onClick={closeNav}
-              >
-                &times;
-              </a>
-            </div>
+            <a
+              className="absolute cursor-pointer right-[24px] top-4 text-4xl"
+              onClick={closeNav}
+            >
+              &times;
+            </a>
             <div className="flex flex-col gap-8 p-12">
               {!user?.id ? (
                 <>
@@ -201,7 +192,20 @@ const Navbar: React.FC<NavbarInterface> = ({ deletedUser }) => {
               )}
             </div>
           </div>
-          <ToggleTheme />
+          <p
+            className="text-3xl text-white cursor-pointer"
+            onClick={() => router.push("/")}
+          >
+            F
+          </p>
+          <ToggleTheme ml={true} />
+          <Button
+            className="text-4xl py-8 cursor-point text-white hover:bg-[#212529] hover:text-white"
+            onClick={openNav}
+            variant={"ghost"}
+          >
+            &#9776;
+          </Button>
         </div>
       )}
     </div>

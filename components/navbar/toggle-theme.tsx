@@ -12,14 +12,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const ToggleTheme = () => {
+const ToggleTheme: React.FC<{ ml?: boolean }> = ({ ml = false }) => {
   const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="hover:bg-transparent hover:text-white border-0 mt-2"
+          className={`hover:bg-transparent hover:text-white border-0 mt-2 ${
+            ml && "ml-auto"
+          }`}
           variant="ghost"
           size="icon"
         >

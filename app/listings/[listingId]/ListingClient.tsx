@@ -327,7 +327,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
           </div>
           <div className="w-full flex flex-col justify-center gap-6 bg-white rounded-md p-12">
             <p>Posted at {format(listing.createdAt, "dd MMMM yyyy")}</p>
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-col md:!flex-row gap-4">
               <Bookmark
                 listingId={listing.id}
                 variant="button"

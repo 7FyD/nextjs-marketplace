@@ -127,7 +127,7 @@ const NewListingModal: React.FC<NewListingModalProps> = ({ className }) => {
           Create new listing
         </Button>
       </DialogTrigger>
-      <DialogContent className="overflow-y-scroll w-auto max-h-[80%] sm:max-w-2xl px-20 p-16 bg-white text-black">
+      <DialogContent className="overflow-y-scroll w-auto max-h-[80%] sm:max-w-2xl md:px-20 md:p-16 bg-white text-black">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
             Create a new listing
@@ -181,7 +181,7 @@ const NewListingModal: React.FC<NewListingModalProps> = ({ className }) => {
                   control={form.control}
                   name="price"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="grow">
                       <FormLabel>Price</FormLabel>
                       <FormControl>
                         <Input
@@ -192,7 +192,7 @@ const NewListingModal: React.FC<NewListingModalProps> = ({ className }) => {
                           type="number"
                         />
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="w-full">
                         {form.watch("currency")
                           ? `The price is set in ${form.watch("currency")}.`
                           : "You haven't selected a currency yet."}
@@ -205,7 +205,7 @@ const NewListingModal: React.FC<NewListingModalProps> = ({ className }) => {
                   control={form.control}
                   name="currency"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="h-min">
                       <FormLabel>Currency</FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -216,7 +216,7 @@ const NewListingModal: React.FC<NewListingModalProps> = ({ className }) => {
                             <SelectValue placeholder="Select your preferred currency" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="data-[state=closed]:hidden">
                           <SelectItem value="USD">
                             <div className="flex flex-row gap-3 items-center w-[200px] mr-2">
                               <US
