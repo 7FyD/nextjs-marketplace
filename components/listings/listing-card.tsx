@@ -40,7 +40,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const user = useCurrentUser();
   return (
-    <Link href={`/listings/${id}`} className="inline-block">
+    <Link href={`/listings/${id}`}>
       <Card className="mx-auto w-[300px] md:w-[400px] 2xl:w-[350px] hover:scale-105 transition-all h-[450px]">
         <CardHeader>
           <div className="flex flex-row justify-between items-center">
@@ -52,9 +52,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
               }
             />
           </div>
-          <CardDescription>
-            Country: {country} - Currency: {currency}
-          </CardDescription>
+          <CardDescription>Country: {country}</CardDescription>
         </CardHeader>
         <CardContent>
           <AspectRatio ratio={16 / 9}>
@@ -70,7 +68,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <p>
             {price.toLocaleString("en-US", {
               style: "currency",
-              currency: "EUR",
+              currency: currency,
               minimumFractionDigits: price % 1 !== 0 ? 2 : 0,
               maximumFractionDigits: 2,
             })}
