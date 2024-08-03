@@ -48,6 +48,13 @@ export const createNewListing = async (
       userId: user.id,
     },
   });
-
+  const updatedUser = await db.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      activeListings: dbUser.activeListings + 1,
+    },
+  });
   return { success: "Listing created.", id: newListing.id };
 };

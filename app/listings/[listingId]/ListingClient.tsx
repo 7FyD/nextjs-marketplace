@@ -289,8 +289,10 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
                     <h4 className="hover:underline">{user.name}</h4>
                   </Link>
                 </div>
-                <p>On marketplace since: dateTime</p>
-                <p>Active listings: number</p>
+                <p>
+                  On marketplace since: {format(user.createdAt, "dd MMMM yyyy")}
+                </p>
+                <p>Active listings: {user.activeListings}</p>
               </div>
               <div className="h-3/6 bg-white rounded-md w-full p-6 flex flex-col gap-4 justify-center">
                 <h2 className="font-semibold text-lg">DELIVERY INFORMATION</h2>
