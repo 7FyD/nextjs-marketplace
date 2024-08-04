@@ -43,9 +43,13 @@ export const settingsSendVerifyEmail = async () => {
   if (user.emailVerified) {
     return { error: "Email already verified." };
   }
-
+  const name = user.name ? user.name : "Esteemed individual";
   const verificationToken = await generateVerificationToken(user.email);
-  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  await sendVerificationEmail(
+    name,
+    verificationToken.email,
+    verificationToken.token
+  );
 
   return { success: "An email has been sent with a verification link." };
 };
@@ -93,117 +97,6 @@ export const settingsSendTwoFactorEmail = async () => {
     success: `An email has been sent to ${user.email}`,
   };
 };
-
-// export const settingsChangePassword = async (
-//   values: z.infer<typeof SettingsNewPasswordSchema>
-// ) => {
-//   const user = await currentUser();
-//   if (!user || !user.id) {
-//     return { error: "Unauthorized." };
-//   }
-
-//   const dbUser = await getUserById(user.id);
-
-//   if (!dbUser) {
-//     return { error: "Unauthorized" };
-//   }
-
-//   if (!dbUser.password) {
-//     return { error: "Account does not use password." };
-//   }
-
-//   if (!values.oldPassword || !values.password) {
-//     return { error: "Invalid fields." };
-//   }
-
-//   const validPassword = await bcrypt.compare(
-//     values.oldPassword,
-//     dbUser.password
-//   );
-//   if (!validPassword) {
-//     return { error: "Incorrect password." };
-//   }
-//   const validatedFields = SettingsNewPasswordSchema.safeParse(values);
-
-//   if (!validatedFields.success) {
-//     return { error: "Invalid new password." };
-//   }
-//   const hashedPassword = await bcrypt.hash(values.password, 10);
-//   await db.user.update({
-//     where: { id: user.id },
-//     data: { password: hashedPassword },
-//   });
-//   return { success: "Password succesfully changed." };
-// };
-
-// export const settingsGeneral = async (
-//   values: z.infer<typeof SettingsGeneralSchema>
-// ) => {
-//   const user = await currentUser();
-//   if (!user || !user.id) {
-//     return { error: "Unauthorized." };
-//   }
-
-//   const dbUser = await getUserById(user.id);
-
-//   if (!dbUser) {
-//     return { error: "Unauthorized" };
-//   }
-
-//   if (!values) {
-//     return { error: "New name is required." };
-//   }
-
-//   const validatedFields = SettingsGeneralSchema.safeParse(values);
-
-//   if (!validatedFields.success) {
-//     return { error: "Invalid input." };
-//   }
-//   await db.user.update({
-//     where: { id: user.id },
-//     data: { name: values.name },
-//   });
-//   return { success: "Name successfully changed." };
-// };
-
-// export const settingsChangeEmail = async (
-//   values: z.infer<typeof SettingsChangeEmailSchema>
-// ) => {
-//   // add an optional oldEmaiil? string on the new-verification token in database and if there is one, get it
-//   const user = await currentUser();
-//   if (!user || !user.id) {
-//     return { error: "Unauthorized." };
-//   }
-
-//   const dbUser = await getUserById(user.id);
-
-//   if (!dbUser) {
-//     return { error: "Unauthorized" };
-//   }
-
-//   if (!user.email) {
-//     return { error: "Account does not use email." };
-//   }
-
-//   const validatedFields = SettingsChangeEmailSchema.safeParse(values);
-
-//   if (!validatedFields.success) {
-//     return { error: "Invalid new email." };
-//   }
-
-//   const existingUser = await getUserByEmail(values.email);
-
-//   if (existingUser) {
-//     return { error: "Email already in use!" };
-//   }
-
-//   const verificationToken = await generateVerificationToken(values.email);
-//   await sendVerificationEmail(verificationToken.email, verificationToken.token);
-
-//   return {
-//     inform: "A verification email has been sent to your new mail addresss.",
-//   };
-// };
 
 export const generalSettings = async (
   values: z.infer<typeof generalSettingsSchema>
