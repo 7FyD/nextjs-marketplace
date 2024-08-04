@@ -12,7 +12,7 @@ export const FormError = ({ message, className }: FormErrorProps) => {
     <div
       className={`bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive ${className}`}
     >
-      <ExclamationTriangleIcon className="h-4 w-4" />
+      <ExclamationTriangleIcon className="size-4 min-w-4 min-h-4" />
       <p>{message}</p>
     </div>
   );

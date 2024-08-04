@@ -13,7 +13,7 @@ interface SettingsInterface {
 }
 
 const SettingsClient: React.FC<SettingsInterface> = ({ user }) => {
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isDesktop = useMediaQuery("(min-width: 1264px)");
   const pathname = usePathname();
   const query = useSearchParams().get("type");
 
