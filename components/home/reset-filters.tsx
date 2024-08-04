@@ -9,7 +9,7 @@ interface ResetFiltersInterface {
 const ResetFilters: React.FC<ResetFiltersInterface> = ({ handleClick }) => {
   return (
     <Button
-      className="mx-auto block w-[250px] mb-8"
+      className="mx-auto block w-[250px] my-4"
       variant={"destructive"}
       onClick={handleClick}
     >

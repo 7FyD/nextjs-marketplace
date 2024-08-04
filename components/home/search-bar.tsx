@@ -24,6 +24,7 @@ import { useCallback, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BeatLoader } from "react-spinners";
 import ResetFilters from "./reset-filters";
+
 const SearchBar = () => {
   const router = useRouter();
   const currentPath = usePathname();
@@ -61,28 +62,28 @@ const SearchBar = () => {
   }, [countryFilter, inputValue, countryFilter, params]);
 
   return (
-    <div className="flex flex-col gap-8 h-[300px] md:!h-[200px]">
-      <div className="flex flex-col lg:!flex-row items-center justify-center mt-12 mx-auto w-full md:w-1/2">
-        <div className="w-3/5 relative bg-accent border">
+    <div className="flex flex-col md:h-[200px] mb-16">
+      <div className="flex flex-col items-center justify-center mt-12 mx-auto w-full md:w-[360px] px-4">
+        <div className="w-full relative bg-accent border">
           <div className="absolute top-[0.85rem] left-4">
             <Search className="h-5 w-5 text-gray-400" />
           </div>
           <Input
             id="searchInput"
-            className="py-6 px-12 border-0 shadow-none w-full"
+            className="py-6 pl-12 pr-4 border-0 shadow-none w-full"
             placeholder="What is it you're searching for?"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
         </div>
-        <div className="w-3/5 flex flex-col sm:!flex-row justify-center">
+        <div className="w-full flex flex-col justify-center ">
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-full sm:!w-2/5 p-6 justify-between"
+                className="w-full sm:w-auto p-6 justify-between"
               >
                 {buttonLabel !== "" ? buttonLabel : "Select a country"}
                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -124,7 +125,7 @@ const SearchBar = () => {
           <Button
             onClick={onSubmit}
             disabled={isPending}
-            className="border w-full sm:!w-3/5 p-6 rounded-none bg-inherit text-accent-foreground hover:text-accent !duration-200 disabled:bg-primary/90 disabled:text-accent"
+            className="w-full sm:w-auto p-6 rounded-none bg-inherit text-accent-foreground hover:text-accent !duration-200 disabled:bg-primary/90 disabled:text-accent"
           >
             {isPending ? <BeatLoader /> : "Search"}
           </Button>

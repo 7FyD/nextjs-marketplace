@@ -250,11 +250,11 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
   };
   return (
     <Fragment>
-      <SearchBar />
-      <div className="container mt-[-4em] mb-64">
+      <div className="container mb-64">
+        <SearchBar />
         <div className="flex flex-col gap-12">
-          <div className="flex  md:!flex-row flex-col gap-16">
-            <div className="w-full md:w-3/4 h-[700px] bg-white rounded-md flex items-center justify-center p-12">
+          <div className="flex lg:!flex-row flex-col gap-16">
+            <div className="w-full lg:w-3/4 h-[700px] bg-white rounded-md flex items-center justify-center p-12">
               <div className="relative h-full w-full">
                 <Image
                   className="object-scale-down inline-block"
@@ -264,8 +264,8 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
                 />
               </div>
             </div>
-            <div className="flex flex-col md:h-[700px] w-full md:w-1/4 gap-12 md:gap-0 justify-between">
-              <div className="h-auto md:h-2/6 bg-white rounded-md w-full p-6 flex flex-col gap-4">
+            <div className="flex flex-col lg:h-[700px] w-full lg:w-1/4 gap-12 lg:gap-0 justify-between">
+              <div className="h-auto bg-white rounded-md w-full p-4 flex flex-col gap-6">
                 <h2 className="font-semibold text-lg">SELLER INFORMATION</h2>
                 <div className="flex flex-row gap-6 items-center">
                   <Link
@@ -294,7 +294,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
                 </p>
                 <p>Active listings: {user.activeListings}</p>
               </div>
-              <div className="h-3/6 bg-white rounded-md w-full p-6 flex flex-col gap-4 justify-center">
+              <div className="h-auto bg-white rounded-md w-full p-4 flex flex-col gap-6 justify-between">
                 <h2 className="font-semibold text-lg">DELIVERY INFORMATION</h2>
                 <p className="block h-9">
                   Country: {getCountryLabelByValue(listing.country)}
@@ -368,7 +368,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, user }) => {
             <h2 className="font-semibold text-xl">DESCRIPTION</h2>
             <p>{listing.description}</p>
             <Separator />
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-col sm:!flex-row justify-between">
               <p className="font-light">ID: {listing.id}</p>
               <Button
                 variant="ghost"
