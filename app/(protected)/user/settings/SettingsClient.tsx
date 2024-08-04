@@ -30,7 +30,7 @@ const SettingsClient: React.FC<SettingsInterface> = ({ user }) => {
             query !== "security" &&
             query !== "general" &&
             query !== "delete account" && <div>Nothing found.</div>}
-          {(query === null || query === "general") && (
+          {query !== "security" && query !== "delete account" && (
             <SettingsGeneral isDesktop={isDesktop} user={user} />
           )}
           {query === "security" && (

@@ -38,6 +38,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { FormError } from "@/components/utilities/form-error";
+import { Info } from "lucide-react";
 
 interface SettingsSecurityInterface {
   user: User | null;
@@ -185,7 +186,28 @@ const SettingsSecurity: React.FC<SettingsSecurityInterface> = ({
               )}
             </div>
             <div className="flex flex-col gap-2">
-              <p className="text-center">Two factor Authentificator</p>
+              <div className="flex flex-row gap-1 items-center justify-center">
+                <p className="text-center">Two factor Authentificator</p>
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="p-0 h-max inline hover:cursor-default"
+                    >
+                      <Info className="inline w-[18px] h-[18px]" />
+                    </Button>
+                  </HoverCardTrigger>
+                  <HoverCardContent>
+                    <p className="text-sm">
+                      Enabling this will require you to enter a code sent to
+                      your email each time you sign into your account. This
+                      additional step enhances your account's security and
+                      safety.
+                    </p>
+                  </HoverCardContent>
+                </HoverCard>
+              </div>
               <Button
                 disabled={isTwoFactorPending || twoFactorEmailSent}
                 className="mx-auto block px-6"
