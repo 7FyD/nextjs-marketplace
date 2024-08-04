@@ -19,10 +19,12 @@ import { Notification } from "@prisma/client";
 import { getNotifications } from "@/app/actions/get-notifications";
 import Bubble from "./notifications-bubble";
 
-const DEBOUNCE_DELAY = 2000;
-
 const NotificationMenu: React.FC = () => {
   const currentUser = useCurrentUser();
+  if (!currentUser?.id)
+    return (
+      <p className="text-red-500">Small error occured, please refresh page.</p>
+    );
   const [notifications, setNotifications] = useState<{
     userNotifications: Notification[];
     reportNotifications: Notification[];
