@@ -69,12 +69,6 @@ const Navbar: React.FC<NavbarInterface> = ({ deletedUser }) => {
                   >
                     Sign In
                   </button>
-                  <button
-                    className={`transition px-4 py-2 cursor-pointer rounded-md border-2 border-transparent hover:bg-[#495057] hover:border-[#495057]`}
-                    onClick={() => router.push("/auth/register")}
-                  >
-                    Sign Up
-                  </button>
                 </>
               ) : (
                 <div className="flex flex-row gap-6 items-center">
@@ -154,11 +148,6 @@ const Navbar: React.FC<NavbarInterface> = ({ deletedUser }) => {
                     onClick={closeNav}
                     href="/auth/login"
                     label="Sign In"
-                  />
-                  <MenuItem
-                    onClick={closeNav}
-                    href="/auth/register"
-                    label="Sign Up"
                   />
                 </>
               ) : (

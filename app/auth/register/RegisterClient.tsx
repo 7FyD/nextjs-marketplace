@@ -39,18 +39,14 @@ import {
 } from "@/components/ui/hover-card";
 import { Info } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import { useMediaQuery } from "@/app/hooks/use-media-query";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const RegisterClient = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -88,6 +84,7 @@ export const RegisterClient = () => {
       backButtonLabel="Already have an account?"
       backButtonHref="/auth/login"
       showSocial
+      className="mb-24"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
